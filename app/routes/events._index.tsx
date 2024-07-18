@@ -3,30 +3,22 @@ import { Link, useLoaderData } from "@remix-run/react";
 import prisma from "~/db";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "~ Seek Gathering ~" },
-    { name: "description", content: "Seek and you shall find…" },
-  ];
+  return [{ title: "All Events ~ Seek Gathering" }];
 };
 
 export async function loader() {
   const events = await prisma.event.findMany({
     select: { id: true, title: true, dateStart: true, dateEnd: true },
     orderBy: [{ dateStart: "asc" }],
-    take: 3,
   });
   return events;
 }
 
-export default function Index() {
+export default function Events() {
   const events = useLoaderData<typeof loader>();
   return (
     <>
-      <h1 className="text-4xl mb-8">~ Seek Gathering ~</h1>
-      <p className="text-xl mb-8">
-        Out of love for the community, a seeker&apos;s aid was born&hellip;
-      </p>
-      <h2 className="text-3xl mb-8">What&apos;s happening soon?</h2>
+      <h1 className="text-4xl mb-8">All Events</h1>
       <div className="flex flex-col gap-2 mb-8">
         {events.map((event) => (
           <Link
@@ -48,7 +40,8 @@ export default function Index() {
         ))}
       </div>
       <div className="flex flex-col items-center justify-center gap-4">
-        <Link to="/events">Show All Events</Link>
+        <Link to="/events/new">Add New Event</Link>
+        <Link to="/">Back</Link>
       </div>
     </>
   );
