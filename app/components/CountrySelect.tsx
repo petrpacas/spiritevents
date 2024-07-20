@@ -12,12 +12,7 @@ export const CountrySelect: React.FC<CountrySelect> = ({
 }) => {
   const countriesObject = filteredCountries || countries;
   return (
-    <select
-      name="country"
-      id="country"
-      defaultValue={defaultValue}
-      className="bg-orange-50"
-    >
+    <select name="country" id="country" defaultValue={defaultValue}>
       {!defaultValue && <option value="">Select a country</option>}
       {countriesObject.map((country) => (
         <option key={country.code} value={country.code}>

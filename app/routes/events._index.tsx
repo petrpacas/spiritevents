@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData, useSubmit } from "@remix-run/react";
 import prisma from "~/services/db.server";
-import { CountrySelect } from "~/components";
+import { CountrySelect, EventListCard } from "~/components";
 import { countries } from "~/utils/countries";
 
 export const meta: MetaFunction = () => {
@@ -22,28 +22,29 @@ export async function loader({ request }: LoaderFunctionArgs) {
     where: { country: country || undefined },
     orderBy: [{ dateStart: "asc" }],
   });
-  return { events, country };
+  return { country, events };
 }
 
 export default function Events() {
-  const { events, country } = useLoaderData<typeof loader>();
+  const { country, events } = useLoaderData<typeof loader>();
   const submit = useSubmit();
+
+  const getCountryNameByCode = (code: string) => {
+    const country = countries.find((country) => country.code === code);
+    return country ? country.name : code;
+  };
   const getCountryCodesFromEvents = () => {
     return events.map((event) => event.country);
   };
   const filterCountriesForEvent = (eventCountries: string[]) => {
     return countries.filter((country) => eventCountries.includes(country.code));
   };
-  const getCountryNameByCode = (code: string) => {
-    const country = countries.find((country) => country.code === code);
-    return country ? country.name : code;
-  };
   const eventCountries = getCountryCodesFromEvents();
   const filteredCountries = filterCountriesForEvent(eventCountries);
 
   return (
     <>
-      <h1 className="text-4xl mb-8">All Events</h1>
+      <h1 className="mb-8 text-4xl">All Events</h1>
       {country ? (
         <div className="mb-8">
           Filtered by country: {getCountryNameByCode(country)}
@@ -52,38 +53,35 @@ export default function Events() {
         <Form
           className="mb-8"
           onChange={(event) => {
+            console.log(event);
             submit(event.currentTarget);
           }}
         >
-          <label className="flex flex-col gap-2" htmlFor="country">
+          <label className="grid gap-2" htmlFor="country">
             Filter by country
             <CountrySelect filteredCountries={filteredCountries} />
           </label>
         </Form>
       )}
-      <div className="flex flex-col gap-2 mb-8">
+      <div className="mb-8 grid gap-2">
         {events.map((event) => (
-          <Link
+          <EventListCard
             key={event.id}
-            className="text-2xl flex items-center justify-between"
-            to={`/events/${event.id}`}
-          >
-            <span>{event.title || "n/a"}</span>
-            <span className="text-base flex gap-4">
-              <span>{event.dateStart}</span>
-              {event.dateEnd && (
-                <>
-                  <span className="text-slate-400">&gt;&gt;</span>
-                  <span>{event.dateEnd}</span>
-                </>
-              )}
-            </span>
-          </Link>
+            id={event.id}
+            title={event.title}
+            country={event.country}
+            dateStart={event.dateStart}
+            dateEnd={event.dateEnd}
+          />
         ))}
       </div>
-      <div className="flex flex-col items-center justify-center gap-4">
-        <Link to="/events/new">Add New Event</Link>
-        <Link to={country ? "/events" : "/"}>Back</Link>
+      <div className="flex justify-end gap-4">
+        <Link
+          to={country ? "/events" : "/"}
+          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600"
+        >
+          Back
+        </Link>
       </div>
     </>
   );

@@ -13,11 +13,6 @@ export const meta: MetaFunction = () => {
   return [{ title: "New Event ~ Seek Gathering" }];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  await requireUserSession(request);
-  return null;
-}
-
 export async function action({ request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
@@ -31,41 +26,47 @@ export async function action({ request }: ActionFunctionArgs) {
   return redirect("/events");
 }
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  await requireUserSession(request);
+  return null;
+}
+
 export default function NewEvent() {
   const errors = useActionData<typeof action>();
+
   return (
     <>
-      <h1 className="text-4xl mb-8">New Event</h1>
+      <h1 className="mb-8 text-4xl">New Event</h1>
       <Form method="post">
-        <div className="flex flex-col gap-4 mb-8">
-          <label className="flex flex-col gap-2">
+        <div className="mb-8 grid gap-4">
+          <label className="grid gap-2">
             title
-            <input type="text" name="title" className="bg-orange-50" />
+            <input type="text" name="title" />
             {errors?.fieldErrors.title && (
               <p className="text-red-500">
                 {errors.fieldErrors.title.join(", ")}
               </p>
             )}
           </label>
-          <label className="flex flex-col gap-2">
+          <label className="grid gap-2">
             dateStart
-            <input type="date" name="dateStart" className="bg-orange-50" />
+            <input type="date" name="dateStart" />
             {errors?.fieldErrors.dateStart && (
               <p className="text-red-500">
                 {errors.fieldErrors.dateStart.join(", ")}
               </p>
             )}
           </label>
-          <label className="flex flex-col gap-2">
+          <label className="grid gap-2">
             dateEnd
-            <input type="date" name="dateEnd" className="bg-orange-50" />
+            <input type="date" name="dateEnd" />
             {errors?.fieldErrors.dateEnd && (
               <p className="text-red-500">
                 {errors.fieldErrors.dateEnd.join(", ")}
               </p>
             )}
           </label>
-          <label className="flex flex-col gap-2">
+          <label className="grid gap-2">
             country
             <CountrySelect />
             {errors?.fieldErrors.country && (
@@ -74,27 +75,27 @@ export default function NewEvent() {
               </p>
             )}
           </label>
-          <label className="flex flex-col gap-2">
+          <label className="grid gap-2">
             coords
-            <input type="text" name="coords" className="bg-orange-50" />
+            <input type="text" name="coords" />
             {errors?.fieldErrors.coords && (
               <p className="text-red-500">
                 {errors.fieldErrors.coords.join(", ")}
               </p>
             )}
           </label>
-          <label className="flex flex-col gap-2">
+          <label className="grid gap-2">
             link
-            <input type="text" name="link" className="bg-orange-50" />
+            <input type="text" name="link" />
             {errors?.fieldErrors.link && (
               <p className="text-red-500">
                 {errors.fieldErrors.link.join(", ")}
               </p>
             )}
           </label>
-          <label className="flex flex-col gap-2">
+          <label className="grid gap-2">
             description
-            <textarea name="description" className="bg-orange-50" />
+            <textarea name="description" />
             {errors?.fieldErrors.description && (
               <p className="text-red-500">
                 {errors.fieldErrors.description.join(", ")}
@@ -102,9 +103,19 @@ export default function NewEvent() {
             )}
           </label>
         </div>
-        <div className="flex flex-col items-center justify-center gap-4">
-          <button type="submit">Save</button>
-          <Link to="/events">Back</Link>
+        <div className="flex justify-end gap-4">
+          <button
+            type="submit"
+            className="rounded bg-amber-600 px-4 py-2 text-white"
+          >
+            Save
+          </button>
+          <Link
+            to="/events"
+            className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600"
+          >
+            Back
+          </Link>
         </div>
       </Form>
     </>

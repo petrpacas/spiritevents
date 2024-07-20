@@ -20,38 +20,39 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Login() {
   const navigate = useNavigate();
+
   return (
     <>
-      <h1 className="text-4xl mb-8">Log In</h1>
+      <h1 className="mb-8 text-4xl">Log In</h1>
       <Form method="post">
-        <div className="flex flex-col gap-4 mb-8">
-          <label className="flex flex-col gap-2">
+        <div className="mb-8 grid gap-4">
+          <label className="grid gap-2">
             email
-            <input
-              type="email"
-              name="email"
-              required
-              className="bg-orange-50"
-            />
+            <input type="email" name="email" required />
           </label>
-          <label className="flex flex-col gap-2">
+          <label className="grid gap-2">
             password
             <input
               type="password"
               name="password"
               autoComplete="current-password"
               required
-              className="bg-orange-50"
             />
           </label>
         </div>
-        <div className="flex flex-col items-center justify-center gap-4">
-          <button type="submit">Log In</button>
+        <div className="flex justify-end gap-4">
+          <button
+            type="submit"
+            className="rounded bg-amber-600 px-4 py-2 text-white"
+          >
+            Log In
+          </button>
           <button
             type="button"
             onClick={() => {
               navigate(-1);
             }}
+            className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600"
           >
             Cancel
           </button>

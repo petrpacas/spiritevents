@@ -10,7 +10,11 @@ export const EventSchema = z
     dateStart: z.string().date(),
     dateEnd: z.string().date(),
     country: z.string().trim().length(2),
-    coords: z.string().trim().or(z.literal("")),
+    coords: z
+      .string()
+      .trim()
+      .transform((value) => value.replace(/\s/g, ""))
+      .or(z.literal("")),
     link: z.string().url().or(z.literal("")),
     description: z.string().trim().or(z.literal("")),
   })

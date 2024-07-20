@@ -47,7 +47,7 @@ export const sessionStorage = createCookieSessionStorage({
 export const { getSession, commitSession, destroySession } = sessionStorage;
 
 export async function requireUserSession(
-  request: LoaderFunctionArgs["request"]
+  request: LoaderFunctionArgs["request"],
 ) {
   const cookie = request.headers.get("cookie");
   const session = await getSession(cookie);

@@ -1,7 +1,7 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
-import { authenticator } from "~/services/auth.server";
+import type { MetaFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 import prisma from "~/services/db.server";
+import { EventListCard } from "~/components";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,54 +10,53 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await authenticator.isAuthenticated(request);
+export async function loader() {
   const events = await prisma.event.findMany({
-    select: { id: true, title: true, dateStart: true, dateEnd: true },
+    select: {
+      id: true,
+      title: true,
+      dateStart: true,
+      dateEnd: true,
+      country: true,
+    },
     orderBy: [{ dateStart: "asc" }],
     take: 3,
   });
-  return { user, events };
+  return events;
 }
 
 export default function Index() {
-  const { user, events } = useLoaderData<typeof loader>();
+  const events = useLoaderData<typeof loader>();
+
   return (
     <>
-      <h1 className="text-4xl mb-8">~ Seek Gathering ~</h1>
-      <p className="text-xl mb-8">
-        Out of love for the community, a seeker&apos;s aid was born&hellip;
+      <h1 className="mb-8 text-center text-4xl">Welcome to Seek Gathering</h1>
+      <p className="mb-16 text-center text-xl">
+        Born from a deep love for the global conscious community, this platform
+        is your gateway to discovering and connecting with extraordinary
+        gatherings, festivals, and events designed to uplift your spirit and
+        propel you forward on your journey of self-discovery
       </p>
-      <h2 className="text-3xl mb-8">What&apos;s happening soon?</h2>
-      <div className="flex flex-col gap-2 mb-8">
+      <h2 className="mb-8 text-center text-3xl">What&apos;s happening soon?</h2>
+      <div className="mb-8 grid gap-2">
         {events.map((event) => (
-          <Link
+          <EventListCard
             key={event.id}
-            className="text-2xl flex items-center justify-between"
-            to={`/events/${event.id}`}
-          >
-            <span>{event.title || "n/a"}</span>
-            <span className="text-base flex gap-4">
-              <span>{event.dateStart}</span>
-              {event.dateEnd && (
-                <>
-                  <span className="text-slate-400">&gt;&gt;</span>
-                  <span>{event.dateEnd}</span>
-                </>
-              )}
-            </span>
-          </Link>
+            id={event.id}
+            title={event.title}
+            country={event.country}
+            dateStart={event.dateStart}
+            dateEnd={event.dateEnd}
+          />
         ))}
       </div>
-      <div className="flex flex-col items-center justify-center gap-4">
-        <Link to="/events">Show All Events</Link>
-        {user ? (
-          <Form action="/logout" method="post">
-            <button type="submit">Log Out</button>
-          </Form>
-        ) : (
-          <Link to="/login">Log In</Link>
-        )}
+      <div className="flex justify-center">
+        <Link
+          to="/events"
+          className="rounded-lg bg-amber-600 px-8 py-4 text-lg text-white"
+        >
+          Show All Events
+        </Link>
       </div>
     </>
   );
