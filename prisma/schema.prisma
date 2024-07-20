@@ -13,14 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(nanoid(8))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  password  String
+  isAdmin   Boolean
+}
+
 model Event {
   id          String   @id @default(nanoid(8))
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   title       String   @unique
   dateStart   String
-  dateEnd     String?
-  country     String?
+  dateEnd     String
+  country     String
   coords      String?
   link        String?
   description String?

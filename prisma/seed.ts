@@ -23,7 +23,7 @@ async function main() {
       title: "Dummy Event 2",
       dateStart: "2025-02-01",
       dateEnd: "2025-02-05",
-      country: "Czech Republic",
+      country: "GR",
       coords: "123.123, 123.123",
       link: "https://link.dummy-event-2.example/",
       description: "Description of Dummy Event 2",
@@ -37,7 +37,7 @@ async function main() {
       title: "Dummy Event 3",
       dateStart: "2025-03-01",
       dateEnd: "2025-03-05",
-      country: "Czech Republic",
+      country: "DE",
       coords: "123.123, 123.123",
       link: "https://link.dummy-event-3.example/",
       description: "Description of Dummy Event 3",
@@ -65,7 +65,7 @@ async function main() {
       title: "Dummy Event 5",
       dateStart: "2025-05-01",
       dateEnd: "2025-05-05",
-      country: "Czech Republic",
+      country: "GR",
       coords: "123.123, 123.123",
       link: "https://link.dummy-event-5.example/",
       description: "Description of Dummy Event 5",
@@ -79,7 +79,7 @@ async function main() {
       title: "Dummy Event 6",
       dateStart: "2025-06-01",
       dateEnd: "2025-06-05",
-      country: "Czech Republic",
+      country: "DE",
       coords: "123.123, 123.123",
       link: "https://link.dummy-event-6.example/",
       description: "Description of Dummy Event 6",
@@ -107,7 +107,7 @@ async function main() {
       title: "Dummy Event 8",
       dateStart: "2025-08-01",
       dateEnd: "2025-08-05",
-      country: "Czech Republic",
+      country: "GR",
       coords: "123.123, 123.123",
       link: "https://link.dummy-event-8.example/",
       description: "Description of Dummy Event 8",
@@ -121,7 +121,7 @@ async function main() {
       title: "Dummy Event 9",
       dateStart: "2025-09-01",
       dateEnd: "2025-09-05",
-      country: "Czech Republic",
+      country: "DE",
       coords: "123.123, 123.123",
       link: "https://link.dummy-event-9.example/",
       description: "Description of Dummy Event 9",
@@ -132,8 +132,8 @@ main()
   .then(async () => {
     await prisma.$disconnect();
   })
-  .catch(async (e) => {
-    console.error(e);
+  .catch(async (error) => {
+    console.error(error);
     await prisma.$disconnect();
     process.exit(1);
   });

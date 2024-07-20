@@ -3,14 +3,24 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { Form, redirect, useLoaderData, useNavigate } from "@remix-run/react";
-import prisma from "~/db";
+import {
+  Form,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
+import { requireUserSession } from "~/services/session.server";
+import { EventSchema } from "~/services/validations";
+import prisma from "~/services/db.server";
+import { CountrySelect } from "~/components/";
 
-export const meta: MetaFunction = ({ data }) => {
-  return [{ title: `Edit ~ ${data.title} ~ Seek Gathering` }];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: `Edit ~ ${data?.title} ~ Seek Gathering` }];
 };
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  await requireUserSession(request);
   const event = await prisma.event.findUnique({
     where: { id: params.eventId },
   });
@@ -21,13 +31,23 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
+  await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  await prisma.event.update({ where: { id: params.eventId }, data });
+  const result = EventSchema.safeParse(data);
+  if (!result.success) {
+    const errors = result.error.flatten();
+    return errors;
+  }
+  await prisma.event.update({
+    where: { id: params.eventId },
+    data: result.data,
+  });
   return redirect(`/events/${params.eventId}`);
 }
 
 export default function EditEvent() {
+  const errors = useActionData<typeof action>();
   const event = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   return (
@@ -43,6 +63,11 @@ export default function EditEvent() {
               className="bg-orange-50"
               defaultValue={event.title}
             />
+            {errors?.fieldErrors.title && (
+              <p className="text-red-500">
+                {errors.fieldErrors.title.join(", ")}
+              </p>
+            )}
           </label>
           <label className="flex flex-col gap-2">
             dateStart
@@ -52,6 +77,11 @@ export default function EditEvent() {
               className="bg-orange-50"
               defaultValue={event.dateStart}
             />
+            {errors?.fieldErrors.dateStart && (
+              <p className="text-red-500">
+                {errors.fieldErrors.dateStart.join(", ")}
+              </p>
+            )}
           </label>
           <label className="flex flex-col gap-2">
             dateEnd
@@ -61,15 +91,20 @@ export default function EditEvent() {
               className="bg-orange-50"
               defaultValue={event.dateEnd}
             />
+            {errors?.fieldErrors.dateEnd && (
+              <p className="text-red-500">
+                {errors.fieldErrors.dateEnd.join(", ")}
+              </p>
+            )}
           </label>
           <label className="flex flex-col gap-2">
             country
-            <input
-              type="text"
-              name="country"
-              className="bg-orange-50"
-              defaultValue={event.country}
-            />
+            <CountrySelect defaultValue={event.country} />
+            {errors?.fieldErrors.country && (
+              <p className="text-red-500">
+                {errors.fieldErrors.country.join(", ")}
+              </p>
+            )}
           </label>
           <label className="flex flex-col gap-2">
             coords
@@ -77,8 +112,13 @@ export default function EditEvent() {
               type="text"
               name="coords"
               className="bg-orange-50"
-              defaultValue={event.coords}
+              defaultValue={event.coords ?? ""}
             />
+            {errors?.fieldErrors.coords && (
+              <p className="text-red-500">
+                {errors.fieldErrors.coords.join(", ")}
+              </p>
+            )}
           </label>
           <label className="flex flex-col gap-2">
             link
@@ -86,16 +126,26 @@ export default function EditEvent() {
               type="text"
               name="link"
               className="bg-orange-50"
-              defaultValue={event.link}
+              defaultValue={event.link ?? ""}
             />
+            {errors?.fieldErrors.link && (
+              <p className="text-red-500">
+                {errors.fieldErrors.link.join(", ")}
+              </p>
+            )}
           </label>
           <label className="flex flex-col gap-2">
             description
             <textarea
               name="description"
               className="bg-orange-50"
-              defaultValue={event.description}
+              defaultValue={event.description ?? ""}
             />
+            {errors?.fieldErrors.description && (
+              <p className="text-red-500">
+                {errors.fieldErrors.description.join(", ")}
+              </p>
+            )}
           </label>
         </div>
         <div className="flex flex-col items-center justify-center gap-4">

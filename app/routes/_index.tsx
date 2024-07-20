@@ -1,6 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import prisma from "~/db";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Form, Link, useLoaderData } from "@remix-run/react";
+import { authenticator } from "~/services/auth.server";
+import prisma from "~/services/db.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,17 +10,18 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
+  const user = await authenticator.isAuthenticated(request);
   const events = await prisma.event.findMany({
     select: { id: true, title: true, dateStart: true, dateEnd: true },
     orderBy: [{ dateStart: "asc" }],
     take: 3,
   });
-  return events;
+  return { user, events };
 }
 
 export default function Index() {
-  const events = useLoaderData<typeof loader>();
+  const { user, events } = useLoaderData<typeof loader>();
   return (
     <>
       <h1 className="text-4xl mb-8">~ Seek Gathering ~</h1>
@@ -49,6 +51,13 @@ export default function Index() {
       </div>
       <div className="flex flex-col items-center justify-center gap-4">
         <Link to="/events">Show All Events</Link>
+        {user ? (
+          <Form action="/logout" method="post">
+            <button type="submit">Log Out</button>
+          </Form>
+        ) : (
+          <Link to="/login">Log In</Link>
+        )}
       </div>
     </>
   );
