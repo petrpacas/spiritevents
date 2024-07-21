@@ -57,74 +57,99 @@ export default function EditEvent() {
       <Form method="post">
         <div className="mb-8 grid gap-4">
           <label className="grid gap-2">
-            title
-            <input type="text" name="title" defaultValue={event.title} />
-            {errors?.fieldErrors.title && (
+            Title
+            <input
+              type="text"
+              name="title"
+              defaultValue={event.title}
+              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            />
+            {errors?.fieldErrors?.title && (
               <p className="text-red-500">
                 {errors.fieldErrors.title.join(", ")}
               </p>
             )}
           </label>
+          <div className="grid gap-4 md:flex md:items-start">
+            <label className="grid gap-2 md:flex-1">
+              Start Date
+              <input
+                type="date"
+                name="dateStart"
+                defaultValue={event.dateStart}
+                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              />
+              {errors?.fieldErrors?.dateStart && (
+                <p className="text-red-500">
+                  {errors.fieldErrors.dateStart.join(", ")}
+                </p>
+              )}
+            </label>
+            <label className="grid gap-2 md:flex-1">
+              End Date
+              <input
+                type="date"
+                name="dateEnd"
+                defaultValue={event.dateEnd}
+                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              />
+              {errors?.fieldErrors?.dateEnd && (
+                <p className="text-red-500">
+                  {errors.fieldErrors.dateEnd.join(", ")}
+                </p>
+              )}
+            </label>
+            <label className="grid gap-2 md:flex-1">
+              Country
+              <CountrySelect
+                defaultValue={event.country}
+                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              />
+              {errors?.fieldErrors?.country && (
+                <p className="text-red-500">
+                  {errors.fieldErrors.country.join(", ")}
+                </p>
+              )}
+            </label>
+          </div>
+          <div className="grid gap-4 md:flex md:items-start">
+            <label className="grid gap-2 md:flex-1">
+              Coordinates
+              <input
+                type="text"
+                name="coords"
+                defaultValue={event.coords ?? ""}
+                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              />
+              {errors?.fieldErrors?.coords && (
+                <p className="text-red-500">
+                  {errors.fieldErrors.coords.join(", ")}
+                </p>
+              )}
+            </label>
+            <label className="grid gap-2 md:flex-1">
+              Link
+              <input
+                type="text"
+                name="link"
+                defaultValue={event.link ?? ""}
+                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              />
+              {errors?.fieldErrors?.link && (
+                <p className="text-red-500">
+                  {errors.fieldErrors.link.join(", ")}
+                </p>
+              )}
+            </label>
+          </div>
           <label className="grid gap-2">
-            dateStart
-            <input
-              type="date"
-              name="dateStart"
-              defaultValue={event.dateStart}
-            />
-            {errors?.fieldErrors.dateStart && (
-              <p className="text-red-500">
-                {errors.fieldErrors.dateStart.join(", ")}
-              </p>
-            )}
-          </label>
-          <label className="grid gap-2">
-            dateEnd
-            <input type="date" name="dateEnd" defaultValue={event.dateEnd} />
-            {errors?.fieldErrors.dateEnd && (
-              <p className="text-red-500">
-                {errors.fieldErrors.dateEnd.join(", ")}
-              </p>
-            )}
-          </label>
-          <label className="grid gap-2">
-            country
-            <CountrySelect defaultValue={event.country} />
-            {errors?.fieldErrors.country && (
-              <p className="text-red-500">
-                {errors.fieldErrors.country.join(", ")}
-              </p>
-            )}
-          </label>
-          <label className="grid gap-2">
-            coords
-            <input
-              type="text"
-              name="coords"
-              defaultValue={event.coords ?? ""}
-            />
-            {errors?.fieldErrors.coords && (
-              <p className="text-red-500">
-                {errors.fieldErrors.coords.join(", ")}
-              </p>
-            )}
-          </label>
-          <label className="grid gap-2">
-            link
-            <input type="text" name="link" defaultValue={event.link ?? ""} />
-            {errors?.fieldErrors.link && (
-              <p className="text-red-500">
-                {errors.fieldErrors.link.join(", ")}
-              </p>
-            )}
-          </label>
-          <label className="grid gap-2">
-            description
+            Description
             <textarea
               name="description"
               defaultValue={event.description ?? ""}
+              className="min-h-20 rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
             />
-            {errors?.fieldErrors.description && (
+            {errors?.fieldErrors?.description && (
               <p className="text-red-500">
                 {errors.fieldErrors.description.join(", ")}
               </p>
@@ -134,7 +159,7 @@ export default function EditEvent() {
         <div className="flex justify-end gap-4">
           <button
             type="submit"
-            className="rounded bg-amber-600 px-4 py-2 text-white"
+            className="rounded bg-amber-600 px-4 py-2 text-white hover:shadow-md active:shadow"
           >
             Save
           </button>
@@ -143,7 +168,7 @@ export default function EditEvent() {
             onClick={() => {
               navigate(-1);
             }}
-            className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600"
+            className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600 hover:shadow-md active:shadow"
           >
             Cancel
           </button>

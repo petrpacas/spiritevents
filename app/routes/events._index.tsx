@@ -57,9 +57,12 @@ export default function Events() {
             submit(event.currentTarget);
           }}
         >
-          <label className="grid gap-2" htmlFor="country">
-            Filter by country
-            <CountrySelect filteredCountries={filteredCountries} />
+          <label className="flex items-center gap-2" htmlFor="country">
+            Filter by country:
+            <CountrySelect
+              filteredCountries={filteredCountries}
+              className="rounded bg-white pl-2 pr-6 hover:shadow-md active:shadow"
+            />
           </label>
         </Form>
       )}
@@ -78,7 +81,7 @@ export default function Events() {
       <div className="flex justify-end gap-4">
         <Link
           to={country ? "/events" : "/"}
-          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600"
+          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600 hover:shadow-md active:shadow"
         >
           Back
         </Link>

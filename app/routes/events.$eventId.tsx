@@ -42,14 +42,14 @@ export default function ShowEvent() {
     <>
       <div className="mb-8 grid gap-8 rounded-lg border border-amber-600 bg-white p-8">
         <h1 className="text-4xl">{event.title}</h1>
-        <div className="grid">
+        <div className="grid gap-4 text-neutral-800">
           <div className="flex items-center justify-between gap-8 text-2xl">
             <p>
               {getCountryNameByCode(event.country)} ({event.country})
             </p>
             <p className="flex gap-2">
               <span>{new Date(event.dateStart).toDateString()}</span>
-              {event.dateEnd && (
+              {event.dateEnd !== event.dateStart && (
                 <>
                   <span className="text-neutral-400">&gt;&gt;</span>
                   <span>{new Date(event.dateEnd).toDateString()}</span>
@@ -86,7 +86,7 @@ export default function ShowEvent() {
             </div>
           )}
         </div>
-        <div className="text-xl">{event.description}</div>
+        <div className="text-xl text-neutral-800">{event.description}</div>
         {user && (
           <div className="grid justify-end text-right text-neutral-400">
             <span>id: {event.id}</span>
@@ -101,7 +101,7 @@ export default function ShowEvent() {
             <Form action="edit">
               <button
                 type="submit"
-                className="rounded bg-amber-600 px-4 py-2 text-white"
+                className="rounded bg-amber-600 px-4 py-2 text-white hover:shadow-md active:shadow"
               >
                 Edit
               </button>
@@ -120,7 +120,7 @@ export default function ShowEvent() {
             >
               <button
                 type="submit"
-                className="rounded bg-red-600 px-4 py-2 text-white"
+                className="rounded bg-red-600 px-4 py-2 text-white hover:shadow-md active:shadow"
               >
                 Delete
               </button>
@@ -129,7 +129,7 @@ export default function ShowEvent() {
         )}
         <Link
           to="/events"
-          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600"
+          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600 hover:shadow-md active:shadow"
         >
           Back
         </Link>

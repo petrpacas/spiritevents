@@ -53,7 +53,7 @@ export default function Index() {
       <div className="flex justify-center">
         <Link
           to="/events"
-          className="rounded-lg bg-amber-600 px-8 py-4 text-lg text-white"
+          className="rounded-lg bg-amber-600 px-8 py-4 text-lg text-white hover:shadow-md active:shadow"
         >
           Show All Events
         </Link>

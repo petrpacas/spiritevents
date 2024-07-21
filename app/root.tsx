@@ -37,14 +37,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <nav className="flex items-center gap-4">
               <Link
                 to="/events/new"
-                className="rounded bg-amber-900 px-4 py-2 text-white"
+                className="rounded bg-amber-900 px-4 py-2 text-white hover:shadow-md active:shadow"
               >
                 Add New Event
               </Link>
               <Form action="/logout" method="post">
                 <button
                   type="submit"
-                  className="rounded border border-amber-900 px-4 py-2 text-amber-900"
+                  className="rounded border border-amber-900 px-4 py-2 text-amber-900 hover:shadow-md active:shadow"
                 >
                   Log Out
                 </button>
@@ -53,7 +53,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           ) : (
             <Link
               to="/login"
-              className="rounded border border-amber-900 px-4 py-2 text-amber-900"
+              className="rounded border border-amber-900 px-4 py-2 text-amber-900 hover:shadow-md active:shadow"
             >
               Admin
             </Link>

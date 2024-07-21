@@ -22,42 +22,46 @@ export default function Login() {
   const navigate = useNavigate();
 
   return (
-    <>
-      <h1 className="mb-8 text-4xl">Log In</h1>
-      <Form method="post">
-        <div className="mb-8 grid gap-4">
-          <label className="grid gap-2">
-            email
-            <input type="email" name="email" required />
-          </label>
-          <label className="grid gap-2">
-            password
-            <input
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              required
-            />
-          </label>
-        </div>
-        <div className="flex justify-end gap-4">
-          <button
-            type="submit"
-            className="rounded bg-amber-600 px-4 py-2 text-white"
-          >
-            Log In
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              navigate(-1);
-            }}
-            className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600"
-          >
-            Cancel
-          </button>
-        </div>
-      </Form>
-    </>
+    <Form method="post" className="mx-auto grid max-w-lg gap-8 text-center">
+      <h1 className="text-4xl">Log In</h1>
+      <div className="grid gap-4">
+        <label className="grid gap-2">
+          Email
+          <input
+            type="email"
+            name="email"
+            required
+            className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+          />
+        </label>
+        <label className="grid gap-2">
+          Password
+          <input
+            type="password"
+            name="password"
+            autoComplete="current-password"
+            required
+            className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+          />
+        </label>
+      </div>
+      <div className="flex justify-center gap-4">
+        <button
+          type="submit"
+          className="rounded bg-amber-600 px-4 py-2 text-white hover:shadow-md active:shadow"
+        >
+          Log In
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            navigate(-1);
+          }}
+          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600 hover:shadow-md active:shadow"
+        >
+          Cancel
+        </button>
+      </div>
+    </Form>
   );
 }
