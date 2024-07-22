@@ -36,55 +36,53 @@ export default function ShowEvent() {
   };
   return (
     <>
-      <div className="mb-8 grid gap-8 rounded-lg border border-amber-600 bg-white p-8">
-        <h1 className="text-4xl">{event.title}</h1>
-        <div className="grid gap-4 text-neutral-800">
-          <div className="flex items-center justify-between gap-8 text-2xl">
-            <p>
-              {getCountryNameByCode(event.country)} ({event.country})
-            </p>
-            <p className="flex gap-2">
-              <span>{new Date(event.dateStart).toDateString()}</span>
-              {event.dateEnd !== event.dateStart && (
-                <>
-                  <span className="text-neutral-400">&gt;&gt;</span>
-                  <span>{new Date(event.dateEnd).toDateString()}</span>
-                </>
-              )}
-            </p>
-          </div>
-          {(event.coords || event.link) && (
-            <div className="flex items-center justify-between gap-8 text-lg text-neutral-400">
-              <div>
-                {event.coords && (
-                  <a
-                    href={`https://www.google.com/maps?q=${event.coords}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline"
-                  >
-                    Google Maps Coords
-                  </a>
-                )}
-              </div>
-              <div>
-                {event.link && (
-                  <a
-                    href={event.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline"
-                  >
-                    {event.link}
-                  </a>
-                )}
-              </div>
-            </div>
+      <div className="mb-8 grid gap-8 border-y border-amber-600 bg-white px-4 py-8 max-sm:-mx-4 sm:rounded-lg sm:border-x">
+        <div className="text-center">
+          <h1 className="mb-2 text-3xl sm:text-4xl">{event.title}</h1>
+          <p className="text-lg text-amber-600 sm:text-xl">
+            {getCountryNameByCode(event.country)} ({event.country})
+          </p>
+        </div>
+        <div className="grid text-center text-lg sm:flex sm:justify-center sm:gap-2 sm:text-xl">
+          <span>{new Date(event.dateStart).toDateString()}</span>
+          {event.dateEnd !== event.dateStart && (
+            <>
+              <span className="text-amber-600">&gt;&gt;</span>
+              <span>{new Date(event.dateEnd).toDateString()}</span>
+            </>
           )}
         </div>
-        <div className="text-xl text-neutral-800">{event.description}</div>
+        {(event.coords || event.link) && (
+          <div className="-mx-4 grid gap-4 border-t border-amber-600 px-4 pt-8 text-amber-600 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:text-lg">
+            {event.coords && (
+              <a
+                href={`https://www.google.com/maps?q=${event.coords}`}
+                target="_blank"
+                rel="noreferrer"
+                className="underline"
+              >
+                Google Maps Coords
+              </a>
+            )}
+            {event.link && (
+              <a
+                href={event.link}
+                target="_blank"
+                rel="noreferrer"
+                className="underline"
+              >
+                {event.link}
+              </a>
+            )}
+          </div>
+        )}
+        {event.description && (
+          <div className="-mx-4 border-t border-amber-600 px-4 pt-8 text-lg sm:text-xl">
+            {event.description}
+          </div>
+        )}
         {user && (
-          <div className="grid justify-end text-right text-neutral-400">
+          <div className="-mx-4 grid border-t border-amber-600 px-4 pt-8 text-amber-600 sm:justify-end sm:text-right">
             <span>id: {event.id}</span>
             <span>createdAt: {event.createdAt}</span>
             <span>updatedAt: {event.updatedAt}</span>
@@ -97,7 +95,7 @@ export default function ShowEvent() {
             <Form action="edit">
               <button
                 type="submit"
-                className="rounded bg-amber-600 px-4 py-2 text-white hover:shadow-md active:shadow"
+                className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white hover:shadow-md active:shadow"
               >
                 Edit
               </button>
@@ -116,7 +114,7 @@ export default function ShowEvent() {
             >
               <button
                 type="submit"
-                className="rounded bg-red-600 px-4 py-2 text-white hover:shadow-md active:shadow"
+                className="rounded border border-transparent bg-red-600 px-4 py-2 text-white hover:shadow-md active:shadow"
               >
                 Delete
               </button>
@@ -125,7 +123,7 @@ export default function ShowEvent() {
         )}
         <Link
           to="/events"
-          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600 hover:shadow-md active:shadow"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
         >
           Back
         </Link>

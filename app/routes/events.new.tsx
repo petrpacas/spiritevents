@@ -33,116 +33,120 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function NewEvent() {
   const errors = useActionData<typeof action>();
   return (
-    <>
-      <h1 className="mb-8 text-4xl">New Event</h1>
-      <Form method="post">
-        <div className="mb-8 grid gap-4">
-          <label className="grid gap-2">
-            Title
+    <Form method="post">
+      <h1 className="mb-8 text-3xl sm:text-4xl">New Event</h1>
+      <div className="mb-8 grid gap-4">
+        <label className="grid gap-2">
+          Title
+          <input
+            type="text"
+            name="title"
+            className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+          />
+          {errors?.fieldErrors?.title && (
+            <p className="text-red-600">
+              {errors.fieldErrors.title.join(", ")}
+            </p>
+          )}
+        </label>
+        <div className="grid gap-4 md:flex md:items-start">
+          <label className="grid gap-2 md:flex-1">
+            Start Date
             <input
-              type="text"
-              name="title"
+              type="date"
+              name="dateStart"
               className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
             />
-            {errors?.fieldErrors?.title && (
-              <p className="text-red-500">
-                {errors.fieldErrors.title.join(", ")}
+            {errors?.fieldErrors?.dateStart && (
+              <p className="text-red-600">
+                {errors.fieldErrors.dateStart.join(", ")}
               </p>
             )}
           </label>
-          <div className="grid gap-4 md:flex md:items-start">
-            <label className="grid gap-2 md:flex-1">
-              Start Date
-              <input
-                type="date"
-                name="dateStart"
-                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
-              />
-              {errors?.fieldErrors?.dateStart && (
-                <p className="text-red-500">
-                  {errors.fieldErrors.dateStart.join(", ")}
-                </p>
-              )}
-            </label>
-            <label className="grid gap-2 md:flex-1">
-              End Date
-              <input
-                type="date"
-                name="dateEnd"
-                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
-              />
-              {errors?.fieldErrors?.dateEnd && (
-                <p className="text-red-500">
-                  {errors.fieldErrors.dateEnd.join(", ")}
-                </p>
-              )}
-            </label>
-            <label className="grid gap-2 md:flex-1">
-              Country
-              <CountrySelect className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow" />
-              {errors?.fieldErrors?.country && (
-                <p className="text-red-500">
-                  {errors.fieldErrors.country.join(", ")}
-                </p>
-              )}
-            </label>
-          </div>
-          <div className="grid gap-4 md:flex md:items-start">
-            <label className="grid gap-2 md:flex-1">
-              Coordinates
-              <input
-                type="text"
-                name="coords"
-                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
-              />
-              {errors?.fieldErrors?.coords && (
-                <p className="text-red-500">
-                  {errors.fieldErrors.coords.join(", ")}
-                </p>
-              )}
-            </label>
-            <label className="grid gap-2 md:flex-1">
-              Link
-              <input
-                type="text"
-                name="link"
-                className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
-              />
-              {errors?.fieldErrors?.link && (
-                <p className="text-red-500">
-                  {errors.fieldErrors.link.join(", ")}
-                </p>
-              )}
-            </label>
-          </div>
-          <label className="grid gap-2">
-            Description
-            <textarea
-              name="description"
-              className="min-h-20 rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+          <label className="grid gap-2 md:flex-1">
+            End Date
+            <input
+              type="date"
+              name="dateEnd"
+              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
             />
-            {errors?.fieldErrors?.description && (
-              <p className="text-red-500">
-                {errors.fieldErrors.description.join(", ")}
+            {errors?.fieldErrors?.dateEnd && (
+              <p className="text-red-600">
+                {errors.fieldErrors.dateEnd.join(", ")}
+              </p>
+            )}
+          </label>
+          <label className="grid gap-2 md:flex-1">
+            Country
+            <CountrySelect className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow" />
+            {errors?.fieldErrors?.country && (
+              <p className="text-red-600">
+                {errors.fieldErrors.country.join(", ")}
               </p>
             )}
           </label>
         </div>
-        <div className="flex justify-end gap-4">
-          <button
-            type="submit"
-            className="rounded bg-amber-600 px-4 py-2 text-white hover:shadow-md active:shadow"
-          >
-            Save
-          </button>
-          <Link
-            to="/events"
-            className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600 hover:shadow-md active:shadow"
-          >
-            Back
-          </Link>
+        <div className="grid gap-4 md:flex md:items-start">
+          <label className="grid gap-2 md:flex-1">
+            <div>
+              Coordinates <span className="text-amber-600">(optional)</span>
+            </div>
+            <input
+              type="text"
+              name="coords"
+              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            />
+            {errors?.fieldErrors?.coords && (
+              <p className="text-red-600">
+                {errors.fieldErrors.coords.join(", ")}
+              </p>
+            )}
+          </label>
+          <label className="grid gap-2 md:flex-1">
+            <div>
+              Link <span className="text-amber-600">(optional)</span>
+            </div>
+            <input
+              type="text"
+              name="link"
+              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            />
+            {errors?.fieldErrors?.link && (
+              <p className="text-red-600">
+                {errors.fieldErrors.link.join(", ")}
+              </p>
+            )}
+          </label>
         </div>
-      </Form>
-    </>
+        <label className="grid gap-2">
+          <div>
+            Description <span className="text-amber-600">(optional)</span>
+          </div>
+          <textarea
+            name="description"
+            className="min-h-20 rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+          />
+          {errors?.fieldErrors?.description && (
+            <p className="text-red-600">
+              {errors.fieldErrors.description.join(", ")}
+            </p>
+          )}
+        </label>
+      </div>
+      <div className="flex justify-end gap-4">
+        <button
+          type="submit"
+          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white hover:shadow-md active:shadow"
+        >
+          Save
+        </button>
+        <Link
+          to="/events"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
+        >
+          Back
+        </Link>
+      </div>
+    </Form>
   );
 }

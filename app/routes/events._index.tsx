@@ -1,5 +1,11 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData, useSubmit } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useNavigate,
+  useSubmit,
+} from "@remix-run/react";
 import { CountrySelect, EventListCard } from "~/components";
 import { prisma } from "~/services";
 import { countries, getTodayDate } from "~/utils";
@@ -27,6 +33,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Events() {
   const { country, events } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
   const submit = useSubmit();
   const getCountryNameByCode = (code: string) => {
     const country = countries.find((country) => country.code === code);
@@ -42,21 +49,44 @@ export default function Events() {
   const filteredCountries = filterCountriesForEvent(eventCountries);
   return (
     <>
-      <h1 className="mb-8 text-4xl">All Events</h1>
+      <h1 className="mb-8 text-3xl sm:text-4xl">All Events</h1>
       {country ? (
-        <div className="mb-8">
-          Filtered by country: {getCountryNameByCode(country)}
+        <div className="mb-8 grid gap-2 sm:flex sm:items-center">
+          Showing events in{" "}
+          <div className="inline-grid">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="col-start-1 row-start-1 rounded bg-white pl-2 pr-6 text-left hover:shadow-md active:shadow"
+            >
+              {getCountryNameByCode(country)}
+            </button>
+            <svg
+              className="pointer-events-none relative right-1 col-start-1 row-start-1 h-4 w-4 self-center justify-self-end forced-colors:hidden"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
         </div>
       ) : (
         <Form
-          className="mb-8"
+          className="mb-8 sm:flex"
           onChange={(event) => {
             console.log(event);
             submit(event.currentTarget);
           }}
         >
-          <label className="flex items-center gap-2" htmlFor="country">
-            Filter by country:
+          <label className="grid items-center gap-2 sm:flex" htmlFor="country">
+            Showing events in
             <CountrySelect
               filteredCountries={filteredCountries}
               className="rounded bg-white pl-2 pr-6 hover:shadow-md active:shadow"
@@ -79,7 +109,7 @@ export default function Events() {
       <div className="flex justify-end gap-4">
         <Link
           to={country ? "/events" : "/"}
-          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600 hover:shadow-md active:shadow"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
         >
           Back
         </Link>

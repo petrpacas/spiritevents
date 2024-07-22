@@ -21,7 +21,7 @@ export default function Login() {
   const navigate = useNavigate();
   return (
     <Form method="post" className="mx-auto grid max-w-lg gap-8 text-center">
-      <h1 className="text-4xl">Log In</h1>
+      <h1 className="text-3xl sm:text-4xl">Log In</h1>
       <div className="grid gap-4">
         <label className="grid gap-2">
           Email
@@ -43,10 +43,10 @@ export default function Login() {
           />
         </label>
       </div>
-      <div className="flex justify-center gap-4">
+      <div className="grid justify-center gap-4">
         <button
           type="submit"
-          className="rounded bg-amber-600 px-4 py-2 text-white hover:shadow-md active:shadow"
+          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white hover:shadow-md active:shadow"
         >
           Log In
         </button>
@@ -55,7 +55,7 @@ export default function Login() {
           onClick={() => {
             navigate(-1);
           }}
-          className="rounded border border-amber-600 bg-white px-4 py-2 text-amber-600 hover:shadow-md active:shadow"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
         >
           Cancel
         </button>
