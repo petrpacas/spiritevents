@@ -4,10 +4,8 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { Form, Link, redirect, useLoaderData } from "@remix-run/react";
-import { requireUserSession } from "~/services/session.server";
-import { authenticator } from "~/services/auth.server";
-import prisma from "~/services/db.server";
-import { countries } from "~/utils/countries";
+import { authenticator, prisma, requireUserSession } from "~/services";
+import { countries } from "~/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `${data?.event?.title} ~ Seek Gathering` }];
@@ -32,12 +30,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function ShowEvent() {
   const { event, user } = useLoaderData<typeof loader>();
-
   const getCountryNameByCode = (code: string) => {
     const country = countries.find((country) => country.code === code);
     return country ? country.name : code;
   };
-
   return (
     <>
       <div className="mb-8 grid gap-8 rounded-lg border border-amber-600 bg-white p-8">

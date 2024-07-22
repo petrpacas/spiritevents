@@ -1,8 +1,8 @@
+import type { User } from "@prisma/client";
 import { Authenticator } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
-import { login, sessionStorage } from "~/services/session.server";
-import { User } from "@prisma/client";
 import invariant from "tiny-invariant";
+import { login, sessionStorage } from "./session.server";
 
 export const authenticator = new Authenticator<User>(sessionStorage);
 
@@ -19,5 +19,5 @@ authenticator.use(
       throw new Error("Invalid email or password");
     }
     return user;
-  })
+  }),
 );

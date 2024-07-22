@@ -1,13 +1,13 @@
-import React from "react";
-import { countries } from "../utils/countries";
+import type { FC } from "react";
+import { countries } from "~/utils";
 
-interface CountrySelect {
+type Props = {
   className?: string;
   defaultValue?: string;
   filteredCountries?: typeof countries;
-}
+};
 
-export const CountrySelect: React.FC<CountrySelect> = ({
+export const CountrySelect: FC<Props> = ({
   className,
   defaultValue,
   filteredCountries,

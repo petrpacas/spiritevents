@@ -1,11 +1,10 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useNavigate } from "@remix-run/react";
-import { authenticator } from "~/services/auth.server";
+import { authenticator } from "~/services";
 
 export async function action({ request }: ActionFunctionArgs) {
   const requestUrl = new URL(request.url);
   const ogRoute = requestUrl.searchParams.get("ogRoute");
-
   return await authenticator.authenticate("form", request, {
     successRedirect: ogRoute || "/",
     failureRedirect: ogRoute ? `/login?ogRoute=${ogRoute}` : "/login",
@@ -20,7 +19,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Login() {
   const navigate = useNavigate();
-
   return (
     <Form method="post" className="mx-auto grid max-w-lg gap-8 text-center">
       <h1 className="text-4xl">Log In</h1>

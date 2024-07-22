@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
+
 async function main() {
   await prisma.event.upsert({
     where: { id: "dummy-id-1" },
@@ -128,6 +130,7 @@ async function main() {
     },
   });
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect();

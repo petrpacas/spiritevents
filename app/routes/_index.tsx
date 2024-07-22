@@ -1,7 +1,8 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import prisma from "~/services/db.server";
 import { EventListCard } from "~/components";
+import { prisma } from "~/services";
+import { getTodayDate } from "~/utils";
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,6 +20,7 @@ export async function loader() {
       dateEnd: true,
       country: true,
     },
+    where: { dateEnd: { gte: getTodayDate() } },
     orderBy: [{ dateStart: "asc" }],
     take: 3,
   });
@@ -27,7 +29,6 @@ export async function loader() {
 
 export default function Index() {
   const events = useLoaderData<typeof loader>();
-
   return (
     <>
       <h1 className="mb-8 text-center text-4xl">Welcome to Seek Gathering</h1>

@@ -10,10 +10,9 @@ import {
   useLoaderData,
   useNavigate,
 } from "@remix-run/react";
-import { requireUserSession } from "~/services/session.server";
-import { EventSchema } from "~/services/validations";
-import prisma from "~/services/db.server";
 import { CountrySelect } from "~/components/";
+import { prisma, requireUserSession } from "~/services";
+import { eventSchema } from "~/validations";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `Edit ~ ${data?.title} ~ Seek Gathering` }];
@@ -23,7 +22,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const result = EventSchema.safeParse(data);
+  const result = eventSchema.safeParse(data);
   if (!result.success) {
     const errors = result.error.flatten();
     return errors;
@@ -50,7 +49,6 @@ export default function EditEvent() {
   const errors = useActionData<typeof action>();
   const event = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-
   return (
     <>
       <h1 className="mb-8 text-4xl">Edit ~ {event.title}</h1>

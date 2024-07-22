@@ -3,11 +3,10 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { Form, redirect, Link, useActionData } from "@remix-run/react";
-import { requireUserSession } from "~/services/session.server";
-import { EventSchema } from "~/services/validations";
-import prisma from "~/services/db.server";
+import { Form, Link, redirect, useActionData } from "@remix-run/react";
 import { CountrySelect } from "~/components/";
+import { prisma, requireUserSession } from "~/services";
+import { eventSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
   return [{ title: "New Event ~ Seek Gathering" }];
@@ -17,7 +16,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const result = EventSchema.safeParse(data);
+  const result = eventSchema.safeParse(data);
   if (!result.success) {
     const errors = result.error.flatten();
     return errors;
@@ -33,7 +32,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function NewEvent() {
   const errors = useActionData<typeof action>();
-
   return (
     <>
       <h1 className="mb-8 text-4xl">New Event</h1>

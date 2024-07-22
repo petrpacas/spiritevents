@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   Form,
   Link,
@@ -9,8 +9,8 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
+import { authenticator } from "~/services";
 import "./tailwind.css";
-import { authenticator } from "~/services/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
@@ -19,7 +19,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const user = useLoaderData<typeof loader>();
-
   return (
     <html lang="en">
       <head>
@@ -31,7 +30,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="grid min-h-dvh grid-rows-[auto_1fr_auto] bg-amber-100 text-amber-900">
         <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-8 py-4">
           <Link to="/" className="font-serif text-4xl uppercase">
-            Seek Gathering
+            S<span className="max-sm:sr-only">eek </span>G
+            <span className="max-sm:sr-only">athering</span>
           </Link>
           {user ? (
             <nav className="flex items-center gap-4">

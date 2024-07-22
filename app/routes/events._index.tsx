@@ -1,8 +1,8 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData, useSubmit } from "@remix-run/react";
-import prisma from "~/services/db.server";
 import { CountrySelect, EventListCard } from "~/components";
-import { countries } from "~/utils/countries";
+import { prisma } from "~/services";
+import { countries, getTodayDate } from "~/utils";
 
 export const meta: MetaFunction = () => {
   return [{ title: "All Events ~ Seek Gathering" }];
@@ -19,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       dateEnd: true,
       country: true,
     },
-    where: { country: country || undefined },
+    where: { dateEnd: { gte: getTodayDate() }, country: country || undefined },
     orderBy: [{ dateStart: "asc" }],
   });
   return { country, events };
@@ -28,7 +28,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Events() {
   const { country, events } = useLoaderData<typeof loader>();
   const submit = useSubmit();
-
   const getCountryNameByCode = (code: string) => {
     const country = countries.find((country) => country.code === code);
     return country ? country.name : code;
@@ -41,7 +40,6 @@ export default function Events() {
   };
   const eventCountries = getCountryCodesFromEvents();
   const filteredCountries = filterCountriesForEvent(eventCountries);
-
   return (
     <>
       <h1 className="mb-8 text-4xl">All Events</h1>

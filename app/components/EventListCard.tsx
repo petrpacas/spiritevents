@@ -1,15 +1,15 @@
-import React from "react";
+import type { FC } from "react";
 import { Link } from "@remix-run/react";
 
-interface EventListCard {
+type Props = {
   id: string;
   title: string;
   country: string;
   dateStart: string;
   dateEnd: string;
-}
+};
 
-export const EventListCard: React.FC<EventListCard> = ({
+export const EventListCard: FC<Props> = ({
   id,
   title,
   country,
