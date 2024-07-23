@@ -1,13 +1,21 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { Form, useNavigate } from "@remix-run/react";
 import { authenticator } from "~/services";
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Sign in ~ Seek Gathering" }];
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const requestUrl = new URL(request.url);
   const ogRoute = requestUrl.searchParams.get("ogRoute");
   return await authenticator.authenticate("form", request, {
+    failureRedirect: ogRoute ? `/sign-in?ogRoute=${ogRoute}` : "/sign-in",
     successRedirect: ogRoute || "/",
-    failureRedirect: ogRoute ? `/login?ogRoute=${ogRoute}` : "/login",
   });
 }
 
@@ -17,14 +25,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export default function Login() {
+export default function SignIn() {
   const navigate = useNavigate();
   return (
     <Form
       method="post"
-      className="mx-auto grid w-full max-w-80 gap-8 text-center"
+      className="grid w-full max-w-80 gap-8 self-center justify-self-center text-center"
     >
-      <h1 className="text-xl font-bold sm:text-2xl">Sign In</h1>
+      <h1 className="text-xl font-bold sm:text-2xl">
+        Sign in to S<span className="sr-only">eek&nbsp;</span>G
+        <span className="sr-only">athering</span>
+      </h1>
       <div className="grid gap-4">
         <label className="grid gap-2">
           Email
@@ -32,7 +43,7 @@ export default function Login() {
             type="email"
             name="email"
             required
-            className="w-full rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className="w-full rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
           />
         </label>
         <label className="grid gap-2">
@@ -42,23 +53,23 @@ export default function Login() {
             name="password"
             autoComplete="current-password"
             required
-            className="w-full rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className="w-full rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
           />
         </label>
       </div>
       <div className="grid gap-4">
         <button
           type="submit"
-          className="rounded border border-transparent bg-amber-700 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Sign In
+          Sign in
         </button>
         <button
           type="button"
           onClick={() => {
             navigate(-1);
           }}
-          className="rounded border border-amber-700 px-4 py-2 text-amber-700 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel
         </button>

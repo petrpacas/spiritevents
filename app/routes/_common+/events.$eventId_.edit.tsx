@@ -3,16 +3,22 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { Form, Link, redirect, useActionData } from "@remix-run/react";
+import {
+  Form,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
 import { CountrySelect } from "~/components/";
 import { prisma, requireUserSession } from "~/services";
 import { eventSchema } from "~/validations";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "New Event ~ Seek Gathering" }];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: `Editing ${data?.event?.title} ~ Seek Gathering` }];
 };
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
@@ -21,26 +27,38 @@ export async function action({ request }: ActionFunctionArgs) {
     const errors = result.error.flatten();
     return errors;
   }
-  await prisma.event.create({ data: result.data });
-  return redirect("/events");
+  await prisma.event.update({
+    where: { id: params.eventId },
+    data: result.data,
+  });
+  return redirect(`/events/${params.eventId}`);
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   await requireUserSession(request);
-  return null;
+  const event = await prisma.event.findUnique({
+    where: { id: params.eventId },
+  });
+  if (!event) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  return { event };
 }
 
-export default function NewEvent() {
+export default function EditEvent() {
   const errors = useActionData<typeof action>();
+  const { event } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
   return (
     <Form method="post">
-      <h1 className="mb-8 text-3xl sm:text-4xl">New Event</h1>
+      <h1 className="mb-8 text-3xl sm:text-4xl">Editing {event.title}</h1>
       <div className="mb-8 grid gap-4">
         <label className="grid gap-2">
           Title
           <input
             type="text"
             name="title"
+            defaultValue={event.title}
             className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors?.title && (
@@ -51,10 +69,11 @@ export default function NewEvent() {
         </label>
         <div className="grid gap-4 md:flex md:items-start">
           <label className="grid gap-2 md:flex-1">
-            Start Date
+            Start date
             <input
               type="date"
               name="dateStart"
+              defaultValue={event.dateStart}
               className="h-[2.625rem] rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.dateStart && (
@@ -64,10 +83,11 @@ export default function NewEvent() {
             )}
           </label>
           <label className="grid gap-2 md:flex-1">
-            End Date
+            End date
             <input
               type="date"
               name="dateEnd"
+              defaultValue={event.dateEnd}
               className="h-[2.625rem] rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.dateEnd && (
@@ -78,7 +98,10 @@ export default function NewEvent() {
           </label>
           <label className="grid gap-2 md:flex-1">
             Country
-            <CountrySelect className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow" />
+            <CountrySelect
+              defaultValue={event.country}
+              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            />
             {errors?.fieldErrors?.country && (
               <p className="text-red-600">
                 {errors.fieldErrors.country.join(", ")}
@@ -94,6 +117,7 @@ export default function NewEvent() {
             <input
               type="text"
               name="coords"
+              defaultValue={event.coords ?? ""}
               className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.coords && (
@@ -109,6 +133,7 @@ export default function NewEvent() {
             <input
               type="text"
               name="link"
+              defaultValue={event.link ?? ""}
               className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.link && (
@@ -124,6 +149,7 @@ export default function NewEvent() {
           </div>
           <textarea
             name="description"
+            defaultValue={event.description ?? ""}
             className="min-h-20 rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors?.description && (
@@ -140,12 +166,15 @@ export default function NewEvent() {
         >
           Save
         </button>
-        <Link
-          to="/events"
+        <button
+          type="button"
+          onClick={() => {
+            navigate(-1);
+          }}
           className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Back
-        </Link>
+          Cancel
+        </button>
       </div>
     </Form>
   );

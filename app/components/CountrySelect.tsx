@@ -19,7 +19,7 @@ export const CountrySelect: FC<Props> = ({
         name="country"
         id="country"
         defaultValue={defaultValue}
-        className={`col-start-1 row-start-1 w-full appearance-none ${className || ""}`}
+        className={`col-start-1 row-start-1 w-full appearance-none${` ${className}` || ""}`}
       >
         {!defaultValue && (
           <option value="">

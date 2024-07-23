@@ -3,12 +3,12 @@ import bcrypt from "@node-rs/bcrypt";
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import { prisma } from "~/services";
 
-type LoginForm = {
+type EmailPassword = {
   email: string;
   password: string;
 };
 
-export async function login({ email, password }: LoginForm) {
+export async function login({ email, password }: EmailPassword) {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) return null;
   const isCorrectPassword = await bcrypt.compare(password, user.password);
@@ -16,14 +16,14 @@ export async function login({ email, password }: LoginForm) {
   return user;
 }
 
-// export async function register({ email, password }: LoginForm) {
-//   const passwordHash = await bcrypt.hash(password, 10);
-//   const user = await prisma.user.create({
-//     data: { email, password: passwordHash, isAdmin: false },
-//   });
-//   if (!user) return null;
-//   return user;
-// }
+export async function register({ email, password }: EmailPassword) {
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user = await prisma.user.create({
+    data: { email, password: passwordHash, isAdmin: false },
+  });
+  if (!user) return null;
+  return user;
+}
 
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
@@ -32,10 +32,10 @@ if (!sessionSecret) {
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
-    name: "seek_gathering_session",
-    sameSite: "lax",
-    path: "/",
     httpOnly: true,
+    name: "seek_gathering_session",
+    path: "/",
+    sameSite: "lax",
     secrets: [sessionSecret],
     secure: process.env.NODE_ENV === "production",
   },
@@ -48,7 +48,7 @@ export async function requireUserSession(
   const session = await sessionStorage.getSession(cookie);
   if (!session.has("user")) {
     const requestUrl = new URL(request.url);
-    throw redirect(`/login?ogRoute=${requestUrl.pathname}`);
+    throw redirect(`/sign-in?ogRoute=${requestUrl.pathname}`);
   }
   return session;
 }

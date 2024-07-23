@@ -1,0 +1,123 @@
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useNavigate,
+  useSubmit,
+} from "@remix-run/react";
+import { CountrySelect, EventListCard } from "~/components";
+import { prisma } from "~/services";
+import { countries, getTodayDate } from "~/utils";
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Upcoming events ~ Seek Gathering" }];
+};
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const requestUrl = new URL(request.url);
+  const country = requestUrl.searchParams.get("country");
+  const events = await prisma.event.findMany({
+    orderBy: [{ dateStart: "asc" }],
+    select: {
+      country: true,
+      dateEnd: true,
+      dateStart: true,
+      id: true,
+      title: true,
+    },
+    where: { country: country || undefined, dateEnd: { gte: getTodayDate() } },
+  });
+  return { country, events };
+}
+
+export default function Events() {
+  const { country, events } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+  const submit = useSubmit();
+  const getCountryNameByCode = (code: string) => {
+    const country = countries.find((country) => country.code === code);
+    return country ? country.name : code;
+  };
+  const getCountryCodesFromEvents = () => {
+    return events.map((event) => event.country);
+  };
+  const filterCountriesForEvent = (eventCountries: string[]) => {
+    return countries.filter((country) => eventCountries.includes(country.code));
+  };
+  const eventCountries = getCountryCodesFromEvents();
+  const filteredCountries = filterCountriesForEvent(eventCountries);
+  return (
+    <div>
+      <div className="mb-8 grid gap-4 max-sm:w-full sm:flex sm:items-center sm:justify-between">
+        <h1 className="text-3xl sm:text-4xl">Upcoming events</h1>
+        {country ? (
+          <div className="grid gap-2 sm:flex sm:items-center">
+            Showing events in{" "}
+            <div className="inline-grid">
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="col-start-1 row-start-1 rounded border border-neutral-200 bg-white pl-2 pr-6 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
+              >
+                {getCountryNameByCode(country)}
+              </button>
+              <svg
+                className="pointer-events-none relative right-1 col-start-1 row-start-1 h-4 w-4 self-center justify-self-end forced-colors:hidden"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+          </div>
+        ) : (
+          <Form
+            className="sm:flex"
+            onChange={(event) => {
+              submit(event.currentTarget);
+            }}
+          >
+            <label
+              className="grid items-center gap-2 sm:flex"
+              htmlFor="country"
+            >
+              Showing events in
+              <CountrySelect
+                filteredCountries={filteredCountries}
+                className="rounded border border-neutral-200 bg-white pl-2 pr-6 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              />
+            </label>
+          </Form>
+        )}
+      </div>
+      <div className="mb-8 grid gap-2">
+        {events.map((event) => (
+          <EventListCard
+            key={event.id}
+            id={event.id}
+            title={event.title}
+            country={event.country}
+            dateStart={event.dateStart}
+            dateEnd={event.dateEnd}
+          />
+        ))}
+      </div>
+      <div className="flex justify-end gap-4">
+        <Link
+          to={country ? "/events" : "/"}
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        >
+          Back
+        </Link>
+      </div>
+    </div>
+  );
+}

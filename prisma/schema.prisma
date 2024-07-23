@@ -14,23 +14,25 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(nanoid(8))
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  email     String   @unique
-  password  String
-  isAdmin   Boolean
+
+  email    String  @unique
+  isAdmin  Boolean
+  password String
 }
 
 model Event {
-  id          String   @id @default(nanoid(8))
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  title       String   @unique
-  dateStart   String
-  dateEnd     String
-  country     String
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   coords      String?
-  link        String?
+  country     String
+  dateEnd     String
+  dateStart   String
   description String?
+  link        String?
+  title       String  @unique
 }

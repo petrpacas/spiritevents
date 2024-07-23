@@ -13,37 +13,37 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
   const events = await prisma.event.findMany({
+    orderBy: [{ dateStart: "asc" }],
     select: {
+      country: true,
+      dateEnd: true,
+      dateStart: true,
       id: true,
       title: true,
-      dateStart: true,
-      dateEnd: true,
-      country: true,
     },
-    where: { dateEnd: { gte: getTodayDate() } },
-    orderBy: [{ dateStart: "asc" }],
     take: 3,
+    where: { dateEnd: { gte: getTodayDate() } },
   });
-  return events;
+  return { events };
 }
 
 export default function Index() {
-  const events = useLoaderData<typeof loader>();
+  const { events } = useLoaderData<typeof loader>();
   return (
-    <>
-      <h1 className="mb-8 text-center text-3xl sm:text-4xl">
+    <div className="grid gap-8">
+      <h1 className="text-center text-3xl sm:text-4xl">
         Welcome to Seek Gathering
       </h1>
-      <p className="mb-8 text-center text-lg sm:mb-16 sm:text-xl">
+      <p className="text-center text-lg sm:text-xl">
         Born from a deep love for the global conscious community, this platform
         is your gateway to discovering and connecting with extraordinary
         gatherings, festivals, and events designed to uplift your spirit and
         propel you forward on your journey of self-discovery
       </p>
-      <h2 className="mb-8 text-center text-2xl sm:text-3xl">
+      <h2 className="text-center text-2xl sm:text-3xl">
         What&apos;s happening soon?
       </h2>
-      <div className="mb-8 grid gap-2">
+      <div className="grid gap-2">
         {events.map((event) => (
           <EventListCard
             key={event.id}
@@ -52,6 +52,7 @@ export default function Index() {
             country={event.country}
             dateStart={event.dateStart}
             dateEnd={event.dateEnd}
+            isHomepage
           />
         ))}
       </div>
@@ -60,9 +61,9 @@ export default function Index() {
           to="/events"
           className="rounded-lg border border-transparent bg-amber-800 px-8 py-4 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Show All Events
+          Browse upcoming events
         </Link>
       </div>
-    </>
+    </div>
   );
 }

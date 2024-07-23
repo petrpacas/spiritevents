@@ -25,17 +25,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (!event) {
     throw new Response("Not Found", { status: 404 });
   }
-  return { event, user: !!user };
+  return { event, isAuthenticated: !!user };
 }
 
 export default function ShowEvent() {
-  const { event, user } = useLoaderData<typeof loader>();
+  const { event, isAuthenticated } = useLoaderData<typeof loader>();
   const getCountryNameByCode = (code: string) => {
     const country = countries.find((country) => country.code === code);
     return country ? country.name : code;
   };
   return (
-    <>
+    <div>
       <div className="mb-8 grid gap-8 border-y border-amber-600 bg-white px-4 py-8 max-sm:-mx-4 sm:rounded-lg sm:border-x">
         <div className="text-center">
           <h1 className="mb-2 text-3xl sm:text-4xl">{event.title}</h1>
@@ -61,7 +61,7 @@ export default function ShowEvent() {
                 rel="noreferrer"
                 className="underline"
               >
-                Google Maps Coords
+                Google Maps coordinates
               </a>
             )}
             {event.link && (
@@ -81,7 +81,7 @@ export default function ShowEvent() {
             {event.description}
           </div>
         )}
-        {user && (
+        {isAuthenticated && (
           <div className="-mx-4 grid border-t border-amber-600 px-4 pt-8 text-amber-600 sm:justify-end sm:text-right">
             <span>id: {event.id}</span>
             <span>createdAt: {event.createdAt}</span>
@@ -90,7 +90,7 @@ export default function ShowEvent() {
         )}
       </div>
       <div className="flex justify-end gap-4">
-        {user && (
+        {isAuthenticated && (
           <>
             <Form action="edit">
               <button
@@ -128,6 +128,6 @@ export default function ShowEvent() {
           Back
         </Link>
       </div>
-    </>
+    </div>
   );
 }
