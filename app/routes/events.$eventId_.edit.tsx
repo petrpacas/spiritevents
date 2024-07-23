@@ -59,7 +59,7 @@ export default function EditEvent() {
             type="text"
             name="title"
             defaultValue={event.title}
-            className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors?.title && (
             <p className="text-red-600">
@@ -74,7 +74,7 @@ export default function EditEvent() {
               type="date"
               name="dateStart"
               defaultValue={event.dateStart}
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="h-[2.625rem] rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.dateStart && (
               <p className="text-red-600">
@@ -88,7 +88,7 @@ export default function EditEvent() {
               type="date"
               name="dateEnd"
               defaultValue={event.dateEnd}
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="h-[2.625rem] rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.dateEnd && (
               <p className="text-red-600">
@@ -100,7 +100,7 @@ export default function EditEvent() {
             Country
             <CountrySelect
               defaultValue={event.country}
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.country && (
               <p className="text-red-600">
@@ -118,7 +118,7 @@ export default function EditEvent() {
               type="text"
               name="coords"
               defaultValue={event.coords ?? ""}
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.coords && (
               <p className="text-red-600">
@@ -134,7 +134,7 @@ export default function EditEvent() {
               type="text"
               name="link"
               defaultValue={event.link ?? ""}
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.link && (
               <p className="text-red-600">
@@ -150,7 +150,7 @@ export default function EditEvent() {
           <textarea
             name="description"
             defaultValue={event.description ?? ""}
-            className="min-h-20 rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            className="min-h-20 rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors?.description && (
             <p className="text-red-600">
@@ -162,7 +162,7 @@ export default function EditEvent() {
       <div className="flex justify-end gap-4">
         <button
           type="submit"
-          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white hover:shadow-md active:shadow"
+          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Save
         </button>
@@ -171,7 +171,7 @@ export default function EditEvent() {
           onClick={() => {
             navigate(-1);
           }}
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel
         </button>

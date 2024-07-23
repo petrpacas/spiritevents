@@ -20,8 +20,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Login() {
   const navigate = useNavigate();
   return (
-    <Form method="post" className="mx-auto grid max-w-lg gap-8 text-center">
-      <h1 className="text-3xl sm:text-4xl">Log In</h1>
+    <Form
+      method="post"
+      className="mx-auto grid w-full max-w-80 gap-8 text-center"
+    >
+      <h1 className="text-xl font-bold sm:text-2xl">Sign In</h1>
       <div className="grid gap-4">
         <label className="grid gap-2">
           Email
@@ -29,7 +32,7 @@ export default function Login() {
             type="email"
             name="email"
             required
-            className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            className="w-full rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
         </label>
         <label className="grid gap-2">
@@ -39,23 +42,23 @@ export default function Login() {
             name="password"
             autoComplete="current-password"
             required
-            className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            className="w-full rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
         </label>
       </div>
-      <div className="grid justify-center gap-4">
+      <div className="grid gap-4">
         <button
           type="submit"
-          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white hover:shadow-md active:shadow"
+          className="rounded border border-transparent bg-amber-700 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Log In
+          Sign In
         </button>
         <button
           type="button"
           onClick={() => {
             navigate(-1);
           }}
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
+          className="rounded border border-amber-700 px-4 py-2 text-amber-700 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel
         </button>

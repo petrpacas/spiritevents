@@ -41,7 +41,7 @@ export default function NewEvent() {
           <input
             type="text"
             name="title"
-            className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors?.title && (
             <p className="text-red-600">
@@ -55,7 +55,7 @@ export default function NewEvent() {
             <input
               type="date"
               name="dateStart"
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="h-[2.625rem] rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.dateStart && (
               <p className="text-red-600">
@@ -68,7 +68,7 @@ export default function NewEvent() {
             <input
               type="date"
               name="dateEnd"
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="h-[2.625rem] rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.dateEnd && (
               <p className="text-red-600">
@@ -78,7 +78,7 @@ export default function NewEvent() {
           </label>
           <label className="grid gap-2 md:flex-1">
             Country
-            <CountrySelect className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow" />
+            <CountrySelect className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow" />
             {errors?.fieldErrors?.country && (
               <p className="text-red-600">
                 {errors.fieldErrors.country.join(", ")}
@@ -94,7 +94,7 @@ export default function NewEvent() {
             <input
               type="text"
               name="coords"
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.coords && (
               <p className="text-red-600">
@@ -109,7 +109,7 @@ export default function NewEvent() {
             <input
               type="text"
               name="link"
-              className="rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors?.link && (
               <p className="text-red-600">
@@ -124,7 +124,7 @@ export default function NewEvent() {
           </div>
           <textarea
             name="description"
-            className="min-h-20 rounded bg-white px-4 py-2 hover:shadow-md active:shadow"
+            className="min-h-20 rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors?.description && (
             <p className="text-red-600">
@@ -136,13 +136,13 @@ export default function NewEvent() {
       <div className="flex justify-end gap-4">
         <button
           type="submit"
-          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white hover:shadow-md active:shadow"
+          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Save
         </button>
         <Link
           to="/events"
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Back
         </Link>

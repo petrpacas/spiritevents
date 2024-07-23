@@ -95,7 +95,7 @@ export default function ShowEvent() {
             <Form action="edit">
               <button
                 type="submit"
-                className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white hover:shadow-md active:shadow"
+                className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
               >
                 Edit
               </button>
@@ -114,7 +114,7 @@ export default function ShowEvent() {
             >
               <button
                 type="submit"
-                className="rounded border border-transparent bg-red-600 px-4 py-2 text-white hover:shadow-md active:shadow"
+                className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
               >
                 Delete
               </button>
@@ -123,7 +123,7 @@ export default function ShowEvent() {
         )}
         <Link
           to="/events"
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Back
         </Link>

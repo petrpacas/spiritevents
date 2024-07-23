@@ -57,7 +57,7 @@ export default function Events() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="col-start-1 row-start-1 rounded bg-white pl-2 pr-6 text-left hover:shadow-md active:shadow"
+              className="col-start-1 row-start-1 rounded border border-neutral-200 bg-white pl-2 pr-6 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
             >
               {getCountryNameByCode(country)}
             </button>
@@ -89,7 +89,7 @@ export default function Events() {
             Showing events in
             <CountrySelect
               filteredCountries={filteredCountries}
-              className="rounded bg-white pl-2 pr-6 hover:shadow-md active:shadow"
+              className="rounded border border-neutral-200 bg-white pl-2 pr-6 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
           </label>
         </Form>
@@ -109,7 +109,7 @@ export default function Events() {
       <div className="flex justify-end gap-4">
         <Link
           to={country ? "/events" : "/"}
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 hover:shadow-md active:shadow"
+          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Back
         </Link>
