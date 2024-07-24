@@ -4,6 +4,7 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { Form, Link, redirect, useLoaderData } from "@remix-run/react";
+import { marked } from "marked";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries } from "~/utils";
 
@@ -36,58 +37,63 @@ export default function ShowEvent() {
   };
   return (
     <div>
-      <div className="mb-8 grid gap-8 border-y border-amber-600 bg-white px-4 py-8 max-sm:-mx-4 sm:rounded-lg sm:border-x">
-        <div className="text-center">
-          <h1 className="mb-2 text-3xl sm:text-4xl">{event.title}</h1>
-          <p className="text-lg text-amber-600 sm:text-xl">
-            {getCountryNameByCode(event.country)} ({event.country})
-          </p>
-        </div>
-        <div className="grid text-center text-lg sm:flex sm:justify-center sm:gap-2 sm:text-xl">
-          <span>{new Date(event.dateStart).toDateString()}</span>
-          {event.dateEnd !== event.dateStart && (
-            <>
-              <span className="text-amber-600">&gt;&gt;</span>
-              <span>{new Date(event.dateEnd).toDateString()}</span>
-            </>
+      <div className="mb-8 grid border-y border-amber-600 text-center max-sm:-mx-4 sm:rounded-lg sm:border-x">
+        <div className="grid gap-8 bg-white px-4 py-8 sm:rounded-t-lg">
+          <div className="grid gap-2">
+            <h1 className="text-3xl sm:text-4xl">{event.title}</h1>
+            <p className="text-lg text-amber-600 sm:text-xl">
+              {getCountryNameByCode(event.country)} ({event.country})
+            </p>
+          </div>
+          <div className="grid text-lg sm:flex sm:justify-center sm:gap-2 sm:text-xl">
+            <span>{new Date(event.dateStart).toDateString()}</span>
+            {event.dateEnd !== event.dateStart && (
+              <>
+                <span className="text-amber-600">&gt;&gt;</span>
+                <span>{new Date(event.dateEnd).toDateString()}</span>
+              </>
+            )}
+          </div>
+          {(event.coords || event.link) && (
+            <div className="grid items-center justify-center gap-2 text-amber-600 sm:flex sm:gap-8 sm:text-lg">
+              {event.link && (
+                <a href={event.link} className="underline">
+                  Website
+                </a>
+              )}
+              {event.coords && (
+                <a
+                  href={`https://www.google.com/maps?q=${event.coords}`}
+                  className="underline"
+                >
+                  Google Maps
+                </a>
+              )}
+            </div>
           )}
         </div>
-        {(event.coords || event.link) && (
-          <div className="-mx-4 grid gap-4 border-t border-amber-600 px-4 pt-8 text-amber-600 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:text-lg">
-            {event.coords && (
-              <a
-                href={`https://www.google.com/maps?q=${event.coords}`}
-                target="_blank"
-                rel="noreferrer"
-                className="underline"
-              >
-                Google Maps coordinates
-              </a>
-            )}
-            {event.link && (
-              <a
-                href={event.link}
-                target="_blank"
-                rel="noreferrer"
-                className="underline"
-              >
-                {event.link}
-              </a>
-            )}
-          </div>
-        )}
         {event.description && (
-          <div className="-mx-4 border-t border-amber-600 px-4 pt-8 text-lg sm:text-xl">
-            {event.description}
-          </div>
+          <section
+            className="prose prose-amber max-w-none bg-gray-50/50 px-4 py-8 text-lg sm:text-xl"
+            id="description"
+            dangerouslySetInnerHTML={{
+              __html: marked.parse(event.description),
+            }}
+          />
         )}
-        {isAuthenticated && (
-          <div className="-mx-4 grid border-t border-amber-600 px-4 pt-8 text-amber-600 sm:justify-end sm:text-right">
-            <span>id: {event.id}</span>
-            <span>createdAt: {event.createdAt}</span>
-            <span>updatedAt: {event.updatedAt}</span>
-          </div>
-        )}
+        <div className="grid bg-white px-4 py-8 text-amber-600 sm:rounded-b-lg">
+          {isAuthenticated ? (
+            <>
+              <span>ID: {event.id}</span>
+              <span>Created at: {new Date(event.createdAt).toUTCString()}</span>
+              <span>Updated at: {new Date(event.updatedAt).toUTCString()}</span>
+            </>
+          ) : (
+            <span>
+              Last updated on {new Date(event.updatedAt).toUTCString()}
+            </span>
+          )}
+        </div>
       </div>
       <div className="flex justify-end gap-4">
         {isAuthenticated && (

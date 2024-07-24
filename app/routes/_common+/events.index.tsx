@@ -58,12 +58,12 @@ export default function Events() {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="col-start-1 row-start-1 rounded border border-neutral-200 bg-white pl-2 pr-6 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
+                className="col-start-1 row-start-1 rounded border border-gray-200 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
               >
                 {getCountryNameByCode(country)}
               </button>
               <svg
-                className="pointer-events-none relative right-1 col-start-1 row-start-1 h-4 w-4 self-center justify-self-end forced-colors:hidden"
+                className="pointer-events-none relative right-3 col-start-1 row-start-1 h-5 w-5 self-center justify-self-end text-gray-500 forced-colors:hidden"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -92,7 +92,7 @@ export default function Events() {
               Showing events in
               <CountrySelect
                 filteredCountries={filteredCountries}
-                className="rounded border border-neutral-200 bg-white pl-2 pr-6 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                className="rounded border border-gray-200 bg-white py-1 shadow-sm transition-shadow hover:shadow-md active:shadow"
               />
             </label>
           </Form>

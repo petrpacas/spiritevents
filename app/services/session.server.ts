@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import bcrypt from "@node-rs/bcrypt";
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import { prisma } from "~/services";
+import prisma from "./db.server";
 
 type EmailPassword = {
   email: string;

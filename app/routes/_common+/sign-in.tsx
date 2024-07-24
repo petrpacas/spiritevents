@@ -43,7 +43,7 @@ export default function SignIn() {
             type="email"
             name="email"
             required
-            className="w-full rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
+            className="w-full rounded border border-gray-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
           />
         </label>
         <label className="grid gap-2">
@@ -53,7 +53,7 @@ export default function SignIn() {
             name="password"
             autoComplete="current-password"
             required
-            className="w-full rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
+            className="w-full rounded border border-gray-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
           />
         </label>
       </div>

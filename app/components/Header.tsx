@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import { Form, Link, useLocation } from "@remix-run/react";
 
 type Props = {
@@ -6,7 +5,7 @@ type Props = {
   isHomepage?: boolean;
 };
 
-export const Header: FC<Props> = ({ isAuthenticated, isHomepage }) => {
+export const Header = ({ isAuthenticated, isHomepage }: Props) => {
   const location = useLocation();
   let signInUrl = "";
   if (location.pathname === "/" || location.pathname === "/sign-in") {

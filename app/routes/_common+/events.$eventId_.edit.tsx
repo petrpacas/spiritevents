@@ -1,3 +1,4 @@
+import type { MDXEditorMethods } from "@mdxeditor/editor";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -9,8 +10,10 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useSubmit,
 } from "@remix-run/react";
-import { CountrySelect } from "~/components/";
+import { useRef } from "react";
+import { EventFormFields } from "~/components/";
 import { prisma, requireUserSession } from "~/services";
 import { eventSchema } from "~/validations";
 
@@ -22,6 +25,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
+  console.log(data);
   const result = eventSchema.safeParse(data);
   if (!result.success) {
     const errors = result.error.flatten();
@@ -49,116 +53,27 @@ export default function EditEvent() {
   const errors = useActionData<typeof action>();
   const { event } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  const mdxEditorRef = useRef<MDXEditorMethods>(null);
+  const submit = useSubmit();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const $form = event.currentTarget;
+    const formData = new FormData($form);
+    const description = mdxEditorRef.current?.getMarkdown();
+    formData.set("description", description ?? "");
+    submit(formData, {
+      method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
+      action: $form.getAttribute("action") ?? $form.action,
+    });
+  };
   return (
-    <Form method="post">
+    <Form method="post" onSubmit={handleSubmit}>
       <h1 className="mb-8 text-3xl sm:text-4xl">Editing {event.title}</h1>
-      <div className="mb-8 grid gap-4">
-        <label className="grid gap-2">
-          Title
-          <input
-            type="text"
-            name="title"
-            defaultValue={event.title}
-            className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors?.title && (
-            <p className="text-red-600">
-              {errors.fieldErrors.title.join(", ")}
-            </p>
-          )}
-        </label>
-        <div className="grid gap-4 md:flex md:items-start">
-          <label className="grid gap-2 md:flex-1">
-            Start date
-            <input
-              type="date"
-              name="dateStart"
-              defaultValue={event.dateStart}
-              className="h-[2.625rem] rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
-            />
-            {errors?.fieldErrors?.dateStart && (
-              <p className="text-red-600">
-                {errors.fieldErrors.dateStart.join(", ")}
-              </p>
-            )}
-          </label>
-          <label className="grid gap-2 md:flex-1">
-            End date
-            <input
-              type="date"
-              name="dateEnd"
-              defaultValue={event.dateEnd}
-              className="h-[2.625rem] rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
-            />
-            {errors?.fieldErrors?.dateEnd && (
-              <p className="text-red-600">
-                {errors.fieldErrors.dateEnd.join(", ")}
-              </p>
-            )}
-          </label>
-          <label className="grid gap-2 md:flex-1">
-            Country
-            <CountrySelect
-              defaultValue={event.country}
-              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
-            />
-            {errors?.fieldErrors?.country && (
-              <p className="text-red-600">
-                {errors.fieldErrors.country.join(", ")}
-              </p>
-            )}
-          </label>
-        </div>
-        <div className="grid gap-4 md:flex md:items-start">
-          <label className="grid gap-2 md:flex-1">
-            <div>
-              Coordinates <span className="text-amber-600">(optional)</span>
-            </div>
-            <input
-              type="text"
-              name="coords"
-              defaultValue={event.coords ?? ""}
-              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
-            />
-            {errors?.fieldErrors?.coords && (
-              <p className="text-red-600">
-                {errors.fieldErrors.coords.join(", ")}
-              </p>
-            )}
-          </label>
-          <label className="grid gap-2 md:flex-1">
-            <div>
-              Link <span className="text-amber-600">(optional)</span>
-            </div>
-            <input
-              type="text"
-              name="link"
-              defaultValue={event.link ?? ""}
-              className="rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
-            />
-            {errors?.fieldErrors?.link && (
-              <p className="text-red-600">
-                {errors.fieldErrors.link.join(", ")}
-              </p>
-            )}
-          </label>
-        </div>
-        <label className="grid gap-2">
-          <div>
-            Description <span className="text-amber-600">(optional)</span>
-          </div>
-          <textarea
-            name="description"
-            defaultValue={event.description ?? ""}
-            className="min-h-20 rounded border border-neutral-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors?.description && (
-            <p className="text-red-600">
-              {errors.fieldErrors.description.join(", ")}
-            </p>
-          )}
-        </label>
-      </div>
+      <EventFormFields
+        event={event}
+        errors={errors}
+        mdxEditorRef={mdxEditorRef}
+      />
       <div className="flex justify-end gap-4">
         <button
           type="submit"

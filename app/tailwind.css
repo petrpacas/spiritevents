@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.mdxeditor-toolbar {
+  @apply !rounded-b-none !rounded-tl-sm !rounded-tr-sm;
+}

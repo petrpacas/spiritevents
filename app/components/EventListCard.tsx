@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import { Link } from "@remix-run/react";
 
 type Props = {
@@ -10,14 +9,14 @@ type Props = {
   title: string;
 };
 
-export const EventListCard: FC<Props> = ({
+export const EventListCard = ({
   country,
   dateEnd,
   dateStart,
   id,
   isHomepage,
   title,
-}) => {
+}: Props) => {
   return (
     <Link
       to={`/events/${id}`}

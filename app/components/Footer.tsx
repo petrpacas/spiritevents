@@ -1,10 +1,8 @@
-import type { FC } from "react";
-
 type Props = {
   isHomepage?: boolean;
 };
 
-export const Footer: FC<Props> = ({ isHomepage }) => {
+export const Footer = ({ isHomepage }: Props) => {
   return (
     <footer
       className={
