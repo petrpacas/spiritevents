@@ -1,3 +1,3 @@
-import { eventSchema } from "./eventSchema";
+import { eventFormSchema } from "./eventFormSchema";
 
-export { eventSchema };
+export { eventFormSchema };

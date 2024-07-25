@@ -15,7 +15,7 @@ import {
 import { useRef } from "react";
 import { EventFormFields } from "~/components/";
 import { prisma, requireUserSession } from "~/services";
-import { eventSchema } from "~/validations";
+import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `Editing ${data?.event?.title} ~ Seek Gathering` }];
@@ -25,15 +25,16 @@ export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  console.log(data);
-  const result = eventSchema.safeParse(data);
+  const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
     const errors = result.error.flatten();
     return errors;
   }
+  const cleanData = { ...result.data };
+  delete cleanData.ogTitle;
   await prisma.event.update({
     where: { id: params.eventId },
-    data: result.data,
+    data: cleanData,
   });
   return redirect(`/events/${params.eventId}`);
 }
@@ -55,12 +56,13 @@ export default function EditEvent() {
   const navigate = useNavigate();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const $form = event.currentTarget;
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const $form = e.currentTarget;
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
     formData.set("description", description ?? "");
+    formData.set("ogTitle", event.title);
     submit(formData, {
       method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
       action: $form.getAttribute("action") ?? $form.action,

@@ -14,7 +14,7 @@ import {
 import { useRef } from "react";
 import { EventFormFields } from "~/components/";
 import { prisma, requireUserSession } from "~/services";
-import { eventSchema } from "~/validations";
+import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Adding new event ~ Seek Gathering" }];
@@ -24,7 +24,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const result = eventSchema.safeParse(data);
+  const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
     const errors = result.error.flatten();
     return errors;
@@ -43,9 +43,9 @@ export default function NewEvent() {
   const navigate = useNavigate();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const $form = event.currentTarget;
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const $form = e.currentTarget;
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
     formData.set("description", description ?? "");

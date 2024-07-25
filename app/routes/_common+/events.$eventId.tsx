@@ -37,8 +37,8 @@ export default function ShowEvent() {
   };
   return (
     <div>
-      <div className="mb-8 grid border-y border-amber-600 text-center max-sm:-mx-4 sm:rounded-lg sm:border-x">
-        <div className="grid gap-8 bg-white px-4 py-8 sm:rounded-t-lg">
+      <div className="mb-8 grid border-y border-amber-600 bg-white text-center max-sm:-mx-4 sm:rounded-lg sm:border-x">
+        <div className="grid gap-8 px-4 py-8">
           <div className="grid gap-2">
             <h1 className="text-3xl sm:text-4xl">{event.title}</h1>
             <p className="text-lg text-amber-600 sm:text-xl">
@@ -74,14 +74,14 @@ export default function ShowEvent() {
         </div>
         {event.description && (
           <section
-            className="prose prose-amber max-w-none bg-gray-50/50 px-4 py-8 text-lg sm:text-xl"
+            className="prose prose-amber max-w-none bg-amber-100 px-4 py-8 text-lg sm:text-xl"
             id="description"
             dangerouslySetInnerHTML={{
               __html: marked.parse(event.description),
             }}
           />
         )}
-        <div className="grid bg-white px-4 py-8 text-amber-600 sm:rounded-b-lg">
+        <div className="grid px-4 py-8 text-amber-600">
           {isAuthenticated ? (
             <>
               <span>ID: {event.id}</span>
