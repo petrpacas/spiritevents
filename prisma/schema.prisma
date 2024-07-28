@@ -18,7 +18,6 @@ model User {
   updatedAt DateTime @updatedAt
 
   email    String   @unique
-  isAdmin  Boolean?
   password String
   role     UserRole @default(USER)
 }
