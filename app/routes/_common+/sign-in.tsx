@@ -3,8 +3,9 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { Form, useNavigate } from "@remix-run/react";
-import { authenticator } from "~/services";
+import { json } from "@remix-run/node";
+import { Form, useLoaderData, useNavigate } from "@remix-run/react";
+import { authenticator, commitSession, getSession } from "~/services";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Sign in ~ Seek Gathering" }];
@@ -13,19 +14,30 @@ export const meta: MetaFunction = () => {
 export async function action({ request }: ActionFunctionArgs) {
   const requestUrl = new URL(request.url);
   const ogRoute = requestUrl.searchParams.get("ogRoute");
-  return await authenticator.authenticate("form", request, {
+  return await authenticator.authenticate("FormStrategy", request, {
     failureRedirect: ogRoute ? `/sign-in?ogRoute=${ogRoute}` : "/sign-in",
     successRedirect: ogRoute || "/",
   });
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return await authenticator.isAuthenticated(request, {
+  await authenticator.isAuthenticated(request, {
     successRedirect: "/",
   });
+  const session = await getSession(request.headers.get("cookie"));
+  const error = session.get(authenticator.sessionErrorKey);
+  return json(
+    { error },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    },
+  );
 }
 
 export default function SignIn() {
+  const { error } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   return (
     <Form
@@ -56,6 +68,7 @@ export default function SignIn() {
             className="w-full rounded border border-gray-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
           />
         </label>
+        {error?.message && <p className="text-red-600">{error.message}</p>}
       </div>
       <div className="grid gap-4">
         <button

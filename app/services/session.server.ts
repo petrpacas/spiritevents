@@ -42,11 +42,13 @@ export const sessionStorage = createCookieSessionStorage({
   },
 });
 
+export const { getSession, commitSession, destroySession } = sessionStorage;
+
 export async function requireUserSession(
   request: LoaderFunctionArgs["request"],
 ) {
   const cookie = request.headers.get("cookie");
-  const session = await sessionStorage.getSession(cookie);
+  const session = await getSession(cookie);
   if (!session.has("user")) {
     const requestUrl = new URL(request.url);
     throw redirect(`/sign-in?ogRoute=${requestUrl.pathname}`);
