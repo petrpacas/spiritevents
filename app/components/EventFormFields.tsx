@@ -4,7 +4,8 @@ import type { SerializeFrom } from "@remix-run/node";
 import type { RefObject } from "react";
 import type { typeToFlattenedError } from "zod";
 import { ClientOnly } from "remix-utils/client-only";
-import { CountrySelect, DescriptionEditor } from "~/components/";
+import { CountrySelect } from "./CountrySelect";
+import { DescriptionEditor } from "./DescriptionEditor";
 
 type Props = {
   errors: SerializeFrom<typeToFlattenedError<Event, string>> | undefined;

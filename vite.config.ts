@@ -4,6 +4,24 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          const bigOnes = ["@codemirror", "@mdxeditor"];
+          if (
+            bigOnes.some((libName) => id.includes(`node_modules/${libName}`))
+          ) {
+            return id
+              .toString()
+              .split("node_modules/")[1]
+              .split("/")[0]
+              .toString();
+          }
+        },
+      },
+    },
+  },
   plugins: [
     remix({
       future: {
