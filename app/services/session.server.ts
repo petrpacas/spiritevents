@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import bcrypt from "@node-rs/bcrypt";
+import bcrypt from "bcryptjs";
 import { UserRole } from "@prisma/client";
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import prisma from "./db.server";
@@ -18,7 +18,7 @@ export async function login({ email, password }: EmailPassword) {
 }
 
 export async function register({ email, password }: EmailPassword) {
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await bcrypt.hash(password, 12);
   const user = await prisma.user.create({
     data: { email, password: passwordHash, role: UserRole.USER },
   });
