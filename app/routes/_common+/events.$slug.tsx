@@ -14,14 +14,14 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function action({ request, params }: ActionFunctionArgs) {
   await requireUserSession(request);
-  await prisma.event.delete({ where: { id: params.eventId } });
+  await prisma.event.delete({ where: { slug: params.slug } });
   return redirect("/events");
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
   const event = await prisma.event.findUnique({
-    where: { id: params.eventId },
+    where: { slug: params.slug },
   });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
@@ -54,16 +54,16 @@ export default function ShowEvent() {
               </>
             )}
           </div>
-          {(event.linkMap || event.linkWebsite) && (
+          {(event.linkLocation || event.linkWebsite) && (
             <div className="grid items-center justify-center gap-2 text-amber-600 sm:flex sm:gap-8 sm:text-lg">
               {event.linkWebsite && (
                 <a href={event.linkWebsite} className="underline">
                   Website
                 </a>
               )}
-              {event.linkMap && (
-                <a href={event.linkMap} className="underline">
-                  Google Maps
+              {event.linkLocation && (
+                <a href={event.linkLocation} className="underline">
+                  Location
                 </a>
               )}
             </div>

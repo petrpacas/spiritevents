@@ -33,13 +33,13 @@ model Event {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  country     String
-  dateEnd     String
-  dateStart   String
-  description String?
-  linkMap     String?
-  linkWebsite String?
-  slug        String?
-  status      EventStatus @default(PUBLISHED)
-  title       String
+  country      String
+  dateEnd      String
+  dateStart    String
+  description  String?
+  linkLocation String?
+  linkWebsite  String?
+  slug         String      @unique
+  status       EventStatus @default(PUBLISHED)
+  title        String
 }

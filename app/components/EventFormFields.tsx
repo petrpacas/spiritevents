@@ -56,20 +56,19 @@ export const EventFormFields = ({ errors, event, mdxEditorRef }: Props) => {
           )}
         </label>
         <label className="grid gap-2 md:flex-1">
-          {event?.slug ? (
-            <div>
-              URL slug{" "}
-              <span className="text-amber-600">(change with caution)</span>
-            </div>
-          ) : (
-            "URL slug"
-          )}
+          <div>
+            URL slug{" "}
+            <span className="text-amber-600">
+              ({event?.slug ? "change with caution" : "should be permament"})
+            </span>
+          </div>
           <input
             type="text"
             name="slug"
             onChange={handleSlugChange}
             onBlur={handleSlugBlur}
             value={slug}
+            placeholder="e.g. example-event-2024 (use the year)"
             className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors.slug && (
@@ -122,22 +121,6 @@ export const EventFormFields = ({ errors, event, mdxEditorRef }: Props) => {
       <div className="grid gap-4 md:flex md:items-start">
         <label className="grid gap-2 md:flex-1">
           <div>
-            Map link <span className="text-amber-600">(optional)</span>
-          </div>
-          <input
-            type="text"
-            name="linkMap"
-            defaultValue={event?.linkMap ?? ""}
-            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors.linkMap && (
-            <p className="text-red-600">
-              {errors.fieldErrors.linkMap.join(", ")}
-            </p>
-          )}
-        </label>
-        <label className="grid gap-2 md:flex-1">
-          <div>
             Website link <span className="text-amber-600">(optional)</span>
           </div>
           <input
@@ -149,6 +132,22 @@ export const EventFormFields = ({ errors, event, mdxEditorRef }: Props) => {
           {errors?.fieldErrors.linkWebsite && (
             <p className="text-red-600">
               {errors.fieldErrors.linkWebsite.join(", ")}
+            </p>
+          )}
+        </label>
+        <label className="grid gap-2 md:flex-1">
+          <div>
+            Location link <span className="text-amber-600">(optional)</span>
+          </div>
+          <input
+            type="text"
+            name="linkLocation"
+            defaultValue={event?.linkLocation ?? ""}
+            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          />
+          {errors?.fieldErrors.linkLocation && (
+            <p className="text-red-600">
+              {errors.fieldErrors.linkLocation.join(", ")}
             </p>
           )}
         </label>

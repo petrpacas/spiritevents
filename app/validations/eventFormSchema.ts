@@ -7,7 +7,7 @@ const fields = z
   .object({
     country: z.string().trim().length(2, "Country must be selected"),
     description: z.string().trim().or(z.literal("")),
-    linkMap: z
+    linkLocation: z
       .string()
       .trim()
       .transform((value) => value.replace(/\s/g, ""))

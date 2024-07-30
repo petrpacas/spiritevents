@@ -33,16 +33,16 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const cleanData = { ...result.data };
   delete cleanData.ogSlug;
   await prisma.event.update({
-    where: { id: params.eventId },
+    where: { slug: params.slug },
     data: cleanData,
   });
-  return redirect(`/events/${params.eventId}`);
+  return redirect(`/events/${result.data.slug}`);
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   await requireUserSession(request);
   const event = await prisma.event.findUnique({
-    where: { id: params.eventId },
+    where: { slug: params.slug },
   });
   if (!event) {
     throw new Response("Not Found", { status: 404 });

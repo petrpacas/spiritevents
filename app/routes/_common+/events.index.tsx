@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       country: true,
       dateEnd: true,
       dateStart: true,
-      id: true,
+      slug: true,
       title: true,
     },
     where: { country: country || undefined, dateEnd: { gte: getTodayDate() } },
@@ -101,8 +101,8 @@ export default function Events() {
       <div className="mb-8 grid gap-2">
         {events.map((event) => (
           <EventListCard
-            key={event.id}
-            id={event.id}
+            key={event.slug}
+            slug={event.slug}
             title={event.title}
             country={event.country}
             dateStart={event.dateStart}
