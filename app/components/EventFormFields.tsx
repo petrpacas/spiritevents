@@ -44,129 +44,125 @@ export const EventFormFields = ({
     handleSlugChange(e);
   };
   return (
-    <div className="mb-8 grid gap-4">
-      <div className="grid gap-4 md:flex md:items-start">
-        <label className="grid gap-2 md:flex-1">
-          Title
-          <input
-            type="text"
-            name="title"
-            onChange={
-              event?.title || isSuggestion ? undefined : handleTitleChange
-            }
-            defaultValue={event?.title}
-            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors.title && (
-            <p className="text-red-600">
-              {errors.fieldErrors.title.join(", ")}
-            </p>
-          )}
-        </label>
-        {!isSuggestion && (
-          <label className="grid gap-2 md:flex-1">
-            <div>
-              URL slug{" "}
-              <span className="text-amber-600">
-                ({event?.slug ? "change with caution" : "should be permament"})
-              </span>
-            </div>
-            <input
-              type="text"
-              name="slug"
-              onChange={handleSlugChange}
-              onBlur={handleSlugBlur}
-              value={slug}
-              placeholder="e.g. example-event-2024 (use the year)"
-              className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-            />
-            {errors?.fieldErrors.slug && (
-              <p className="text-red-600">
-                {errors.fieldErrors.slug.join(", ")}
-              </p>
-            )}
-          </label>
+    <div className="mb-8 grid gap-4 md:grid-cols-6 md:items-start">
+      <label className="grid gap-2 md:col-span-3">
+        Title
+        <input
+          type="text"
+          name="title"
+          onChange={
+            event?.title || isSuggestion ? undefined : handleTitleChange
+          }
+          defaultValue={event?.title}
+          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.title && (
+          <p className="text-red-600">{errors.fieldErrors.title.join(", ")}</p>
         )}
-      </div>
-      <div className="grid gap-4 md:flex md:items-start">
-        <label className="grid gap-2 md:flex-1">
-          Start date
-          <input
-            type="date"
-            name="dateStart"
-            defaultValue={event?.dateStart}
-            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors.dateStart && (
-            <p className="text-red-600">
-              {errors.fieldErrors.dateStart.join(", ")}
-            </p>
-          )}
-        </label>
-        <label className="grid gap-2 md:flex-1">
-          End date
-          <input
-            type="date"
-            name="dateEnd"
-            defaultValue={event?.dateEnd}
-            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors.dateEnd && (
-            <p className="text-red-600">
-              {errors.fieldErrors.dateEnd.join(", ")}
-            </p>
-          )}
-        </label>
-        <label className="grid gap-2 md:flex-1">
-          Country
-          <CountrySelect
-            defaultValue={event?.country}
-            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors.country && (
-            <p className="text-red-600">
-              {errors.fieldErrors.country.join(", ")}
-            </p>
-          )}
-        </label>
-      </div>
-      <div className="grid gap-4 md:flex md:items-start">
-        <label className="grid gap-2 md:flex-1">
+      </label>
+      {!isSuggestion && (
+        <label className="grid gap-2 md:col-span-3">
           <div>
-            Website link <span className="text-amber-600">(optional)</span>
+            URL slug{" "}
+            <span className="text-amber-600">
+              ~ {event?.slug ? "Change with caution" : "Should be permament"}
+            </span>
           </div>
           <input
             type="text"
-            name="linkWebsite"
-            defaultValue={event?.linkWebsite ?? ""}
+            name="slug"
+            onChange={handleSlugChange}
+            onBlur={handleSlugBlur}
+            value={slug}
+            placeholder="e.g. example-event-2024 (use the year)"
             className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
-          {errors?.fieldErrors.linkWebsite && (
-            <p className="text-red-600">
-              {errors.fieldErrors.linkWebsite.join(", ")}
-            </p>
+          {errors?.fieldErrors.slug && (
+            <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
           )}
         </label>
-        <label className="grid gap-2 md:flex-1">
-          <div>
-            Location link <span className="text-amber-600">(optional)</span>
-          </div>
-          <input
-            type="text"
-            name="linkLocation"
-            defaultValue={event?.linkLocation ?? ""}
-            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors.linkLocation && (
-            <p className="text-red-600">
-              {errors.fieldErrors.linkLocation.join(", ")}
-            </p>
-          )}
-        </label>
-      </div>
+      )}
+      <label
+        className={`${isSuggestion ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
+      >
+        Country
+        <CountrySelect
+          defaultValue={event?.country}
+          className="w-full rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.country && (
+          <p className="text-red-600">
+            {errors.fieldErrors.country.join(", ")}
+          </p>
+        )}
+      </label>
+      <label
+        className={`${isSuggestion ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
+      >
+        Start date
+        <input
+          type="date"
+          name="dateStart"
+          defaultValue={event?.dateStart}
+          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.dateStart && (
+          <p className="text-red-600">
+            {errors.fieldErrors.dateStart.join(", ")}
+          </p>
+        )}
+      </label>
+      <label
+        className={`${isSuggestion ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
+      >
+        End date
+        <input
+          type="date"
+          name="dateEnd"
+          defaultValue={event?.dateEnd}
+          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.dateEnd && (
+          <p className="text-red-600">
+            {errors.fieldErrors.dateEnd.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2 md:col-span-3">
+        <div>
+          Website link <span className="text-amber-600">(optional)</span>
+        </div>
+        <input
+          type="text"
+          name="linkWebsite"
+          defaultValue={event?.linkWebsite ?? ""}
+          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.linkWebsite && (
+          <p className="text-red-600">
+            {errors.fieldErrors.linkWebsite.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2 md:col-span-3">
+        <div>
+          Location link <span className="text-amber-600">(optional)</span>
+        </div>
+        <input
+          type="text"
+          name="linkLocation"
+          defaultValue={event?.linkLocation ?? ""}
+          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.linkLocation && (
+          <p className="text-red-600">
+            {errors.fieldErrors.linkLocation.join(", ")}
+          </p>
+        )}
+      </label>
       <ClientOnly
         fallback={
-          <label className="grid gap-2">
+          <label className="grid gap-2 md:col-span-6">
             <div>
               Description{" "}
               <span className="text-amber-600">
@@ -188,7 +184,7 @@ export const EventFormFields = ({
         }
       >
         {() => (
-          <div className="grid gap-2">
+          <div className="grid gap-2 md:col-span-6">
             <div>
               Description <span className="text-amber-600">(optional)</span>
             </div>

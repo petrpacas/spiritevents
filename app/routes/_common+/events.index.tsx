@@ -8,7 +8,7 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import { CountrySelect, EventListCard } from "~/components";
-import { prisma } from "~/services";
+import { authenticator, prisma } from "~/services";
 import { countries, getTodayDate } from "~/utils";
 
 export const meta: MetaFunction = () => {
@@ -16,6 +16,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const user = await authenticator.isAuthenticated(request);
   const requestUrl = new URL(request.url);
   const country = requestUrl.searchParams.get("country");
   const events = await prisma.event.findMany({
@@ -25,19 +26,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
       dateEnd: true,
       dateStart: true,
       slug: true,
+      status: true,
       title: true,
     },
     where: {
       country: country || undefined,
-      dateEnd: { gte: getTodayDate() },
-      status: EventStatus.PUBLISHED,
+      dateEnd: user ? undefined : { gte: getTodayDate() },
+      status: user ? undefined : EventStatus.PUBLISHED,
     },
   });
-  return { country, events };
+  return { country, events, isAuthenticated: !!user };
 }
 
 export default function Events() {
-  const { country, events } = useLoaderData<typeof loader>();
+  const { country, events, isAuthenticated } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const submit = useSubmit();
   const getCountryNameByCode = (code: string) => {
@@ -54,10 +56,12 @@ export default function Events() {
   const filteredCountries = filterCountriesForEvent(eventCountries);
   return (
     <div>
-      <div className="mb-8 grid gap-4 max-sm:w-full sm:flex sm:items-center sm:justify-between">
-        <h1 className="text-3xl sm:text-4xl">Upcoming events</h1>
+      <div className="mb-8 grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
+        <h1 className="text-3xl sm:text-4xl">
+          {isAuthenticated ? "Admin ~ All" : "Upcoming"} events
+        </h1>
         {country ? (
-          <div className="grid gap-2 sm:flex sm:items-center">
+          <div className="grid gap-2 md:flex md:items-center">
             Showing events in{" "}
             <div className="inline-grid">
               <button
@@ -85,13 +89,13 @@ export default function Events() {
           </div>
         ) : (
           <Form
-            className="sm:flex"
+            className="md:flex"
             onChange={(event) => {
               submit(event.currentTarget);
             }}
           >
             <label
-              className="grid items-center gap-2 sm:flex"
+              className="grid items-center gap-2 md:flex"
               htmlFor="country"
             >
               Showing events in
@@ -108,6 +112,7 @@ export default function Events() {
           <EventListCard
             key={event.slug}
             slug={event.slug}
+            status={isAuthenticated ? event.status : undefined}
             title={event.title}
             country={event.country}
             dateStart={event.dateStart}

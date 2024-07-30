@@ -53,7 +53,6 @@ export default function Index() {
             country={event.country}
             dateStart={event.dateStart}
             dateEnd={event.dateEnd}
-            isHomepage
           />
         ))}
       </div>

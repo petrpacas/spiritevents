@@ -3,6 +3,7 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { EventStatus } from "@prisma/client";
 import { Form, Link, redirect, useLoaderData } from "@remix-run/react";
 import { marked } from "marked";
 import { authenticator, prisma, requireUserSession } from "~/services";
@@ -21,7 +22,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
   const event = await prisma.event.findUnique({
-    where: { slug: params.slug },
+    where: {
+      slug: params.slug,
+      status: user ? undefined : EventStatus.PUBLISHED,
+    },
   });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
@@ -35,12 +39,37 @@ export default function ShowEvent() {
     const country = countries.find((country) => country.code === code);
     return country ? country.name : code;
   };
+  let statusLetter = undefined;
+  let statusBg = "bg-white";
+  switch (event.status) {
+    case EventStatus.DRAFT:
+      statusLetter = "(D)";
+      statusBg = "bg-gray-50";
+      break;
+    case EventStatus.PUBLISHED:
+      break;
+    case EventStatus.SUGGESTED:
+      statusLetter = "(S)";
+      statusBg = "bg-emerald-50";
+      break;
+    default:
+      break;
+  }
   return (
     <div>
-      <div className="mb-8 grid border-y border-amber-600 bg-white text-center max-sm:-mx-4 sm:rounded-lg sm:border-x">
+      <div
+        className={`${statusBg} mb-8 grid border-y border-amber-600 text-center max-sm:-mx-4 sm:rounded-lg sm:border-x`}
+      >
         <div className="grid gap-8 px-4 py-8">
           <div className="grid gap-2">
-            <h1 className="text-3xl sm:text-4xl">{event.title}</h1>
+            <h1 className="text-3xl sm:text-4xl">
+              {statusLetter && (
+                <>
+                  <span className="text-amber-600">{statusLetter}</span>{" "}
+                </>
+              )}
+              {event.title}
+            </h1>
             <p className="text-lg text-amber-600 sm:text-xl">
               {getCountryNameByCode(event.country)} ({event.country})
             </p>

@@ -7,11 +7,7 @@ const fields = z
   .object({
     country: z.string().trim().length(2, "Country must be selected"),
     description: z.string().trim().or(z.literal("")),
-    linkLocation: z
-      .string()
-      .trim()
-      .transform((value) => value.replace(/\s/g, ""))
-      .or(z.literal("")),
+    linkLocation: z.string().url().or(z.literal("")),
     linkWebsite: z.string().url().or(z.literal("")),
     ogSlug: z.string().optional(),
     slug: z

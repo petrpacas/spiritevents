@@ -53,8 +53,9 @@ export default function NewEvent() {
     <Form method="post" onSubmit={handleSubmit}>
       <h1 className="mb-8 text-3xl sm:text-4xl">Suggest an event</h1>
       <p className="mb-8 border-b border-amber-600 pb-8 text-lg sm:text-xl">
-        I&apos;d like to kindly ask you to fill in the title, the dates, and the
-        country the event is happening in.{" "}
+        I&apos;d like to kindly ask you to fill in the title, the country, and
+        the dates your suggested event is happening in.
+        <br />
         <strong>Let&apos;s create this portal together!</strong>
       </p>
       <EventFormFields
@@ -67,7 +68,7 @@ export default function NewEvent() {
           type="submit"
           className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Send
+          Send suggestion
         </button>
         <button
           type="button"
