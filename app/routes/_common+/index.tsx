@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { EventStatus } from "@prisma/client";
 import { Link, useLoaderData } from "@remix-run/react";
 import { EventListCard } from "~/components";
 import { prisma } from "~/services";
@@ -22,7 +23,7 @@ export async function loader() {
       title: true,
     },
     take: 3,
-    where: { dateEnd: { gte: getTodayDate() } },
+    where: { dateEnd: { gte: getTodayDate() }, status: EventStatus.PUBLISHED },
   });
   return { events };
 }

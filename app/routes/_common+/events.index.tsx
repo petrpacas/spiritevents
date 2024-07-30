@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { EventStatus } from "@prisma/client";
 import {
   Form,
   Link,
@@ -26,7 +27,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
       slug: true,
       title: true,
     },
-    where: { country: country || undefined, dateEnd: { gte: getTodayDate() } },
+    where: {
+      country: country || undefined,
+      dateEnd: { gte: getTodayDate() },
+      status: EventStatus.PUBLISHED,
+    },
   });
   return { country, events };
 }

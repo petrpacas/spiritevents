@@ -12,10 +12,16 @@ import { DescriptionEditor } from "./DescriptionEditor";
 type Props = {
   errors: SerializeFrom<typeToFlattenedError<Event, string>> | undefined;
   event?: SerializeFrom<Event>;
+  isSuggestion?: boolean;
   mdxEditorRef: RefObject<MDXEditorMethods>;
 };
 
-export const EventFormFields = ({ errors, event, mdxEditorRef }: Props) => {
+export const EventFormFields = ({
+  errors,
+  event,
+  isSuggestion,
+  mdxEditorRef,
+}: Props) => {
   const [slug, setSlug] = useState(event?.slug ?? "");
   const handleSlugBlur = () => {
     setSlug((prevSlug) =>
@@ -45,7 +51,9 @@ export const EventFormFields = ({ errors, event, mdxEditorRef }: Props) => {
           <input
             type="text"
             name="title"
-            onChange={event?.title ? undefined : handleTitleChange}
+            onChange={
+              event?.title || isSuggestion ? undefined : handleTitleChange
+            }
             defaultValue={event?.title}
             className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
@@ -55,26 +63,30 @@ export const EventFormFields = ({ errors, event, mdxEditorRef }: Props) => {
             </p>
           )}
         </label>
-        <label className="grid gap-2 md:flex-1">
-          <div>
-            URL slug{" "}
-            <span className="text-amber-600">
-              ({event?.slug ? "change with caution" : "should be permament"})
-            </span>
-          </div>
-          <input
-            type="text"
-            name="slug"
-            onChange={handleSlugChange}
-            onBlur={handleSlugBlur}
-            value={slug}
-            placeholder="e.g. example-event-2024 (use the year)"
-            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-          />
-          {errors?.fieldErrors.slug && (
-            <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
-          )}
-        </label>
+        {!isSuggestion && (
+          <label className="grid gap-2 md:flex-1">
+            <div>
+              URL slug{" "}
+              <span className="text-amber-600">
+                ({event?.slug ? "change with caution" : "should be permament"})
+              </span>
+            </div>
+            <input
+              type="text"
+              name="slug"
+              onChange={handleSlugChange}
+              onBlur={handleSlugBlur}
+              value={slug}
+              placeholder="e.g. example-event-2024 (use the year)"
+              className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            />
+            {errors?.fieldErrors.slug && (
+              <p className="text-red-600">
+                {errors.fieldErrors.slug.join(", ")}
+              </p>
+            )}
+          </label>
+        )}
       </div>
       <div className="grid gap-4 md:flex md:items-start">
         <label className="grid gap-2 md:flex-1">
