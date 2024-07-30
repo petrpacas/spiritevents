@@ -4,6 +4,8 @@ import type { SerializeFrom } from "@remix-run/node";
 import type { RefObject } from "react";
 import type { typeToFlattenedError } from "zod";
 import { ClientOnly } from "remix-utils/client-only";
+import { useState } from "react";
+import slugify from "slugify";
 import { CountrySelect } from "./CountrySelect";
 import { DescriptionEditor } from "./DescriptionEditor";
 
@@ -14,20 +16,67 @@ type Props = {
 };
 
 export const EventFormFields = ({ errors, event, mdxEditorRef }: Props) => {
+  const [slug, setSlug] = useState(event?.slug ?? "");
+  const handleSlugBlur = () => {
+    setSlug((prevSlug) =>
+      slugify(prevSlug, {
+        lower: true,
+        strict: true,
+      }),
+    );
+  };
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    const slugValue = slugify(value, {
+      lower: true,
+      strict: true,
+      trim: false,
+    });
+    setSlug(slugValue);
+  };
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleSlugChange(e);
+  };
   return (
     <div className="mb-8 grid gap-4">
-      <label className="grid gap-2">
-        Title
-        <input
-          type="text"
-          name="title"
-          defaultValue={event?.title}
-          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-        />
-        {errors?.fieldErrors.title && (
-          <p className="text-red-600">{errors.fieldErrors.title.join(", ")}</p>
-        )}
-      </label>
+      <div className="grid gap-4 md:flex md:items-start">
+        <label className="grid gap-2 md:flex-1">
+          Title
+          <input
+            type="text"
+            name="title"
+            onChange={event?.title ? undefined : handleTitleChange}
+            defaultValue={event?.title}
+            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          />
+          {errors?.fieldErrors.title && (
+            <p className="text-red-600">
+              {errors.fieldErrors.title.join(", ")}
+            </p>
+          )}
+        </label>
+        <label className="grid gap-2 md:flex-1">
+          {event?.slug ? (
+            <div>
+              URL slug{" "}
+              <span className="text-amber-600">(change with caution)</span>
+            </div>
+          ) : (
+            "URL slug"
+          )}
+          <input
+            type="text"
+            name="slug"
+            onChange={handleSlugChange}
+            onBlur={handleSlugBlur}
+            value={slug}
+            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          />
+          {errors?.fieldErrors.slug && (
+            <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
+          )}
+        </label>
+      </div>
       <div className="grid gap-4 md:flex md:items-start">
         <label className="grid gap-2 md:flex-1">
           Start date
@@ -73,32 +122,34 @@ export const EventFormFields = ({ errors, event, mdxEditorRef }: Props) => {
       <div className="grid gap-4 md:flex md:items-start">
         <label className="grid gap-2 md:flex-1">
           <div>
-            Coordinates <span className="text-amber-600">(optional)</span>
+            Map link <span className="text-amber-600">(optional)</span>
           </div>
           <input
             type="text"
-            name="coords"
-            defaultValue={event?.coords ?? ""}
+            name="linkMap"
+            defaultValue={event?.linkMap ?? ""}
             className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
-          {errors?.fieldErrors.coords && (
+          {errors?.fieldErrors.linkMap && (
             <p className="text-red-600">
-              {errors.fieldErrors.coords.join(", ")}
+              {errors.fieldErrors.linkMap.join(", ")}
             </p>
           )}
         </label>
         <label className="grid gap-2 md:flex-1">
           <div>
-            Link <span className="text-amber-600">(optional)</span>
+            Website link <span className="text-amber-600">(optional)</span>
           </div>
           <input
             type="text"
-            name="link"
-            defaultValue={event?.link ?? ""}
+            name="linkWebsite"
+            defaultValue={event?.linkWebsite ?? ""}
             className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
-          {errors?.fieldErrors.link && (
-            <p className="text-red-600">{errors.fieldErrors.link.join(", ")}</p>
+          {errors?.fieldErrors.linkWebsite && (
+            <p className="text-red-600">
+              {errors.fieldErrors.linkWebsite.join(", ")}
+            </p>
           )}
         </label>
       </div>

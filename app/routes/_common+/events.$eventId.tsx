@@ -54,18 +54,15 @@ export default function ShowEvent() {
               </>
             )}
           </div>
-          {(event.coords || event.link) && (
+          {(event.linkMap || event.linkWebsite) && (
             <div className="grid items-center justify-center gap-2 text-amber-600 sm:flex sm:gap-8 sm:text-lg">
-              {event.link && (
-                <a href={event.link} className="underline">
+              {event.linkWebsite && (
+                <a href={event.linkWebsite} className="underline">
                   Website
                 </a>
               )}
-              {event.coords && (
-                <a
-                  href={`https://www.google.com/maps?q=${event.coords}`}
-                  className="underline"
-                >
+              {event.linkMap && (
+                <a href={event.linkMap} className="underline">
                   Google Maps
                 </a>
               )}

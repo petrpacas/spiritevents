@@ -31,7 +31,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
     return errors;
   }
   const cleanData = { ...result.data };
-  delete cleanData.ogTitle;
+  delete cleanData.ogSlug;
   await prisma.event.update({
     where: { id: params.eventId },
     data: cleanData,
@@ -62,7 +62,7 @@ export default function EditEvent() {
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
     formData.set("description", description ?? "");
-    formData.set("ogTitle", event.title);
+    formData.set("ogSlug", event.slug ?? "");
     submit(formData, {
       method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
       action: $form.getAttribute("action") ?? $form.action,

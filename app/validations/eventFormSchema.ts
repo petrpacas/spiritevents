@@ -1,18 +1,38 @@
+import slugify from "slugify";
 import { z } from "zod";
 import { prisma } from "~/services";
 import { getTodayDate } from "~/utils";
 
 const fields = z
   .object({
-    coords: z
+    country: z.string().trim().length(2, "Country must be selected"),
+    description: z.string().trim().or(z.literal("")),
+    linkMap: z
       .string()
       .trim()
       .transform((value) => value.replace(/\s/g, ""))
       .or(z.literal("")),
-    country: z.string().trim().length(2, "Country must be selected"),
-    description: z.string().trim().or(z.literal("")),
-    link: z.string().url().or(z.literal("")),
-    ogTitle: z.string().optional(),
+    linkWebsite: z.string().url().or(z.literal("")),
+    ogSlug: z.string().optional(),
+    slug: z
+      .string()
+      .trim()
+      .transform((value) =>
+        slugify(value, {
+          lower: true,
+          strict: true,
+        }),
+      )
+      .superRefine((value, ctx) => {
+        if (value.length < 2) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Slug must contain at least 2 characters",
+            fatal: true,
+          });
+          return z.NEVER;
+        }
+      }),
     title: z
       .string()
       .trim()
@@ -22,21 +42,19 @@ const fields = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Title must contain at least 2 characters",
-            fatal: true,
           });
-          return z.NEVER;
         }
       }),
   })
   .superRefine(async (data, ctx) => {
-    const { ogTitle, title } = data;
-    if (title !== ogTitle) {
-      const count = await prisma.event.count({ where: { title: title } });
+    const { ogSlug, slug } = data;
+    if (slug !== ogSlug) {
+      const count = await prisma.event.count({ where: { slug } });
       if (count >= 1) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Title is already taken",
-          path: ["title"],
+          message: "URL slug is already taken",
+          path: ["slug"],
         });
       }
     }
