@@ -55,7 +55,7 @@ export default function ShowEvent() {
             )}
           </div>
           {(event.linkLocation || event.linkWebsite) && (
-            <div className="grid items-center justify-center gap-2 text-amber-600 sm:flex sm:gap-8 sm:text-lg">
+            <div className="grid items-center justify-center gap-2 text-amber-600 sm:text-lg">
               {event.linkWebsite && (
                 <a href={event.linkWebsite} className="underline">
                   Website
@@ -70,13 +70,15 @@ export default function ShowEvent() {
           )}
         </div>
         {event.description && (
-          <section
-            className="prose prose-amber max-w-none bg-amber-100 px-4 py-8 text-lg sm:text-xl"
-            id="description"
-            dangerouslySetInnerHTML={{
-              __html: marked.parse(event.description),
-            }}
-          />
+          <div className="bg-amber-100 px-4 py-8">
+            <div
+              className="prose prose-amber mx-auto text-center text-lg sm:text-xl"
+              id="description"
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(event.description),
+              }}
+            />
+          </div>
         )}
         <div className="grid px-4 py-8 text-amber-600">
           {isAuthenticated ? (
