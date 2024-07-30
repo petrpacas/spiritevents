@@ -15,8 +15,22 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function action({ request, params }: ActionFunctionArgs) {
   await requireUserSession(request);
-  await prisma.event.delete({ where: { slug: params.slug } });
-  return redirect("/events");
+  const formData = await request.formData();
+  const intent = formData.get("intent");
+  switch (intent) {
+    case "delete":
+      await prisma.event.delete({ where: { slug: params.slug } });
+      return redirect("/events");
+    case "publish":
+      await prisma.event.update({
+        data: { status: EventStatus.PUBLISHED },
+        where: { slug: params.slug },
+      });
+      break;
+    default:
+      break;
+  }
+  return null;
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -126,6 +140,18 @@ export default function ShowEvent() {
       <div className="flex justify-end gap-4">
         {isAuthenticated && (
           <>
+            {event.status !== EventStatus.PUBLISHED && (
+              <Form replace method="post">
+                <button
+                  type="submit"
+                  name="intent"
+                  value="publish"
+                  className="rounded border border-transparent bg-emerald-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                >
+                  Publish
+                </button>
+              </Form>
+            )}
             <Form action="edit">
               <button
                 type="submit"
@@ -148,6 +174,8 @@ export default function ShowEvent() {
             >
               <button
                 type="submit"
+                name="intent"
+                value="delete"
                 className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
               >
                 Delete
