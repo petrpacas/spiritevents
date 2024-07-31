@@ -120,10 +120,14 @@ export default function Events() {
         ))}
       </div>
       <div className="flex items-center justify-between gap-4">
-        <div className="text-sm sm:max-md:text-base md:text-lg">
-          <span className="text-amber-600">(S)</span>UGGESTION /{" "}
-          <span className="text-amber-600">(D)</span>RAFT / PUBLISHED
-        </div>
+        {isAuthenticated ? (
+          <div className="text-sm sm:max-md:text-base md:text-lg">
+            <span className="text-amber-600">(S)</span>UGGESTION or{" "}
+            {/* <span className="text-amber-600">(D)</span>RAFT / */}PUBLISHED
+          </div>
+        ) : (
+          <div />
+        )}
         <Link
           to={country ? "/events" : "/"}
           className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
