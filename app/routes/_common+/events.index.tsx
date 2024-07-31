@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { EventStatus } from "@prisma/client";
 import {
   Form,
   Link,
@@ -9,7 +8,7 @@ import {
 } from "@remix-run/react";
 import { CountrySelect, EventListCard } from "~/components";
 import { authenticator, prisma } from "~/services";
-import { countries, getTodayDate } from "~/utils";
+import { countries, getTodayDate, enumEventStatus } from "~/utils";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Upcoming events ~ Seek Gathering" }];
@@ -32,7 +31,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     where: {
       country: country || undefined,
       dateEnd: user ? undefined : { gte: getTodayDate() },
-      status: user ? undefined : EventStatus.PUBLISHED,
+      status: user ? undefined : enumEventStatus.PUBLISHED,
     },
   });
   return { country, events, isAuthenticated: !!user };
@@ -58,7 +57,7 @@ export default function Events() {
     <div>
       <div className="mb-8 grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
         <h1 className="text-3xl sm:text-4xl">
-          {isAuthenticated ? "Admin ~ All" : "Upcoming"} events
+          {isAuthenticated ? "All" : "Upcoming"} events
         </h1>
         {country ? (
           <div className="grid gap-2 md:flex md:items-center">
@@ -120,7 +119,11 @@ export default function Events() {
           />
         ))}
       </div>
-      <div className="flex justify-end gap-4">
+      <div className="flex items-center justify-between gap-4">
+        <div className="text-sm sm:max-md:text-base md:text-lg">
+          <span className="text-amber-600">(S)</span>UGGESTION /{" "}
+          <span className="text-amber-600">(D)</span>RAFT / PUBLISHED
+        </div>
         <Link
           to={country ? "/events" : "/"}
           className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"

@@ -3,11 +3,10 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { EventStatus } from "@prisma/client";
 import { Form, Link, redirect, useLoaderData } from "@remix-run/react";
 import { marked } from "marked";
 import { authenticator, prisma, requireUserSession } from "~/services";
-import { countries } from "~/utils";
+import { countries, enumEventStatus } from "~/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `${data?.event?.title} ~ Seek Gathering` }];
@@ -23,7 +22,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       return redirect("/events");
     case "publish":
       await prisma.event.update({
-        data: { status: EventStatus.PUBLISHED },
+        data: { status: enumEventStatus.PUBLISHED },
         where: { slug: params.slug },
       });
       break;
@@ -38,7 +37,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const event = await prisma.event.findUnique({
     where: {
       slug: params.slug,
-      status: user ? undefined : EventStatus.PUBLISHED,
+      status: user ? undefined : enumEventStatus.PUBLISHED,
     },
   });
   if (!event) {
@@ -56,13 +55,13 @@ export default function ShowEvent() {
   let statusLetter = undefined;
   let statusBg = "bg-white";
   switch (event.status) {
-    case EventStatus.DRAFT:
+    case enumEventStatus.DRAFT:
       statusLetter = "(D)";
       statusBg = "bg-gray-50";
       break;
-    case EventStatus.PUBLISHED:
+    case enumEventStatus.PUBLISHED:
       break;
-    case EventStatus.SUGGESTED:
+    case enumEventStatus.SUGGESTED:
       statusLetter = "(S)";
       statusBg = "bg-emerald-50";
       break;
@@ -140,13 +139,13 @@ export default function ShowEvent() {
       <div className="flex justify-end gap-4">
         {isAuthenticated && (
           <>
-            {event.status !== EventStatus.PUBLISHED && (
+            {event.status !== enumEventStatus.PUBLISHED && (
               <Form replace method="post">
                 <button
                   type="submit"
                   name="intent"
                   value="publish"
-                  className="rounded border border-transparent bg-emerald-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                  className="rounded border border-transparent bg-emerald-700 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
                 >
                   Publish
                 </button>

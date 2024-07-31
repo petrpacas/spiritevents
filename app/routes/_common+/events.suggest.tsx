@@ -1,7 +1,6 @@
 import type { MDXEditorMethods } from "@mdxeditor/editor";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { createId } from "@paralleldrive/cuid2";
-import { EventStatus } from "@prisma/client";
 import {
   Form,
   redirect,
@@ -12,6 +11,7 @@ import {
 import { useRef } from "react";
 import { EventFormFields } from "~/components/";
 import { prisma } from "~/services";
+import { enumEventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
@@ -27,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return errors;
   }
   await prisma.event.create({
-    data: { ...result.data, status: EventStatus.SUGGESTED },
+    data: { ...result.data, status: enumEventStatus.SUGGESTED },
   });
   return redirect("/events");
 }

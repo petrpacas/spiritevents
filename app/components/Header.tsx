@@ -53,7 +53,7 @@ export const Header = ({ isAuthenticated, isHomepage }: Props) => {
                 type="submit"
                 className="flex items-center gap-2 rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
               >
-                <span className="max-sm:sr-only">Sign out</span>
+                <span className="max-sm:sr-only">Exit</span>
                 <svg
                   className="h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@ export const Header = ({ isAuthenticated, isHomepage }: Props) => {
               to={signInUrl}
               className="flex items-center gap-2 rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
             >
-              <span className="max-sm:sr-only">Sign in</span>
+              <span className="max-sm:sr-only">Admin</span>
               <svg
                 className="h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg"

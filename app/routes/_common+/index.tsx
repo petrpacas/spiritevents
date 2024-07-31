@@ -1,9 +1,8 @@
 import type { MetaFunction } from "@remix-run/node";
-import { EventStatus } from "@prisma/client";
 import { Link, useLoaderData } from "@remix-run/react";
 import { EventListCard } from "~/components";
 import { prisma } from "~/services";
-import { getTodayDate } from "~/utils";
+import { getTodayDate, enumEventStatus } from "~/utils";
 
 export const meta: MetaFunction = () => {
   return [
@@ -23,7 +22,10 @@ export async function loader() {
       title: true,
     },
     take: 3,
-    where: { dateEnd: { gte: getTodayDate() }, status: EventStatus.PUBLISHED },
+    where: {
+      dateEnd: { gte: getTodayDate() },
+      status: enumEventStatus.PUBLISHED,
+    },
   });
   return { events };
 }

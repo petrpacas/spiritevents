@@ -1,12 +1,12 @@
-import { EventStatus } from "@prisma/client";
 import { Link } from "@remix-run/react";
+import { enumEventStatus } from "~/utils";
 
 type Props = {
   country: string;
   dateEnd: string;
   dateStart: string;
   slug: string;
-  status?: EventStatus;
+  status?: keyof typeof enumEventStatus;
   title: string;
 };
 
@@ -21,13 +21,13 @@ export const EventListCard = ({
   let statusLetter = undefined;
   let statusBg = "bg-white";
   switch (status) {
-    case EventStatus.DRAFT:
+    case enumEventStatus.DRAFT:
       statusLetter = "(D)";
       statusBg = "bg-gray-50";
       break;
-    case EventStatus.PUBLISHED:
+    case enumEventStatus.PUBLISHED:
       break;
-    case EventStatus.SUGGESTED:
+    case enumEventStatus.SUGGESTED:
       statusLetter = "(S)";
       statusBg = "bg-emerald-50";
       break;
