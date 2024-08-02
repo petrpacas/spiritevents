@@ -78,12 +78,12 @@ export default function Index() {
   }, [actionData?.success]);
   return (
     <div className="grid gap-8">
+      <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
       <div
-        className="grid min-h-dvh bg-cover bg-center"
+        className="grid min-h-screen bg-cover bg-center"
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
-        <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
-        <div className="grid min-h-dvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,0.8),rgba(255,251,235,0.8),rgba(255,251,235,1))] bg-cover bg-center">
+        <div className="grid min-h-screen items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,0.8),rgba(255,251,235,0.8),rgba(255,251,235,1))] bg-cover bg-center">
           <h2 className="px-4 py-[6.625rem] text-center text-3xl font-bold leading-loose drop-shadow-[0_0_1rem_rgba(255,255,255,1)] sm:px-8 md:text-4xl md:leading-loose">
             Your gateway to discovering conscious{" "}
             <br className="max-lg:hidden" />

@@ -2,6 +2,6 @@
 
 Your gateway to discovering conscious gatherings and festivals intended to nourish, uplift, and connect
 
-_~ enter the portal ~_
+~ enter the portal ~
 
 https://seekgathering.com

@@ -26,7 +26,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
           </a>
         </div> */}
         <div>
-          made by{" "}
+          Made with ❤️ by{" "}
           <a href="mailto:petr@pacas.cz" className="text-amber-600 underline">
             petr@pacas.cz
           </a>
