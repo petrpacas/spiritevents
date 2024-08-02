@@ -21,7 +21,7 @@ import bgImage from "./elizabeth-anura_medicine-festival-2023-watermark.jpg";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "SeekGathering ~ the portal is open" },
+    { title: "SeekGathering" },
     {
       name: "description",
       content:

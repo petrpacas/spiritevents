@@ -122,7 +122,7 @@ export default function Events() {
       <div className="flex items-center justify-between gap-4">
         {isAuthenticated ? (
           <div className="text-sm sm:max-md:text-base md:text-lg">
-            <span className="text-amber-600">(S)</span>UGGESTION or{" "}
+            <span className="text-amber-600">(S)</span>UGGESTED or{" "}
             {/* <span className="text-amber-600">(D)</span>RAFT / */}PUBLISHED
           </div>
         ) : (
