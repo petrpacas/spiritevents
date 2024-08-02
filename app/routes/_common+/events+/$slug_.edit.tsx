@@ -8,6 +8,7 @@ import {
   Form,
   redirect,
   useActionData,
+  useLoaderData,
   useNavigate,
   useSubmit,
 } from "@remix-run/react";
@@ -16,11 +17,11 @@ import { EventFormFields } from "~/components/";
 import { prisma, requireUserSession } from "~/services";
 import { eventFormSchema } from "~/validations";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "Adding new event ~ Seek Gathering" }];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: `Editing ${data?.event?.title} ~ Seek Gathering` }];
 };
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
@@ -29,17 +30,29 @@ export async function action({ request }: ActionFunctionArgs) {
     const errors = result.error.flatten();
     return errors;
   }
-  await prisma.event.create({ data: result.data });
-  return redirect("/events");
+  const cleanData = { ...result.data };
+  delete cleanData.ogSlug;
+  await prisma.event.update({
+    where: { slug: params.slug },
+    data: cleanData,
+  });
+  return redirect(`/events/${result.data.slug}`);
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   await requireUserSession(request);
-  return null;
+  const event = await prisma.event.findUnique({
+    where: { slug: params.slug },
+  });
+  if (!event) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  return { event };
 }
 
-export default function NewEvent() {
+export default function EditEvent() {
   const errors = useActionData<typeof action>();
+  const { event } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
@@ -49,6 +62,7 @@ export default function NewEvent() {
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
     formData.set("description", description ?? "");
+    formData.set("ogSlug", event.slug ?? "");
     submit(formData, {
       method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
       action: $form.getAttribute("action") ?? $form.action,
@@ -56,12 +70,16 @@ export default function NewEvent() {
   };
   return (
     <Form method="post" onSubmit={handleSubmit}>
-      <h1 className="mb-8 text-3xl sm:text-4xl">Adding new event</h1>
-      <EventFormFields errors={errors} mdxEditorRef={mdxEditorRef} />
+      <h1 className="mb-8 text-3xl sm:text-4xl">Editing {event.title}</h1>
+      <EventFormFields
+        event={event}
+        errors={errors}
+        mdxEditorRef={mdxEditorRef}
+      />
       <div className="flex justify-end gap-4">
         <button
           type="submit"
-          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Save
         </button>
@@ -70,7 +88,7 @@ export default function NewEvent() {
           onClick={() => {
             navigate(-1);
           }}
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel
         </button>

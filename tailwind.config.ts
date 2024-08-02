@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 import {
   scopedPreflightStyles,
   isolateOutsideOfContainer,
@@ -14,6 +15,10 @@ export default {
     require("@tailwindcss/typography"),
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Poppins", ...defaultTheme.fontFamily.sans],
+      },
+    },
   },
 } satisfies Config;

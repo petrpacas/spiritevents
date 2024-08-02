@@ -71,7 +71,7 @@ export default function ShowEvent() {
   return (
     <div>
       <div
-        className={`${statusBg} mb-8 grid border-y border-amber-600 text-center max-sm:-mx-4 sm:rounded-lg sm:border-x`}
+        className={`${statusBg} mb-8 grid rounded-lg border border-amber-600 text-center`}
       >
         <div className="grid gap-8 px-4 py-8">
           <div className="grid gap-2">
@@ -112,7 +112,7 @@ export default function ShowEvent() {
           )}
         </div>
         {event.description && (
-          <div className="bg-amber-100 px-4 py-8">
+          <div className="bg-amber-50 px-4 py-8">
             <div
               className="prose prose-amber mx-auto text-center text-lg sm:text-xl"
               id="description"
@@ -145,7 +145,7 @@ export default function ShowEvent() {
                   type="submit"
                   name="intent"
                   value="publish"
-                  className="rounded border border-transparent bg-emerald-700 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                  className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
                 >
                   Publish
                 </button>
@@ -154,7 +154,7 @@ export default function ShowEvent() {
             <Form action="edit">
               <button
                 type="submit"
-                className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
               >
                 Edit
               </button>
@@ -184,7 +184,7 @@ export default function ShowEvent() {
         )}
         <Link
           to="/events"
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Back
         </Link>

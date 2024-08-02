@@ -1,5 +1,5 @@
-# Welcome to Seek Gathering!
+# ~ Seek Gathering ~
 
-An app idea I'm developing at the moment: An event discovery portal for the worldwide conscious community
+Your gateway to discovering conscious gatherings and festivals intended to nourish, uplift, and connect
 
-Currently running at https://seek-gathering.onrender.com/
+_Enter the portal ~ https://seekgathering.com_

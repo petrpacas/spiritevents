@@ -1,59 +1,89 @@
-import { Form, Link, useLocation } from "@remix-run/react";
+import { Link } from "@remix-run/react";
+import { useState } from "react";
 
 type Props = {
   isAuthenticated: boolean;
-  isHomepage?: boolean;
+  isLanding?: boolean;
 };
 
-export const Header = ({ isAuthenticated, isHomepage }: Props) => {
-  const location = useLocation();
-  let signInUrl = "";
-  if (location.pathname === "/" || location.pathname === "/sign-in") {
-    signInUrl = "/sign-in" + location.search;
-  } else {
-    signInUrl = "/sign-in?ogRoute=" + location.pathname + location.search;
-  }
+export const Header = ({ isAuthenticated, isLanding }: Props) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const handleClick = () => {
+    setIsMenuOpen((value) => {
+      return !value;
+    });
+  };
+  const seekGathering = (
+    <>
+      <span className="text-amber-600">~</span>
+      <span className="max-lg:sr-only"> </span>S
+      <span className="max-lg:sr-only">eek </span>G
+      <span className="max-lg:sr-only">athering </span>
+      <span className="text-amber-600">~</span>
+    </>
+  );
   return (
     <header
-      className={
-        isHomepage
-          ? "flex w-full items-center justify-between"
-          : "mx-auto flex w-full max-w-7xl items-center justify-between p-4 sm:px-8"
-      }
+      className={isLanding ? "absolute top-0 z-10 w-full" : "bg-amber-50"}
     >
-      <Link to="/" className="font-serif text-4xl uppercase">
-        S<span className="max-md:sr-only">eek&nbsp;</span>G
-        <span className="max-md:sr-only">athering</span>
-      </Link>
-      <nav className="flex items-center gap-4">
-        {isAuthenticated ? (
-          <>
-            <Link
-              to="/events/new"
-              className="flex items-center gap-2 rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+      <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between p-4 sm:px-8">
+        <Link to="/" className="text-4xl font-semibold uppercase">
+          {isLanding ? <h1>{seekGathering}</h1> : seekGathering}
+        </Link>
+        <button
+          type="button"
+          onClick={handleClick}
+          className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-30 flex items-center rounded border px-4 py-2 md:hidden`}
+        >
+          <span className="sr-only">Menu</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
+          <div
+            className={`${isMenuOpen ? "" : "hidden"}absolute -bottom-[2px] left-0 right-0 h-[2px] bg-white`}
+          />
+        </button>
+        <nav
+          className={`${isMenuOpen ? "max-md:grid" : "max-md:hidden"} items-center max-lg:gap-2 max-md:absolute max-md:top-[3.625rem] max-md:z-20 max-md:rounded-md max-md:rounded-tr-none max-md:border max-md:border-amber-600 max-md:bg-white max-md:p-4 max-sm:right-4 sm:max-md:right-8 md:flex lg:gap-4`}
+        >
+          <Link
+            to="/events"
+            className="flex items-center gap-2 rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
+          >
+            Upcoming events
+            <svg
+              className="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
             >
-              <span className="max-sm:sr-only">Add new event</span>
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
+              />
+            </svg>
+          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/events/new"
+                className="flex items-center gap-2 rounded border border-emerald-600 bg-transparent px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
-            </Link>
-            <Form action="/sign-out" method="post">
-              <button
-                type="submit"
-                className="flex items-center gap-2 rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
-              >
-                <span className="max-sm:sr-only">Exit</span>
+                Add event
                 <svg
                   className="h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
@@ -65,57 +95,77 @@ export const Header = ({ isAuthenticated, isHomepage }: Props) => {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
                   />
                 </svg>
-              </button>
-            </Form>
-          </>
-        ) : (
-          <>
-            <Link
-              to="/events/suggest"
-              className="flex items-center gap-2 rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
-            >
-              <span className="max-sm:sr-only">Suggest an event</span>
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
+              </Link>
+              <Link
+                to="/feedback/check"
+                className="flex items-center gap-2 rounded border border-sky-600 px-4 py-2 text-sky-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
-                />
-              </svg>
-            </Link>
-            <Link
-              to={signInUrl}
-              className="flex items-center gap-2 rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
-            >
-              <span className="max-sm:sr-only">Admin</span>
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
+                Check feedback
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                  />
+                </svg>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/events/suggest"
+                className="flex items-center gap-2 rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
-                />
-              </svg>
-            </Link>
-          </>
-        )}
-      </nav>
+                Suggest event
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                  />
+                </svg>
+              </Link>
+              <Link
+                to="/feedback"
+                className="flex items-center gap-2 rounded border border-sky-600 px-4 py-2 text-sky-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
+              >
+                Give feedback
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                  />
+                </svg>
+              </Link>
+            </>
+          )}
+        </nav>
+      </div>
     </header>
   );
 };

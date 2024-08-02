@@ -57,7 +57,7 @@ export default function Events() {
     <div>
       <div className="mb-8 grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
         <h1 className="text-3xl sm:text-4xl">
-          {isAuthenticated ? "All" : "Upcoming"} events
+          {isAuthenticated ? "Event dashboard" : "Upcoming events"}
         </h1>
         {country ? (
           <div className="grid gap-2 md:flex md:items-center">
@@ -106,7 +106,7 @@ export default function Events() {
           </Form>
         )}
       </div>
-      <div className="mb-8 grid gap-2">
+      <div className="mb-8 grid gap-2 sm:gap-4">
         {events.map((event) => (
           <EventListCard
             key={event.slug}
@@ -130,7 +130,7 @@ export default function Events() {
         )}
         <Link
           to={country ? "/events" : "/"}
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Back
         </Link>

@@ -37,7 +37,7 @@ export const EventListCard = ({
   return (
     <Link
       to={`/events/${slug}`}
-      className={`${statusBg} grid gap-2 border-y border-amber-600 p-4 shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:-mx-4 max-sm:py-2 sm:rounded-lg sm:border-x md:flex md:items-center md:justify-between md:gap-4`}
+      className={`${statusBg} grid gap-2 rounded-lg border border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow sm:gap-4 sm:p-4 md:flex md:items-center md:justify-between`}
     >
       <h3 className="text-xl sm:text-2xl">
         {statusLetter && (

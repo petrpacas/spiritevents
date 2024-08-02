@@ -8,7 +8,7 @@ import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { authenticator, commitSession, getSession } from "~/services";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Sign in ~ Seek Gathering" }];
+  return [{ title: "Admin login ~ Seek Gathering" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -16,7 +16,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const ogRoute = requestUrl.searchParams.get("ogRoute");
   return await authenticator.authenticate("FormStrategy", request, {
     failureRedirect: ogRoute ? `/sign-in?ogRoute=${ogRoute}` : "/sign-in",
-    successRedirect: ogRoute || "/",
+    successRedirect: ogRoute || "/events",
   });
 }
 
@@ -44,10 +44,7 @@ export default function SignIn() {
       method="post"
       className="grid w-full max-w-80 gap-8 self-center justify-self-center text-center"
     >
-      <h1 className="text-xl font-bold sm:text-2xl">
-        Sign in to S<span className="sr-only">eek&nbsp;</span>G
-        <span className="sr-only">athering</span>
-      </h1>
+      <h1 className="text-xl font-bold sm:text-2xl">Admin login</h1>
       <div className="grid gap-4">
         <label className="grid gap-2">
           Email
@@ -55,7 +52,7 @@ export default function SignIn() {
             type="email"
             name="email"
             required
-            className="w-full rounded border border-gray-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
+            className="w-full rounded border border-gray-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
         </label>
         <label className="grid gap-2">
@@ -65,7 +62,7 @@ export default function SignIn() {
             name="password"
             autoComplete="current-password"
             required
-            className="w-full rounded border border-gray-200 bg-white px-4 py-2 shadow-sm transition-shadow autofill:!bg-amber-100 hover:shadow-md active:shadow"
+            className="w-full rounded border border-gray-200 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
         </label>
         {error?.message && <p className="text-red-600">{error.message}</p>}
@@ -73,7 +70,7 @@ export default function SignIn() {
       <div className="grid gap-4">
         <button
           type="submit"
-          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Sign in
         </button>
@@ -82,7 +79,7 @@ export default function SignIn() {
           onClick={() => {
             navigate(-1);
           }}
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel
         </button>

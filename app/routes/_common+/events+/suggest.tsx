@@ -4,25 +4,25 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { createId } from "@paralleldrive/cuid2";
 import {
   Form,
   redirect,
   useActionData,
-  useLoaderData,
   useNavigate,
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
 import { EventFormFields } from "~/components/";
-import { prisma, requireUserSession } from "~/services";
+import { authenticator, prisma } from "~/services";
+import { enumEventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [{ title: `Editing ${data?.event?.title} ~ Seek Gathering` }];
+export const meta: MetaFunction = () => {
+  return [{ title: "Adding new event ~ Seek Gathering" }];
 };
 
-export async function action({ params, request }: ActionFunctionArgs) {
-  await requireUserSession(request);
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
   const result = await eventFormSchema.safeParseAsync(data);
@@ -30,29 +30,21 @@ export async function action({ params, request }: ActionFunctionArgs) {
     const errors = result.error.flatten();
     return errors;
   }
-  const cleanData = { ...result.data };
-  delete cleanData.ogSlug;
-  await prisma.event.update({
-    where: { slug: params.slug },
-    data: cleanData,
+  await prisma.event.create({
+    data: { ...result.data, status: enumEventStatus.SUGGESTED },
   });
-  return redirect(`/events/${result.data.slug}`);
+  return redirect("/events");
 }
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
-  await requireUserSession(request);
-  const event = await prisma.event.findUnique({
-    where: { slug: params.slug },
+export async function loader({ request }: LoaderFunctionArgs) {
+  await authenticator.isAuthenticated(request, {
+    successRedirect: "/events/new",
   });
-  if (!event) {
-    throw new Response("Not Found", { status: 404 });
-  }
-  return { event };
+  return null;
 }
 
-export default function EditEvent() {
+export default function NewEvent() {
   const errors = useActionData<typeof action>();
-  const { event } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
@@ -61,8 +53,8 @@ export default function EditEvent() {
     const $form = e.currentTarget;
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
+    formData.set("slug", createId());
     formData.set("description", description ?? "");
-    formData.set("ogSlug", event.slug ?? "");
     submit(formData, {
       method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
       action: $form.getAttribute("action") ?? $form.action,
@@ -70,25 +62,31 @@ export default function EditEvent() {
   };
   return (
     <Form method="post" onSubmit={handleSubmit}>
-      <h1 className="mb-8 text-3xl sm:text-4xl">Editing {event.title}</h1>
+      <h1 className="mb-8 text-3xl sm:text-4xl">Suggest a new event</h1>
+      <p className="mb-8 border-b border-amber-600 pb-8 text-lg sm:text-xl">
+        I&apos;d like to kindly ask you to fill in the title, the country, and
+        the dates your suggested event is happening in.
+        <br />
+        <strong>Let&apos;s create this portal together!</strong>
+      </p>
       <EventFormFields
-        event={event}
         errors={errors}
         mdxEditorRef={mdxEditorRef}
+        isSuggestion
       />
       <div className="flex justify-end gap-4">
         <button
           type="submit"
-          className="rounded border border-transparent bg-amber-800 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Save
+          Send suggestion
         </button>
         <button
           type="button"
           onClick={() => {
             navigate(-1);
           }}
-          className="rounded border border-amber-800 px-4 py-2 text-amber-800 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel
         </button>

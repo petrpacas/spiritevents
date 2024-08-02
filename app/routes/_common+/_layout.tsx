@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { Footer, Header } from "~/components";
 import { authenticator } from "~/services";
 
@@ -8,17 +8,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { isAuthenticated: !!user };
 }
 
-export default function MainLayout() {
+export default function CommonLayout() {
   const { isAuthenticated } = useLoaderData<typeof loader>();
+  const { pathname } = useLocation();
   return (
-    <div className="grid min-h-dvh grid-rows-[auto_1fr_auto] text-amber-950">
-      <Header isAuthenticated={isAuthenticated} />
-      <main className="flex justify-center bg-amber-50">
-        <div className="grid w-full max-w-7xl grid-rows-1 items-start p-8 max-sm:px-4">
+    <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
+      <Header isAuthenticated={isAuthenticated} key={pathname} />
+      <main className="flex justify-center">
+        <div className="grid w-full max-w-7xl grid-rows-1 items-start px-4 py-8 sm:px-8">
           <Outlet />
         </div>
       </main>
-      <Footer />
+      <Footer isAuthenticated={isAuthenticated} />
     </div>
   );
 }
