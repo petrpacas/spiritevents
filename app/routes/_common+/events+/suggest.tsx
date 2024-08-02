@@ -27,8 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(formData);
   const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
-    const errors = result.error.flatten();
-    return errors;
+    return result.error.flatten();
   }
   await prisma.event.create({
     data: { ...result.data, status: enumEventStatus.SUGGESTED },

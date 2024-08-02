@@ -13,7 +13,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
     signInUrl = "/sign-in?ogRoute=" + location.pathname + location.search;
   }
   return (
-    <footer>
+    <footer className="text-gray-500">
       <div className="mx-auto grid max-w-7xl justify-center gap-4 px-4 py-8 text-center sm:px-8 sm:py-16">
         <div>SeekGathering</div>
         {/* <div>
@@ -27,7 +27,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
         </div> */}
         <div>
           made by{" "}
-          <a href="mailto:petr@pacas.cz" className="text-amber-600">
+          <a href="mailto:petr@pacas.cz" className="text-amber-600 underline">
             petr@pacas.cz
           </a>
         </div>
@@ -35,7 +35,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
           <Form action="/sign-out" method="post">
             <button
               type="submit"
-              className="inline-flex items-center gap-2 place-self-center rounded border border-gray-200 px-4 py-2 text-gray-500 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="inline-flex items-center gap-2 place-self-center rounded border border-gray-200 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
             >
               Admin logout
               <svg
@@ -57,7 +57,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
         ) : (
           <Link
             to={signInUrl}
-            className="inline-flex items-center gap-2 place-self-center rounded border border-gray-200 px-4 py-2 text-gray-500 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className="inline-flex items-center gap-2 place-self-center rounded border border-gray-200 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
           >
             Admin login
             <svg

@@ -27,14 +27,13 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const data = Object.fromEntries(formData);
   const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
-    const errors = result.error.flatten();
-    return errors;
+    return result.error.flatten();
   }
   const cleanData = { ...result.data };
   delete cleanData.ogSlug;
   await prisma.event.update({
-    where: { slug: params.slug },
     data: cleanData,
+    where: { slug: params.slug },
   });
   return redirect(`/events/${result.data.slug}`);
 }

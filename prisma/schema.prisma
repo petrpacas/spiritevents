@@ -43,3 +43,11 @@ model Event {
   status       EventStatus @default(PUBLISHED)
   title        String
 }
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+}

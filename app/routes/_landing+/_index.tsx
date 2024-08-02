@@ -1,8 +1,21 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData, useLocation } from "@remix-run/react";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useLocation,
+} from "@remix-run/react";
+import { useEffect, useRef } from "react";
+import { inferFlattenedErrors } from "zod";
 import { EventListCard, Footer, Header } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { getTodayDate, enumEventStatus } from "~/utils";
+import { subscriberFormSchema } from "~/validations";
 import bgImage from "./elizabeth-anura_medicine-festival-2023-watermark.jpg";
 // import bgImage from "./phoebe-montague_medicine-festival-2023-watermark.jpg";
 
@@ -16,6 +29,22 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
+
+type ActionData = {
+  errors?: inferFlattenedErrors<typeof subscriberFormSchema>;
+  success: boolean;
+};
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  const result = await subscriberFormSchema.safeParseAsync(data);
+  if (!result.success) {
+    return { errors: result.error.flatten() };
+  }
+  await prisma.subscriber.create({ data: result.data });
+  return { success: true };
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
@@ -38,8 +67,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
+  const actionData = useActionData<ActionData>();
   const { events, isAuthenticated } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (actionData?.success) {
+      formRef.current?.reset();
+    }
+  }, [actionData?.success]);
   return (
     <div className="grid gap-8">
       <div
@@ -148,7 +184,7 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="bg-sky-50">
+        {/* <div className="bg-sky-50">
           <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16">
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
               <div className="grid gap-8 xl:col-span-2">
@@ -189,12 +225,13 @@ export default function Index() {
               </Link>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="bg-amber-50">
+        <div className="bg-stone-50">
           <Form
             method="post"
             className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16"
+            ref={formRef}
           >
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
               <div className="grid gap-8 xl:col-span-2">
@@ -213,23 +250,24 @@ export default function Index() {
                   </p>
                 </div>
               </div>
-              <div className="grid gap-4 sm:max-xl:grid-cols-2">
-                <label className="xl:self-end">
+              <div className="grid gap-4 max-xl:items-start sm:max-xl:grid-cols-2">
+                <label className="grid gap-4 xl:self-end">
                   <input
+                    required
                     placeholder="Email"
                     type="email"
                     name="email"
-                    className="w-full rounded-lg border-amber-600 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4"
+                    className="w-full rounded-lg border-stone-600 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4"
                   />
-                  {/* {errors?.fieldErrors.title && (
-                      <p className="text-red-600">
-                        {errors.fieldErrors.title.join(", ")}
-                      </p>
-                    )} */}
+                  {actionData?.errors?.fieldErrors.email && (
+                    <p className="text-center text-red-600">
+                      {actionData.errors.fieldErrors.email.join(", ")}
+                    </p>
+                  )}
                 </label>
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4 xl:self-start xl:px-8"
+                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-stone-600 px-4 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4 xl:self-start xl:px-8"
                 >
                   Join the mailing list
                   <svg
