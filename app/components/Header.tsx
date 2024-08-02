@@ -13,36 +13,30 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
       return !value;
     });
   };
-  const seekGathering = (
-    <>
-      <span className="text-amber-600">~</span>
-      <span className="max-lg:sr-only"> </span>S
-      <span className="max-lg:sr-only">eek </span>G
-      <span className="max-lg:sr-only">athering </span>
-      <span className="text-amber-600">~</span>
-    </>
+  const brandName = (
+    <div className="text-4xl font-bold uppercase leading-none max-[420px]:grid max-[420px]:text-xl max-[420px]:leading-none">
+      <span className="text-amber-600">Seek</span>Gathering
+    </div>
   );
   return (
     <header
       className={isLanding ? "absolute top-0 z-10 w-full" : "bg-amber-50"}
     >
       <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between p-4 sm:px-8">
-        <Link to="/" className="text-4xl font-semibold uppercase">
-          {isLanding ? <h1>{seekGathering}</h1> : seekGathering}
-        </Link>
+        <Link to="/">{isLanding ? <h1>{brandName}</h1> : brandName}</Link>
         <button
           type="button"
           onClick={handleClick}
-          className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-30 flex items-center rounded border px-4 py-2 md:hidden`}
+          className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-30 flex items-center rounded border px-4 py-2 lg:hidden`}
         >
           <span className="sr-only">Menu</span>
           <svg
+            className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="h-6 w-6"
           >
             <path
               strokeLinecap="round"
@@ -55,7 +49,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
           />
         </button>
         <nav
-          className={`${isMenuOpen ? "max-md:grid" : "max-md:hidden"} items-center max-lg:gap-2 max-md:absolute max-md:top-[3.625rem] max-md:z-20 max-md:rounded-md max-md:rounded-tr-none max-md:border max-md:border-amber-600 max-md:bg-white max-md:p-4 max-sm:right-4 sm:max-md:right-8 md:flex lg:gap-4`}
+          className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-20 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:flex lg:gap-4`}
         >
           <Link
             to="/events"

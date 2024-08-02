@@ -18,7 +18,7 @@ import { prisma, requireUserSession } from "~/services";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [{ title: `Editing ${data?.event?.title} ~ Seek Gathering` }];
+  return [{ title: `Editing ${data?.event?.title} ~ SeekGathering` }];
 };
 
 export async function action({ params, request }: ActionFunctionArgs) {

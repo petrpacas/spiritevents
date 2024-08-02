@@ -1,5 +1,7 @@
-# ~ Seek Gathering ~
+# SeekGathering
 
 Your gateway to discovering conscious gatherings and festivals intended to nourish, uplift, and connect
 
-_Enter the portal ~ https://seekgathering.com_
+_~ enter the portal ~_
+
+https://seekgathering.com

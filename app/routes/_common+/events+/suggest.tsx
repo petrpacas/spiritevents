@@ -19,7 +19,7 @@ import { enumEventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Adding new event ~ Seek Gathering" }];
+  return [{ title: "Adding new event ~ SeekGathering" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {

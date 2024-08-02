@@ -11,7 +11,7 @@ import { authenticator, prisma } from "~/services";
 import { countries, getTodayDate, enumEventStatus } from "~/utils";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Upcoming events ~ Seek Gathering" }];
+  return [{ title: "Upcoming events ~ SeekGathering" }];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {

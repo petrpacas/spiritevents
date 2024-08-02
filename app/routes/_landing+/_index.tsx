@@ -8,7 +8,7 @@ import bgImage from "./elizabeth-anura_medicine-festival-2023-watermark.jpg";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "~ Seek Gathering ~" },
+    { title: "SeekGathering ~ the portal is open" },
     {
       name: "description",
       content:
@@ -48,10 +48,7 @@ export default function Index() {
       >
         <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
         <div className="grid min-h-dvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,0.8),rgba(255,251,235,0.8),rgba(255,251,235,1))] bg-cover bg-center">
-          <h2 className="px-4 py-[6.625rem] text-center text-2xl font-medium leading-loose drop-shadow-[0_0_1rem_rgba(255,255,255,1)] sm:px-8 sm:text-3xl sm:leading-loose md:text-4xl md:leading-loose">
-            <div className="hidden text-3xl font-bold uppercase leading-loose max-lg:block sm:text-4xl sm:leading-loose md:text-5xl md:leading-loose">
-              Seek Gathering
-            </div>
+          <h2 className="px-4 py-[6.625rem] text-center text-3xl font-bold leading-loose drop-shadow-[0_0_1rem_rgba(255,255,255,1)] sm:px-8 md:text-4xl md:leading-loose">
             Your gateway to discovering conscious{" "}
             <br className="max-lg:hidden" />
             <strong className="text-amber-600">

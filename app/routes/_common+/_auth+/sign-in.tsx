@@ -8,7 +8,7 @@ import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { authenticator, commitSession, getSession } from "~/services";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Admin login ~ Seek Gathering" }];
+  return [{ title: "Admin login ~ SeekGathering" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {

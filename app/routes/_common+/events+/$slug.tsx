@@ -9,7 +9,7 @@ import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, enumEventStatus } from "~/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [{ title: `${data?.event?.title} ~ Seek Gathering` }];
+  return [{ title: `${data?.event?.title} ~ SeekGathering` }];
 };
 
 export async function action({ request, params }: ActionFunctionArgs) {

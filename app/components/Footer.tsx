@@ -13,18 +13,31 @@ export const Footer = ({ isAuthenticated }: Props) => {
     signInUrl = "/sign-in?ogRoute=" + location.pathname + location.search;
   }
   return (
-    <footer className="relative">
-      <div className="mx-auto w-full max-w-7xl px-4 py-8 text-center sm:px-8 sm:py-16">
-        <div className="text-gray-500">
-          made by <a href="mailto:petr@pacas.cz">@petrpacas</a>
+    <footer>
+      <div className="mx-auto grid max-w-7xl justify-center gap-4 px-4 py-8 text-center sm:px-8 sm:py-16">
+        <div>SeekGathering</div>
+        {/* <div>
+          ig: <a href="https://instagram.com/seekgathering">@seekgathering</a>
+        </div>
+        <div>
+          fb:{" "}
+          <a href="https://facebook.com/temp.seekgathering">
+            @temp.seekgathering
+          </a>
+        </div> */}
+        <div>
+          made by{" "}
+          <a href="mailto:petr@pacas.cz" className="text-amber-600">
+            petr@pacas.cz
+          </a>
         </div>
         {isAuthenticated ? (
           <Form action="/sign-out" method="post">
             <button
               type="submit"
-              className="absolute bottom-0 left-0 inline-flex items-center gap-2 rounded-tr border-r border-t border-gray-200 px-4 py-2 text-gray-500 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="inline-flex items-center gap-2 place-self-center rounded border border-gray-200 px-4 py-2 text-gray-500 shadow-sm transition-shadow hover:shadow-md active:shadow"
             >
-              <span className="max-sm:sr-only">Logout</span>
+              Admin logout
               <svg
                 className="h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg"
@@ -44,9 +57,9 @@ export const Footer = ({ isAuthenticated }: Props) => {
         ) : (
           <Link
             to={signInUrl}
-            className="absolute bottom-0 left-0 inline-flex items-center gap-2 rounded-tr border-r border-t border-gray-200 px-4 py-2 text-gray-500 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className="inline-flex items-center gap-2 place-self-center rounded border border-gray-200 px-4 py-2 text-gray-500 shadow-sm transition-shadow hover:shadow-md active:shadow"
           >
-            <span className="max-sm:sr-only">Admin login</span>
+            Admin login
             <svg
               className="h-6 w-6"
               xmlns="http://www.w3.org/2000/svg"

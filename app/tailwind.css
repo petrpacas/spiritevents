@@ -5,3 +5,7 @@
 .mdxeditor-toolbar {
   @apply !rounded-b-none !rounded-tl-sm !rounded-tr-sm;
 }
+
+.mdxeditor-popup-container {
+  @apply !shadow-none !border-0;
+}
