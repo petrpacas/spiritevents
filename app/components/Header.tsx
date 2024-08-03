@@ -18,7 +18,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
     }
   }, [isMenuOpen]);
   const brandName = (
-    <div className="text-4xl font-bold uppercase leading-none max-[399px]:grid max-[399px]:text-xl max-[399px]:leading-none">
+    <div className="relative z-10 font-bold leading-none max-[319px]:grid max-[319px]:text-[1.3125rem] min-[320px]:text-[1.75rem] min-[374px]:text-[2.1815rem] min-[428px]:text-[2.625rem]">
       <span className="text-amber-600">Seek</span>Gathering
     </div>
   );
@@ -32,7 +32,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
           <button
             type="button"
             onClick={() => setIsMenuOpen((value) => !value)}
-            className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-30 flex items-center rounded border px-4 py-2 lg:hidden`}
+            className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-40 flex items-center rounded border px-4 py-2 lg:hidden`}
           >
             <span className="sr-only">Menu</span>
             <svg
@@ -54,7 +54,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             />
           </button>
           <nav
-            className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-20 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:flex lg:gap-4`}
+            className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-30 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:flex lg:gap-4`}
           >
             <Link
               to="/events"
@@ -171,7 +171,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
           createPortal(
             <button
               type="button"
-              className={`${isMenuOpen ? "absolute" : "hidden"} bottom-0 left-0 right-0 top-0 z-10 bg-black/50 lg:hidden`}
+              className={`${isMenuOpen ? "absolute" : "hidden"} bottom-0 left-0 right-0 top-0 z-20 bg-black/50 lg:hidden`}
               onClick={() => setIsMenuOpen(false)}
             />,
             document.body,

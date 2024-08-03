@@ -42,7 +42,7 @@ export default function SignIn() {
   return (
     <Form
       method="post"
-      className="grid w-full max-w-80 gap-8 self-center justify-self-center text-center"
+      className="grid w-full max-w-80 gap-8 place-self-center text-center"
     >
       <h1 className="text-xl font-bold sm:text-2xl">Admin login</h1>
       <div className="grid gap-4">

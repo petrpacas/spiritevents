@@ -3,13 +3,7 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import {
-  Form,
-  Link,
-  useActionData,
-  useLoaderData,
-  useLocation,
-} from "@remix-run/react";
+import { Link, useFetcher, useLoaderData, useLocation } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { inferFlattenedErrors } from "zod";
 import { EventListCard, Footer, Header } from "~/components";
@@ -67,7 +61,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const actionData = useActionData<ActionData>();
+  const fetcher = useFetcher<ActionData>();
+  const actionData = fetcher.data;
   const { events, isAuthenticated } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
   const formRef = useRef<HTMLFormElement>(null);
@@ -228,13 +223,13 @@ export default function Index() {
         </div> */}
 
         <div className="bg-stone-50">
-          <Form
+          <fetcher.Form
             method="post"
             className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16"
             ref={formRef}
           >
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
-              <div className="grid gap-8 xl:col-span-2">
+              <div className="grid gap-8 xl:col-span-2 xl:self-center">
                 <h2 className="text-2xl sm:text-3xl">
                   🔄 Stay in the <strong>loop</strong>
                 </h2>
@@ -250,14 +245,27 @@ export default function Index() {
                   </p>
                 </div>
               </div>
-              <div className="grid gap-4 max-xl:items-start sm:max-xl:grid-cols-2">
-                <label className="grid gap-4 xl:self-end">
+              <div className="grid gap-2 max-xl:items-start sm:max-[829px]:grid-cols-2 min-[830px]:max-xl:grid-cols-3 xl:self-center">
+                <label className="grid gap-2">
+                  <input
+                    placeholder="Name (optional)"
+                    type="text"
+                    name="name"
+                    className="w-full rounded-lg border-stone-600 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:py-4"
+                  />
+                  {actionData?.errors?.fieldErrors.name && (
+                    <p className="text-center text-red-600">
+                      {actionData.errors.fieldErrors.name.join(", ")}
+                    </p>
+                  )}
+                </label>
+                <label className="grid gap-2">
                   <input
                     required
                     placeholder="Email"
                     type="email"
                     name="email"
-                    className="w-full rounded-lg border-stone-600 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4"
+                    className="w-full rounded-lg border-stone-600 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:py-4"
                   />
                   {actionData?.errors?.fieldErrors.email && (
                     <p className="text-center text-red-600">
@@ -267,7 +275,7 @@ export default function Index() {
                 </label>
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-stone-600 px-4 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4 xl:self-start xl:px-8"
+                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-stone-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:py-4 sm:max-[829px]:col-span-2 xl:px-8"
                 >
                   Join the mailing list
                   <svg
@@ -287,7 +295,7 @@ export default function Index() {
                 </button>
               </div>
             </div>
-          </Form>
+          </fetcher.Form>
         </div>
       </main>
       <Footer isAuthenticated={isAuthenticated} />
