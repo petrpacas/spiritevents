@@ -3,14 +3,14 @@ import { z } from "zod";
 import { prisma } from "~/services";
 import { getTodayDate } from "~/utils";
 
-// TODO: VALIDATE PROTECTED URL SLUGS (/events/new etc.)
+const restrictedSlugs = ["edit", "new", "suggest"];
 
 const fields = z
   .object({
     country: z.string().trim().length(2, "Country must be selected"),
     description: z.string().trim().or(z.literal("")),
-    linkLocation: z.string().url().or(z.literal("")),
-    linkWebsite: z.string().url().or(z.literal("")),
+    linkLocation: z.string().trim().or(z.literal("")),
+    linkWebsite: z.string().trim().or(z.literal("")),
     ogSlug: z.string().optional(),
     slug: z
       .string()
@@ -26,6 +26,15 @@ const fields = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "URL slug must contain at least 2 characters",
+            fatal: true,
+          });
+          return z.NEVER;
+        }
+
+        if (restrictedSlugs.includes(value)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "URL slug cannot be a restricted word",
             fatal: true,
           });
           return z.NEVER;
