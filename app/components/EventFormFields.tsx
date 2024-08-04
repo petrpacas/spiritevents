@@ -44,7 +44,7 @@ export const EventFormFields = ({
     handleSlugChange(e);
   };
   return (
-    <div className="mb-8 grid gap-4 md:grid-cols-6 md:items-start">
+    <div className="grid gap-4 md:grid-cols-6 md:items-start">
       <label className="grid gap-2 md:col-span-3">
         Title
         <input
@@ -54,7 +54,7 @@ export const EventFormFields = ({
             event?.title || isSuggestion ? undefined : handleTitleChange
           }
           defaultValue={event?.title}
-          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.title && (
           <p className="text-red-600">{errors.fieldErrors.title.join(", ")}</p>
@@ -75,7 +75,7 @@ export const EventFormFields = ({
             onBlur={handleSlugBlur}
             value={slug}
             placeholder="e.g. example-event-2024 (use the year)"
-            className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors.slug && (
             <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
@@ -88,7 +88,7 @@ export const EventFormFields = ({
         Country
         <CountrySelect
           defaultValue={event?.country}
-          className="w-full rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="w-full rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.country && (
           <p className="text-red-600">
@@ -104,7 +104,7 @@ export const EventFormFields = ({
           type="date"
           name="dateStart"
           defaultValue={event?.dateStart}
-          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.dateStart && (
           <p className="text-red-600">
@@ -120,7 +120,7 @@ export const EventFormFields = ({
           type="date"
           name="dateEnd"
           defaultValue={event?.dateEnd}
-          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.dateEnd && (
           <p className="text-red-600">
@@ -136,7 +136,7 @@ export const EventFormFields = ({
           type="text"
           name="linkWebsite"
           defaultValue={event?.linkWebsite ?? ""}
-          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.linkWebsite && (
           <p className="text-red-600">
@@ -152,7 +152,7 @@ export const EventFormFields = ({
           type="text"
           name="linkLocation"
           defaultValue={event?.linkLocation ?? ""}
-          className="rounded border-gray-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.linkLocation && (
           <p className="text-red-600">
@@ -173,7 +173,7 @@ export const EventFormFields = ({
               name="description"
               readOnly
               defaultValue={event?.description ?? ""}
-              className="min-h-20 rounded border-gray-200 shadow-sm transition-shadow read-only:bg-gray-50 hover:shadow-md active:shadow"
+              className="min-h-20 rounded border-stone-200 shadow-sm transition-shadow read-only:bg-gray-50 hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.description && (
               <p className="text-red-600">
@@ -190,7 +190,7 @@ export const EventFormFields = ({
             </div>
             <DescriptionEditor
               ref={mdxEditorRef}
-              className="overflow-x-auto rounded border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="overflow-x-auto rounded border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow"
               markdown={event?.description ?? ""}
             />
             {errors?.fieldErrors.description && (

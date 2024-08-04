@@ -1,17 +1,13 @@
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
-import { Link, useFetcher, useLoaderData, useLocation } from "@remix-run/react";
-import { useEffect, useRef } from "react";
-import { inferFlattenedErrors } from "zod";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Link, useLoaderData, useLocation } from "@remix-run/react";
 import { EventListCard, Footer, Header } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { getTodayDate, enumEventStatus } from "~/utils";
-import { subscriberFormSchema } from "~/validations";
+
+// GET PERMISSION
 import bgImage from "./elizabeth-anura_medicine-festival-2023-watermark.jpg";
 // import bgImage from "./phoebe-montague_medicine-festival-2023-watermark.jpg";
+// GET PERMISSION
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,26 +15,10 @@ export const meta: MetaFunction = () => {
     {
       name: "description",
       content:
-        "Your gateway to discovering conscious gatherings and festivals intended to nourish, uplift, and connect",
+        "Your gateway to discovering conscious gatherings and festivals intended to nourish, uplift, and connect…",
     },
   ];
 };
-
-type ActionData = {
-  errors?: inferFlattenedErrors<typeof subscriberFormSchema>;
-  success: boolean;
-};
-
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  const result = await subscriberFormSchema.safeParseAsync(data);
-  if (!result.success) {
-    return { errors: result.error.flatten() };
-  }
-  await prisma.subscriber.create({ data: result.data });
-  return { success: true };
-}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
@@ -61,16 +41,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const fetcher = useFetcher<ActionData>();
-  const actionData = fetcher.data;
   const { events, isAuthenticated } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
-  const formRef = useRef<HTMLFormElement>(null);
-  useEffect(() => {
-    if (actionData?.success) {
-      formRef.current?.reset();
-    }
-  }, [actionData?.success]);
   return (
     <div className="grid gap-8">
       <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
@@ -78,7 +50,7 @@ export default function Index() {
         className="grid min-h-screen bg-cover bg-center"
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
-        <div className="grid min-h-screen items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,0.8),rgba(255,251,235,0.8),rgba(255,251,235,1))] bg-cover bg-center">
+        <div className="grid min-h-screen items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,0.8),rgba(255,251,235,0.8),rgba(255,251,235,1))]">
           <h2 className="px-4 py-[6.625rem] text-center text-3xl font-bold leading-loose drop-shadow-[0_0_1rem_rgba(255,255,255,1)] sm:px-8 md:text-4xl md:leading-loose">
             Your gateway to discovering conscious{" "}
             <br className="max-lg:hidden" />
@@ -89,6 +61,7 @@ export default function Index() {
             <strong className="text-amber-600">
               nourish, uplift, and connect
             </strong>
+            &hellip;
           </h2>
         </div>
       </div>
@@ -111,14 +84,14 @@ export default function Index() {
                 />
               ))}
             </div>
-            <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
+            <div className="grid gap-8 xl:grid-cols-3 xl:gap-16">
               <Link
                 to="/events"
-                className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4 sm:max-xl:justify-self-end lg:self-center xl:col-start-3 xl:px-8"
+                className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end lg:self-center xl:col-start-3"
               >
                 Browse upcoming events
                 <svg
-                  className="h-6 w-6"
+                  className="h-6 w-6 max-[339px]:hidden"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -157,11 +130,11 @@ export default function Index() {
               </div>
               <Link
                 to="/events/suggest"
-                className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-emerald-600 px-4 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4 sm:max-xl:justify-self-end xl:self-center xl:px-8"
+                className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end xl:self-center"
               >
                 Suggest a new event
                 <svg
-                  className="h-6 w-6"
+                  className="h-6 w-6 max-[339px]:hidden"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -200,11 +173,11 @@ export default function Index() {
               </div>
               <Link
                 to="/feedback"
-                className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-sky-600 px-4 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:py-2 sm:py-4 sm:max-xl:justify-self-end xl:self-center xl:px-8"
+                className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-sky-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end xl:self-center"
               >
                 Give me your feedback
                 <svg
-                  className="h-6 w-6"
+                  className="h-6 w-6 max-[339px]:hidden"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -221,82 +194,6 @@ export default function Index() {
             </div>
           </div>
         </div> */}
-
-        <div className="bg-stone-50">
-          <fetcher.Form
-            method="post"
-            className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16"
-            ref={formRef}
-          >
-            <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
-              <div className="grid gap-8 xl:col-span-2 xl:self-center">
-                <h2 className="text-2xl sm:text-3xl">
-                  🔄 Stay in the <strong>loop</strong>
-                </h2>
-                <div className="grid gap-4 text-lg sm:text-xl">
-                  <p>
-                    Don&apos;t expect to get any email from me anytime soon, but
-                    if and when one goes out, it could be really worth your
-                    while!
-                  </p>
-                  <p className="text-amber-600">
-                    (By joining you agree to receive the newsletter,
-                    obviously&hellip;)
-                  </p>
-                </div>
-              </div>
-              <div className="grid gap-2 max-xl:items-start sm:max-[829px]:grid-cols-2 min-[830px]:max-xl:grid-cols-3 xl:self-center">
-                <label className="grid gap-2">
-                  <input
-                    placeholder="Name (optional)"
-                    type="text"
-                    name="name"
-                    className="w-full rounded-lg border-stone-600 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:py-4"
-                  />
-                  {actionData?.errors?.fieldErrors.name && (
-                    <p className="text-center text-red-600">
-                      {actionData.errors.fieldErrors.name.join(", ")}
-                    </p>
-                  )}
-                </label>
-                <label className="grid gap-2">
-                  <input
-                    required
-                    placeholder="Email"
-                    type="email"
-                    name="email"
-                    className="w-full rounded-lg border-stone-600 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:py-4"
-                  />
-                  {actionData?.errors?.fieldErrors.email && (
-                    <p className="text-center text-red-600">
-                      {actionData.errors.fieldErrors.email.join(", ")}
-                    </p>
-                  )}
-                </label>
-                <button
-                  type="submit"
-                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-stone-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:py-4 sm:max-[829px]:col-span-2 xl:px-8"
-                >
-                  Join the mailing list
-                  <svg
-                    className="h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </fetcher.Form>
-        </div>
       </main>
       <Footer isAuthenticated={isAuthenticated} />
     </div>

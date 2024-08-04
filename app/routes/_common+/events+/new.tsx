@@ -54,8 +54,8 @@ export default function NewEvent() {
     });
   };
   return (
-    <Form method="post" onSubmit={handleSubmit}>
-      <h1 className="mb-8 text-3xl sm:text-4xl">Adding new event</h1>
+    <Form method="post" onSubmit={handleSubmit} className="grid gap-8">
+      <h1 className="text-3xl sm:text-4xl">Adding new event</h1>
       <EventFormFields errors={errors} mdxEditorRef={mdxEditorRef} />
       <div className="flex justify-end gap-4">
         <button

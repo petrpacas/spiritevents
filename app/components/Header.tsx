@@ -54,7 +54,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             />
           </button>
           <nav
-            className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-30 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:flex lg:gap-4`}
+            className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-30 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:relative lg:z-10 lg:flex lg:gap-4`}
           >
             <Link
               to="/events"

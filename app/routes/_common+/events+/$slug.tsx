@@ -69,9 +69,9 @@ export default function ShowEvent() {
       break;
   }
   return (
-    <div>
+    <div className="grid gap-8">
       <div
-        className={`${statusBg} mb-8 grid rounded-lg border border-amber-600 text-center`}
+        className={`${statusBg} grid rounded-lg border border-amber-600 text-center`}
       >
         <div className="grid gap-8 px-4 py-8">
           <div className="grid gap-2">

@@ -54,8 +54,8 @@ export default function Events() {
   const eventCountries = getCountryCodesFromEvents();
   const filteredCountries = filterCountriesForEvent(eventCountries);
   return (
-    <div>
-      <div className="mb-8 grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
+    <div className="grid gap-8">
+      <div className="grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
         <h1 className="text-3xl sm:text-4xl">
           {isAuthenticated ? "Event dashboard" : "Upcoming events"}
         </h1>
@@ -66,7 +66,7 @@ export default function Events() {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="col-start-1 row-start-1 rounded border border-gray-200 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
+                className="col-start-1 row-start-1 rounded border border-stone-300 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
               >
                 {getCountryNameByCode(country)}
               </button>
@@ -100,13 +100,13 @@ export default function Events() {
               Showing events in
               <CountrySelect
                 filteredCountries={filteredCountries}
-                className="rounded border border-gray-200 bg-white py-1 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                className="rounded border border-stone-300 bg-white py-1 shadow-sm transition-shadow hover:shadow-md active:shadow"
               />
             </label>
           </Form>
         )}
       </div>
-      <div className="mb-8 grid gap-2 sm:gap-4">
+      <div className="grid gap-2 sm:gap-4">
         {events.map((event) => (
           <EventListCard
             key={event.slug}

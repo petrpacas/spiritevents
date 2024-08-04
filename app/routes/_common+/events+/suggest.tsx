@@ -60,14 +60,17 @@ export default function NewEvent() {
     });
   };
   return (
-    <Form method="post" onSubmit={handleSubmit}>
-      <h1 className="mb-8 text-3xl sm:text-4xl">Suggest a new event</h1>
-      <p className="mb-8 border-b border-amber-600 pb-8 text-lg sm:text-xl">
+    <Form method="post" onSubmit={handleSubmit} className="grid gap-8">
+      <h1 className="text-3xl sm:text-4xl">Suggest a new event</h1>
+      <p className="text-lg sm:text-xl">
         I&apos;d like to kindly ask you to fill in the title, the country, and
         the dates your suggested event is happening in.
-        <br />
-        <strong>Let&apos;s create this portal together!</strong>
       </p>
+      <hr className="border-amber-600" />
+      <p className="text-center text-lg font-semibold sm:text-xl">
+        Let&apos;s create this portal together!
+      </p>
+      <hr className="border-amber-600" />
       <EventFormFields
         errors={errors}
         mdxEditorRef={mdxEditorRef}
