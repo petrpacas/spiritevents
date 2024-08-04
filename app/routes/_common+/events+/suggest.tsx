@@ -13,13 +13,13 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
-import { EventFormFields } from "~/components/";
+import { EventFormFields } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { enumEventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Adding new event ~ SeekGathering" }];
+  return [{ title: "Suggest event ~ SeekGathering" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -63,8 +63,16 @@ export default function NewEvent() {
     <Form method="post" onSubmit={handleSubmit} className="grid gap-8">
       <h1 className="text-3xl sm:text-4xl">Suggest a new event</h1>
       <p className="text-lg sm:text-xl">
-        I&apos;d like to kindly ask you to fill in the title, the country, and
-        the dates your suggested event is happening in.
+        Do you know of any conscious festival that deserves to be known and
+        found by like-minded people from around the world?
+      </p>
+      <p className="text-lg sm:text-xl">
+        Suggesting it will support not only the event but also other seekers.
+      </p>
+      <p className="text-lg sm:text-xl">
+        If you choose to do so, I&apos;d like to kindly ask you to fill in the
+        title, the country, and the dates the suggested event is happening in.
+        Thank you very much 🙏
       </p>
       <hr className="border-amber-600" />
       <p className="text-center text-lg font-semibold sm:text-xl">
@@ -81,13 +89,11 @@ export default function NewEvent() {
           type="submit"
           className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Send suggestion
+          Suggest event
         </button>
         <button
           type="button"
-          onClick={() => {
-            navigate(-1);
-          }}
+          onClick={() => navigate(-1)}
           className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel

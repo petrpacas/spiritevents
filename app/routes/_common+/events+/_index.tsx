@@ -10,8 +10,14 @@ import { CountrySelect, EventListCard } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { countries, getTodayDate, enumEventStatus } from "~/utils";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "Upcoming events ~ SeekGathering" }];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [
+    {
+      title:
+        (data?.isAuthenticated ? "All events" : "Upcoming events") +
+        " ~ SeekGathering",
+    },
+  ];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -57,7 +63,7 @@ export default function Events() {
     <div className="grid gap-8">
       <div className="grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
         <h1 className="text-3xl sm:text-4xl">
-          {isAuthenticated ? "Event dashboard" : "Upcoming events"}
+          {isAuthenticated ? "All events" : "Upcoming events"}
         </h1>
         {country ? (
           <div className="grid gap-2 md:flex md:items-center">

@@ -3,6 +3,8 @@ import { z } from "zod";
 import { prisma } from "~/services";
 import { getTodayDate } from "~/utils";
 
+// TODO: VALIDATE PROTECTED URL SLUGS (/events/new etc.)
+
 const fields = z
   .object({
     country: z.string().trim().length(2, "Country must be selected"),
@@ -23,7 +25,7 @@ const fields = z
         if (value.length < 2) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Slug must contain at least 2 characters",
+            message: "URL slug must contain at least 2 characters",
             fatal: true,
           });
           return z.NEVER;

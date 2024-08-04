@@ -157,7 +157,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   type="submit"
                   className="inline-flex items-center gap-2 rounded border border-stone-200 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
                 >
-                  Admin logout
+                  Admin sign out
                   <svg
                     className="h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +179,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 to={signInUrl}
                 className="inline-flex items-center gap-2 justify-self-center rounded border border-stone-200 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow xl:justify-self-start"
               >
-                Admin login
+                Admin sign in
                 <svg
                   className="h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"

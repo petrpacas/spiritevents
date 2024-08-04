@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const subscriberFormSchema = z.object({
+export const feedbackFormSchema = z.object({
   contact: z.string().trim().or(z.literal("")),
   content: z
     .string()
@@ -10,7 +10,7 @@ export const subscriberFormSchema = z.object({
       if (value.length < 2) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Content must contain at least 2 characters",
+          message: "Your feedback must contain at least 2 characters",
         });
       }
     }),

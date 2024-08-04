@@ -12,7 +12,7 @@ export const subscriberFormSchema = z
     if (count >= 1) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Email is already subscribed",
+        message: "Email is already in the list",
         path: ["email"],
       });
     }

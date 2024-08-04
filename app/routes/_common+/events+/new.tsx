@@ -12,12 +12,12 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
-import { EventFormFields } from "~/components/";
+import { EventFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Adding new event ~ SeekGathering" }];
+  return [{ title: "Add event ~ SeekGathering" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -55,20 +55,18 @@ export default function NewEvent() {
   };
   return (
     <Form method="post" onSubmit={handleSubmit} className="grid gap-8">
-      <h1 className="text-3xl sm:text-4xl">Adding new event</h1>
+      <h1 className="text-3xl sm:text-4xl">Add event</h1>
       <EventFormFields errors={errors} mdxEditorRef={mdxEditorRef} />
       <div className="flex justify-end gap-4">
         <button
           type="submit"
           className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Save
+          Add
         </button>
         <button
           type="button"
-          onClick={() => {
-            navigate(-1);
-          }}
+          onClick={() => navigate(-1)}
           className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel

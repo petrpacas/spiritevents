@@ -13,7 +13,7 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
-import { EventFormFields } from "~/components/";
+import { EventFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
 import { eventFormSchema } from "~/validations";
 
@@ -84,9 +84,7 @@ export default function EditEvent() {
         </button>
         <button
           type="button"
-          onClick={() => {
-            navigate(-1);
-          }}
+          onClick={() => navigate(-1)}
           className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Cancel
