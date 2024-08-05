@@ -135,7 +135,7 @@ export default function ShowEvent() {
           <div className="grid gap-8">
             {event.description && (
               <div
-                className="prose prose-lg prose-amber mx-auto w-full max-w-[80ch] text-center text-amber-950 sm:prose-xl"
+                className="prose-amber-basic prose prose-lg mx-auto w-full text-center sm:prose-xl"
                 id="description"
                 dangerouslySetInnerHTML={{
                   __html: marked.parse(event.description),
