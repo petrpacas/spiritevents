@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { enumEventStatus } from "~/utils";
+import { enumEventStatus, getStatusConsts } from "~/utils";
 
 type Props = {
   country: string;
@@ -18,22 +18,7 @@ export const EventListCard = ({
   status,
   title,
 }: Props) => {
-  let statusLetter = undefined;
-  let statusBg = "bg-white";
-  switch (status) {
-    case enumEventStatus.DRAFT:
-      statusLetter = "(D)";
-      statusBg = "bg-stone-100";
-      break;
-    case enumEventStatus.PUBLISHED:
-      break;
-    case enumEventStatus.SUGGESTED:
-      statusLetter = "(S)";
-      statusBg = "bg-emerald-100";
-      break;
-    default:
-      break;
-  }
+  const [statusLetter, statusBg] = getStatusConsts(status);
   return (
     <Link
       to={`/events/${slug}`}

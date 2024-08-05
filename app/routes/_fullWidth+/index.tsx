@@ -1,12 +1,11 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData, useLocation } from "@remix-run/react";
-import { EventListCard, Footer, Header } from "~/components";
-import { authenticator, prisma } from "~/services";
+import type { MetaFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import { EventListCard } from "~/components";
+import { prisma } from "~/services";
 import { getTodayDate, enumEventStatus } from "~/utils";
 
 // GET PERMISSION
-import bgImage from "./elizabeth-anura_medicine-festival-2023-watermark.jpg";
-// import bgImage from "./phoebe-montague_medicine-festival-2023-watermark.jpg";
+import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
 // GET PERMISSION
 
 export const meta: MetaFunction = () => {
@@ -20,8 +19,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await authenticator.isAuthenticated(request);
+export async function loader() {
   const events = await prisma.event.findMany({
     orderBy: [{ dateStart: "asc" }],
     select: {
@@ -37,15 +35,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
       status: enumEventStatus.PUBLISHED,
     },
   });
-  return { events, isAuthenticated: !!user };
+  return { events };
 }
 
 export default function Index() {
-  const { events, isAuthenticated } = useLoaderData<typeof loader>();
-  const { pathname } = useLocation();
+  const { events } = useLoaderData<typeof loader>();
   return (
-    <div className="grid gap-8">
-      <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
+    <>
       <div
         className="grid min-h-lvh bg-cover bg-center"
         style={{ backgroundImage: `url('${bgImage}')` }}
@@ -195,7 +191,6 @@ export default function Index() {
           </div>
         </div>
       </main>
-      <Footer isAuthenticated={isAuthenticated} />
-    </div>
+    </>
   );
 }
