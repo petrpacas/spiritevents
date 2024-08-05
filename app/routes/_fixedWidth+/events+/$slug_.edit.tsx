@@ -69,7 +69,7 @@ export default function EditEvent() {
   };
   return (
     <Form method="post" onSubmit={handleSubmit} className="grid gap-8">
-      <h1 className="text-3xl sm:text-4xl">Editing {event.title}</h1>
+      <h1 className="text-3xl font-bold sm:text-4xl">Editing {event.title}</h1>
       <EventFormFields
         event={event}
         errors={errors}

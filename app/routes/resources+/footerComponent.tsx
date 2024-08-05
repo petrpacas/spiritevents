@@ -127,6 +127,8 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 <a
                   href="https://instagram.com/seekgathering"
                   className="text-amber-600 underline"
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   instagram
                 </a>
@@ -135,6 +137,8 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 <a
                   href="https://facebook.com/seekgatheringcom"
                   className="text-amber-600 underline"
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   facebook
                 </a>

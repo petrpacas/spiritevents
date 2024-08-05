@@ -62,7 +62,7 @@ export default function Events() {
   return (
     <div className="grid gap-8">
       <div className="grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
-        <h1 className="text-3xl sm:text-4xl">
+        <h1 className="text-3xl font-bold sm:text-4xl">
           {isAuthenticated ? "All events" : "Upcoming events"}
         </h1>
 
@@ -121,7 +121,9 @@ export default function Events() {
         {events.length === 0 ? (
           <>
             <hr className="border-stone-300" />
-            <p className="text-center text-lg sm:text-xl">No events yet…</p>
+            <p className="text-center text-lg sm:text-xl">
+              No events yet&hellip;
+            </p>
             <hr className="border-stone-300" />
           </>
         ) : (

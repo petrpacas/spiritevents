@@ -61,7 +61,7 @@ export default function NewEvent() {
   };
   return (
     <Form method="post" onSubmit={handleSubmit} className="grid gap-8">
-      <h1 className="text-3xl sm:text-4xl">Suggest a new event</h1>
+      <h1 className="text-3xl font-bold sm:text-4xl">Suggest a new event</h1>
       <p className="text-lg sm:text-xl">
         Do you know of any conscious festival that deserves to be known and
         found by like-minded people from around the world?

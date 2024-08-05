@@ -24,6 +24,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
     case "delete":
       await prisma.event.delete({ where: { slug: params.slug } });
       return redirect("/events");
+    case "draft":
+      await prisma.event.update({
+        data: { status: enumEventStatus.DRAFT },
+        where: { slug: params.slug },
+      });
+      break;
     case "publish":
       await prisma.event.update({
         data: { status: enumEventStatus.PUBLISHED },
@@ -56,18 +62,23 @@ export default function ShowEvent() {
     const country = countries.find((country) => country.code === code);
     return country ? country.name : code;
   };
-  const [statusLetter, statusBg] = getStatusConsts(event.status);
+  const [statusLetter, statusBg, statusGradient, statusGlow, statusGlowMd] =
+    getStatusConsts(event.status);
   return (
     <>
       <div
         className="grid min-h-lvh bg-cover bg-center"
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
-        <div className="grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(254,243,199,1),rgba(254,243,199,.75),rgba(254,243,199,1))]">
-          <h2 className="px-4 py-[6.625rem] text-center text-3xl font-bold leading-loose drop-shadow-[0_0_1.875rem_rgb(254,243,199)] sm:px-8 md:text-4xl md:leading-loose md:drop-shadow-[0_0_2.25rem_rgb(254,243,199)]">
-            <div className="grid gap-8 px-4 py-8">
-              <div className="grid gap-2">
-                <h1 className="text-3xl sm:text-4xl">
+        <div
+          className={`grid min-h-lvh items-center justify-center ${statusGradient}`}
+        >
+          <div
+            className={`max-w-7xl px-4 py-[6.625rem] ${statusGlow} sm:px-8 sm:py-32 ${statusGlowMd}`}
+          >
+            <div className="grid gap-16 text-center">
+              <div className="grid gap-4">
+                <h1 className="text-4xl font-bold leading-tight sm:text-5xl sm:leading-tight">
                   {statusLetter && (
                     <>
                       <span className="text-amber-600">{statusLetter}</span>{" "}
@@ -75,11 +86,38 @@ export default function ShowEvent() {
                   )}
                   {event.title}
                 </h1>
-                <p className="text-lg text-amber-600 sm:text-xl">
-                  {getCountryNameByCode(event.country)} ({event.country})
-                </p>
+                {event.linkWebsite && (
+                  <div>
+                    <a
+                      href={event.linkWebsite}
+                      className="text-lg font-medium text-amber-600 underline sm:text-xl"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Event website
+                    </a>
+                  </div>
+                )}
               </div>
-              <div className="grid text-lg sm:flex sm:justify-center sm:gap-2 sm:text-xl">
+              <div className="grid gap-4">
+                <p className="text-2xl font-semibold leading-tight sm:text-3xl sm:leading-tight">
+                  {getCountryNameByCode(event.country)}{" "}
+                  <span className="text-amber-600">({event.country})</span>
+                </p>
+                {event.linkLocation && (
+                  <div>
+                    <a
+                      href={event.linkLocation}
+                      className="text-lg font-medium text-amber-600 underline sm:text-xl"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Location map
+                    </a>
+                  </div>
+                )}
+              </div>
+              <div className="grid gap-4 text-2xl font-semibold leading-tight sm:text-3xl sm:leading-tight lg:flex lg:justify-center">
                 <span>{new Date(event.dateStart).toDateString()}</span>
                 {event.dateEnd !== event.dateStart && (
                   <>
@@ -88,60 +126,41 @@ export default function ShowEvent() {
                   </>
                 )}
               </div>
-              {(event.linkLocation || event.linkWebsite) && (
-                <div className="grid items-center justify-center gap-4 text-amber-600 sm:text-lg">
-                  {event.linkWebsite && (
-                    <a href={event.linkWebsite} className="underline">
-                      Website
-                    </a>
-                  )}
-                  {event.linkLocation && (
-                    <a href={event.linkLocation} className="underline">
-                      Location
-                    </a>
-                  )}
-                </div>
-              )}
             </div>
-          </h2>
+          </div>
         </div>
       </div>
-      <main className="flex justify-center">
-        <div className="grid w-full max-w-7xl px-4 pb-16 pt-8 sm:px-8">
+      <div className={`flex justify-center`}>
+        <div className="grid w-full max-w-7xl px-4 py-16 sm:px-8">
           <div className="grid gap-8">
-            <div
-              className={`${statusBg} grid rounded-lg border border-amber-600 text-center`}
-            >
-              {event.description && (
-                <div className="bg-amber-100">
-                  <div
-                    className="prose prose-amber mx-auto px-4 py-16 text-center text-lg sm:px-8 sm:text-xl"
-                    id="description"
-                    dangerouslySetInnerHTML={{
-                      __html: marked.parse(event.description),
-                    }}
-                  />
-                </div>
-              )}
-              <div className="grid px-4 py-8 text-amber-600">
-                {isAuthenticated ? (
-                  <>
-                    <span>ID: {event.id}</span>
-                    <span>
-                      CreatedAt: {new Date(event.createdAt).toUTCString()}
-                    </span>
-                    <span>
-                      UpdatedAt: {new Date(event.updatedAt).toUTCString()}
-                    </span>
-                  </>
-                ) : (
+            {event.description && (
+              <div
+                className="prose prose-lg prose-amber mx-auto w-full max-w-[80ch] text-center text-amber-950 sm:prose-xl"
+                id="description"
+                dangerouslySetInnerHTML={{
+                  __html: marked.parse(event.description),
+                }}
+              />
+            )}
+            <div className="grid gap-4 text-center text-amber-600">
+              {isAuthenticated ? (
+                <>
+                  <span className="break-all">ID: {event.id}</span>
                   <span>
-                    Last updated on {new Date(event.updatedAt).toUTCString()}
+                    CreatedAt: {new Date(event.createdAt).toUTCString()}
                   </span>
-                )}
-              </div>
+                  <span>
+                    UpdatedAt: {new Date(event.updatedAt).toUTCString()}
+                  </span>
+                </>
+              ) : (
+                <span>
+                  Event last updated on{" "}
+                  {new Date(event.updatedAt).toUTCString()}
+                </span>
+              )}
             </div>
-            <div className="flex justify-end gap-4">
+            <div className="flex flex-wrap justify-end gap-4">
               {isAuthenticated && (
                 <>
                   {event.status !== enumEventStatus.PUBLISHED && (
@@ -150,16 +169,28 @@ export default function ShowEvent() {
                         type="submit"
                         name="intent"
                         value="publish"
-                        className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                        className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
                       >
                         Publish
+                      </button>
+                    </Form>
+                  )}
+                  {event.status !== enumEventStatus.DRAFT && (
+                    <Form replace method="post">
+                      <button
+                        type="submit"
+                        name="intent"
+                        value="draft"
+                        className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                      >
+                        Draft
                       </button>
                     </Form>
                   )}
                   <Form action="edit">
                     <button
                       type="submit"
-                      className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                      className="rounded border border-transparent bg-sky-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
                     >
                       Edit
                     </button>
@@ -196,7 +227,7 @@ export default function ShowEvent() {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </>
   );
 }

@@ -13,9 +13,11 @@ export default function FullWidthLayout() {
   const { isAuthenticated } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
   return (
-    <div className="grid gap-8">
+    <div className="grid">
       <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
       <Footer isAuthenticated={isAuthenticated} />
     </div>
   );

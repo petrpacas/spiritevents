@@ -36,7 +36,7 @@ export default function SendFeedback() {
   const navigate = useNavigate();
   return (
     <Form method="post" className="grid gap-8">
-      <h1 className="text-3xl sm:text-4xl">Send me your feedback</h1>
+      <h1 className="text-3xl font-bold sm:text-4xl">Send me your feedback</h1>
       <p className="text-lg sm:text-xl">
         What you see here is just a hatchling, a prototype, an absolute work in
         progress. Bearing that in mind:
