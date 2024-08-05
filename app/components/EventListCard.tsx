@@ -23,13 +23,13 @@ export const EventListCard = ({
   switch (status) {
     case enumEventStatus.DRAFT:
       statusLetter = "(D)";
-      statusBg = "bg-gray-50";
+      statusBg = "bg-stone-100";
       break;
     case enumEventStatus.PUBLISHED:
       break;
     case enumEventStatus.SUGGESTED:
       statusLetter = "(S)";
-      statusBg = "bg-emerald-50";
+      statusBg = "bg-emerald-100";
       break;
     default:
       break;

@@ -63,7 +63,7 @@ export default function SendFeedback() {
           <input
             type="text"
             name="name"
-            className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors.name && (
             <p className="text-red-600">{errors.fieldErrors.name.join(", ")}</p>
@@ -76,7 +76,7 @@ export default function SendFeedback() {
           <input
             type="text"
             name="contact"
-            className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors.contact && (
             <p className="text-red-600">
@@ -88,7 +88,7 @@ export default function SendFeedback() {
           Your feedback
           <textarea
             name="content"
-            className="min-h-20 rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors.content && (
             <p className="text-red-600">

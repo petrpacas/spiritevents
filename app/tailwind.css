@@ -7,5 +7,5 @@
 }
 
 .mdxeditor-popup-container {
-  @apply !shadow-none !border-0;
+  @apply !border-0 !shadow-none;
 }

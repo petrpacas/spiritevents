@@ -42,7 +42,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
     signInUrl = "/sign-in?ogRoute=" + pathname + search;
   }
   return (
-    <footer className="bg-stone-50">
+    <footer className="bg-stone-100">
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16">
         <div className="grid items-start gap-16 xl:grid-cols-3">
           <div className="grid items-start gap-8 xl:col-span-2 xl:grid-cols-2 xl:gap-x-16">
@@ -69,14 +69,14 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 placeholder="Name (optional)"
                 type="text"
                 name="name"
-                className="w-full rounded-lg border-stone-200 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
+                className="w-full rounded-lg border-stone-300 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
               />
               <input
                 required
                 placeholder="Email"
                 type="email"
                 name="email"
-                className="w-full rounded-lg border-stone-200 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
+                className="w-full rounded-lg border-stone-300 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
               />
               {actionData?.errors?.fieldErrors.name && (
                 <p className="text-center text-red-600 sm:max-[829px]:col-span-2 min-[830px]:max-xl:order-4 min-[830px]:max-xl:col-span-3">
@@ -114,10 +114,10 @@ export const Footer = ({ isAuthenticated }: Props) => {
             <h2 className="text-2xl font-bold max-[319px]:grid sm:text-3xl">
               👋 <span className="text-amber-600">Seek</span>Gathering
             </h2>
-            <div className="grid gap-2">
+            <div className="grid gap-2 text-lg sm:text-xl">
               <a
                 href="mailto:info@seekgathering.com"
-                className="text-amber-600 underline"
+                className="break-all text-amber-600 underline"
               >
                 info@seekgathering.com
               </a>
@@ -126,25 +126,12 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 className="text-amber-600 underline"
               >
                 instagram
-                <span className="max-[319px]:sr-only">.com/seekgathering</span>
               </a>
               <a
                 href="https://facebook.com/seekgatheringcom"
                 className="text-amber-600 underline"
               >
                 facebook
-                <span className="max-[319px]:sr-only">
-                  .com/seekgatheringcom
-                </span>
-              </a>
-            </div>
-            <div>
-              Made with 💛 by{" "}
-              <a
-                href="mailto:petr@pacas.cz"
-                className="text-amber-600 underline"
-              >
-                petr@pacas.cz
               </a>
             </div>
             {isAuthenticated ? (
@@ -155,7 +142,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
               >
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 rounded border border-stone-200 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                  className="inline-flex items-center gap-2 rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
                 >
                   Admin sign out
                   <svg
@@ -177,7 +164,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
             ) : (
               <Link
                 to={signInUrl}
-                className="inline-flex items-center gap-2 justify-self-center rounded border border-stone-200 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow xl:justify-self-start"
+                className="inline-flex items-center gap-2 justify-self-center rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow xl:justify-self-start"
               >
                 Admin sign in
                 <svg
@@ -196,6 +183,15 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 </svg>
               </Link>
             )}
+            <div>
+              Made with 💛 by{" "}
+              <a
+                href="mailto:petr@pacas.cz"
+                className="text-amber-600 underline"
+              >
+                petr@pacas.cz
+              </a>
+            </div>
           </div>
         </div>
       </div>

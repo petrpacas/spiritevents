@@ -104,6 +104,7 @@ export const EventFormFields = ({
           type="date"
           name="dateStart"
           defaultValue={event?.dateStart}
+          placeholder="yyyy-mm-dd"
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.dateStart && (
@@ -120,6 +121,7 @@ export const EventFormFields = ({
           type="date"
           name="dateEnd"
           defaultValue={event?.dateEnd}
+          placeholder="yyyy-mm-dd"
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.dateEnd && (
@@ -173,7 +175,7 @@ export const EventFormFields = ({
               name="description"
               readOnly
               defaultValue={event?.description ?? ""}
-              className="min-h-20 rounded border-stone-200 shadow-sm transition-shadow read-only:bg-gray-50 hover:shadow-md active:shadow"
+              className="min-h-20 rounded border-stone-200 shadow-sm transition-shadow read-only:bg-stone-200 hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.description && (
               <p className="text-red-600">

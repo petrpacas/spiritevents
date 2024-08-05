@@ -65,80 +65,99 @@ export default function Events() {
         <h1 className="text-3xl sm:text-4xl">
           {isAuthenticated ? "All events" : "Upcoming events"}
         </h1>
-        {country ? (
-          <div className="grid gap-2 md:flex md:items-center">
-            Showing events in{" "}
-            <div className="inline-grid">
-              <button
-                type="button"
-                onClick={() => navigate(-1)}
-                className="col-start-1 row-start-1 rounded border border-stone-300 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
+
+        {events.length > 0 && (
+          <>
+            {country ? (
+              <div className="grid gap-2 md:flex md:items-center">
+                Showing events in{" "}
+                <div className="inline-grid">
+                  <button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    className="col-start-1 row-start-1 rounded border border-stone-300 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
+                  >
+                    {getCountryNameByCode(country)}
+                  </button>
+                  <svg
+                    className="pointer-events-none relative right-3 col-start-1 row-start-1 h-5 w-5 self-center justify-self-end text-gray-500 forced-colors:hidden"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18 18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+              </div>
+            ) : (
+              <Form
+                className="md:flex"
+                onChange={(event) => {
+                  submit(event.currentTarget);
+                }}
               >
-                {getCountryNameByCode(country)}
-              </button>
-              <svg
-                className="pointer-events-none relative right-3 col-start-1 row-start-1 h-5 w-5 self-center justify-self-end text-gray-500 forced-colors:hidden"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18 18 6M6 6l12 12"
-                />
-              </svg>
-            </div>
-          </div>
-        ) : (
-          <Form
-            className="md:flex"
-            onChange={(event) => {
-              submit(event.currentTarget);
-            }}
-          >
-            <label
-              className="grid items-center gap-2 md:flex"
-              htmlFor="country"
-            >
-              Showing events in
-              <CountrySelect
-                filteredCountries={filteredCountries}
-                className="rounded border border-stone-300 bg-white py-1 shadow-sm transition-shadow hover:shadow-md active:shadow"
-              />
-            </label>
-          </Form>
+                <label
+                  className="grid items-center gap-2 md:flex"
+                  htmlFor="country"
+                >
+                  Showing events in
+                  <CountrySelect
+                    filteredCountries={filteredCountries}
+                    className="rounded border border-stone-300 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                  />
+                </label>
+              </Form>
+            )}
+          </>
         )}
       </div>
       <div className="grid gap-2 sm:gap-4">
-        {events.map((event) => (
-          <EventListCard
-            key={event.slug}
-            slug={event.slug}
-            status={isAuthenticated ? event.status : undefined}
-            title={event.title}
-            country={event.country}
-            dateStart={event.dateStart}
-            dateEnd={event.dateEnd}
-          />
-        ))}
-      </div>
-      <div className="flex items-center justify-between gap-4">
-        {isAuthenticated ? (
-          <div className="text-sm sm:max-md:text-base md:text-lg">
-            <span className="text-amber-600">(S)</span>UGGESTED or{" "}
-            {/* <span className="text-amber-600">(D)</span>RAFT / */}PUBLISHED
-          </div>
+        {events.length === 0 ? (
+          <>
+            <hr className="border-stone-300" />
+            <p className="text-center text-lg sm:text-xl">No events yet…</p>
+            <hr className="border-stone-300" />
+          </>
         ) : (
-          <div />
+          events.map((event) => (
+            <EventListCard
+              key={event.slug}
+              slug={event.slug}
+              status={isAuthenticated ? event.status : undefined}
+              title={event.title}
+              country={event.country}
+              dateStart={event.dateStart}
+              dateEnd={event.dateEnd}
+            />
+          ))
         )}
+      </div>
+      {isAuthenticated && (
+        <div className="flex items-center justify-center gap-2 text-sm max-[399px]:flex-col sm:gap-4 sm:text-base md:text-lg">
+          Legend:
+          <div className="rounded border border-transparent bg-emerald-100 p-2 sm:px-4">
+            <span className="text-amber-600">(S)</span> Suggested
+          </div>
+          <div className="rounded border border-transparent bg-stone-100 p-2 sm:px-4">
+            <span className="text-amber-600">(D)</span> Draft
+          </div>
+          <div className="rounded border border-stone-300 bg-white p-2 sm:px-4">
+            Published
+          </div>
+        </div>
+      )}
+      <div className="flex justify-end gap-4">
         <Link
           to={country ? "/events" : "/"}
           className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          Back
+          {country ? "Back to events" : "Back to homepage"}
         </Link>
       </div>
     </div>

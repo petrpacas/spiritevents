@@ -47,11 +47,11 @@ export default function Index() {
     <div className="grid gap-8">
       <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
       <div
-        className="grid min-h-screen bg-cover bg-center"
+        className="grid min-h-lvh bg-cover bg-center"
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
-        <div className="grid min-h-screen items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,0.8),rgba(255,251,235,0.8),rgba(255,251,235,1))]">
-          <h2 className="px-4 py-[6.625rem] text-center text-3xl font-bold leading-loose drop-shadow-[0_0_1rem_rgba(255,255,255,1)] sm:px-8 md:text-4xl md:leading-loose">
+        <div className="grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(254,243,199,1),rgba(254,243,199,.75),rgba(254,243,199,1))]">
+          <h2 className="px-4 py-[6.625rem] text-center text-3xl font-bold leading-loose drop-shadow-[0_0_1.875rem_rgb(254,243,199)] sm:px-8 md:text-4xl md:leading-loose md:drop-shadow-[0_0_2.25rem_rgb(254,243,199)]">
             Your gateway to discovering conscious{" "}
             <br className="max-lg:hidden" />
             <strong className="text-amber-600">
@@ -66,7 +66,7 @@ export default function Index() {
         </div>
       </div>
       <main className="grid gap-8">
-        <div className="bg-white">
+        <div className="bg-transparent">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
             <h2 className="text-2xl sm:text-3xl">
               📅 Choose from the myriad of extraordinary{" "}
@@ -109,7 +109,7 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="bg-emerald-50">
+        <div className="bg-emerald-100">
           <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16">
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
               <div className="grid gap-8 xl:col-span-2">
@@ -152,7 +152,7 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="bg-sky-50">
+        <div className="bg-sky-100">
           <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16">
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
               <div className="grid gap-8 xl:col-span-2">
@@ -177,7 +177,7 @@ export default function Index() {
               >
                 Send me your feedback
                 <svg
-                  className="h-6 w-6"
+                  className="h-6 w-6 max-[339px]:hidden"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"

@@ -57,13 +57,13 @@ export default function ShowEvent() {
   switch (event.status) {
     case enumEventStatus.DRAFT:
       statusLetter = "(D)";
-      statusBg = "bg-gray-50";
+      statusBg = "bg-stone-100";
       break;
     case enumEventStatus.PUBLISHED:
       break;
     case enumEventStatus.SUGGESTED:
       statusLetter = "(S)";
-      statusBg = "bg-emerald-50";
+      statusBg = "bg-emerald-100";
       break;
     default:
       break;
@@ -97,7 +97,7 @@ export default function ShowEvent() {
             )}
           </div>
           {(event.linkLocation || event.linkWebsite) && (
-            <div className="grid items-center justify-center gap-2 text-amber-600 sm:text-lg">
+            <div className="grid items-center justify-center gap-4 text-amber-600 sm:text-lg">
               {event.linkWebsite && (
                 <a href={event.linkWebsite} className="underline">
                   Website
@@ -112,9 +112,9 @@ export default function ShowEvent() {
           )}
         </div>
         {event.description && (
-          <div className="bg-amber-50 px-4 py-8">
+          <div className="bg-amber-100">
             <div
-              className="prose prose-amber mx-auto text-center text-lg sm:text-xl"
+              className="prose prose-amber mx-auto px-4 py-16 text-center text-lg sm:px-8 sm:text-xl"
               id="description"
               dangerouslySetInnerHTML={{
                 __html: marked.parse(event.description),
@@ -126,8 +126,8 @@ export default function ShowEvent() {
           {isAuthenticated ? (
             <>
               <span>ID: {event.id}</span>
-              <span>Created at: {new Date(event.createdAt).toUTCString()}</span>
-              <span>Updated at: {new Date(event.updatedAt).toUTCString()}</span>
+              <span>CreatedAt: {new Date(event.createdAt).toUTCString()}</span>
+              <span>UpdatedAt: {new Date(event.updatedAt).toUTCString()}</span>
             </>
           ) : (
             <span>
