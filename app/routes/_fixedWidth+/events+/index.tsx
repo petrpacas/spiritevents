@@ -6,6 +6,7 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
+import { Fragment } from "react/jsx-runtime";
 import { CountrySelect, EventListCard } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { countries, getTodayDate, enumEventStatus } from "~/utils";
@@ -25,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const requestUrl = new URL(request.url);
   const country = requestUrl.searchParams.get("country");
   const events = await prisma.event.findMany({
-    orderBy: [{ dateStart: "asc" }],
+    orderBy: [{ dateStart: "asc" }, { title: "asc" }],
     select: {
       country: true,
       dateEnd: true,
@@ -61,6 +62,33 @@ export default function Events() {
   };
   const eventCountries = getCountryCodesFromEvents();
   const filteredCountries = filterCountriesForEvent(eventCountries);
+  // CHATGPT MAGIC
+  type EventsWithYearHeading = {
+    year: number;
+    eventsByYear: typeof events;
+  };
+  function groupEventsByYear(
+    eventsByYear: typeof events,
+  ): EventsWithYearHeading[] {
+    const allEvents: Record<number, typeof events> = {};
+    for (const eachEvent of eventsByYear) {
+      const year = new Date(eachEvent.dateStart).getFullYear();
+      if (!allEvents[year]) {
+        allEvents[year] = [];
+      }
+      allEvents[year].push(eachEvent);
+    }
+    const result: EventsWithYearHeading[] = [];
+    for (const year in allEvents) {
+      result.push({
+        year: parseInt(year),
+        eventsByYear: allEvents[year],
+      });
+    }
+    return result;
+  }
+  const eventsByYear = groupEventsByYear(events);
+  // END CHATGPT MAGIC
   return (
     <div className="grid gap-8">
       <div className="grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
@@ -132,16 +160,21 @@ export default function Events() {
             <hr className="mb-8 border-amber-600" />
           </>
         ) : (
-          events.map((event) => (
-            <EventListCard
-              key={event.slug}
-              slug={event.slug}
-              status={isAuthenticated ? event.status : undefined}
-              title={event.title}
-              country={event.country}
-              dateStart={event.dateStart}
-              dateEnd={event.dateEnd}
-            />
+          eventsByYear.map((group, index) => (
+            <Fragment key={index}>
+              <h2 className="text-2xl font-bold sm:text-3xl">{group.year}</h2>
+              {group.eventsByYear.map((event) => (
+                <EventListCard
+                  key={event.slug}
+                  slug={event.slug}
+                  status={isAuthenticated ? event.status : undefined}
+                  title={event.title}
+                  country={event.country}
+                  dateStart={event.dateStart}
+                  dateEnd={event.dateEnd}
+                />
+              ))}
+            </Fragment>
           ))
         )}
       </div>

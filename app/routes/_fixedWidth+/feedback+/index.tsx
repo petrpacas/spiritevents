@@ -9,7 +9,7 @@ export const meta: MetaFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserSession(request);
   const allFeedback = await prisma.feedback.findMany({
-    orderBy: [{ createdAt: "desc" }],
+    orderBy: { createdAt: "desc" },
     select: {
       createdAt: true,
       contact: true,

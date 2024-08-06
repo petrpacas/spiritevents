@@ -21,7 +21,7 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
   const events = await prisma.event.findMany({
-    orderBy: [{ dateStart: "asc" }],
+    orderBy: [{ dateStart: "asc" }, { title: "asc" }],
     select: {
       country: true,
       dateEnd: true,
