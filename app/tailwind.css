@@ -19,7 +19,7 @@
   pointer-events: none;
 }
 #nprogress .bar {
-  background: theme(colors.amber.600);
+  background: #d97706;
   position: fixed;
   z-index: 1031;
   top: 0;
@@ -28,7 +28,7 @@
   height: 0.333rem;
 }
 body.overflow-hidden #nprogress .bar {
-  background: theme(colors.white);
+  background: #fffbeb;
 }
 #nprogress .peg {
   display: block;
@@ -37,16 +37,16 @@ body.overflow-hidden #nprogress .bar {
   width: 100px;
   height: 100%;
   box-shadow:
-    0 0 0.999rem theme(colors.amber.600),
-    0 0 0.666rem theme(colors.amber.600);
+    0 0 0.999rem #d97706,
+    0 0 0.666rem #d97706;
   opacity: 1;
   transform: rotate(3deg) translate(0px, -0.666rem);
   transition: all 200ms linear;
 }
 body.overflow-hidden #nprogress .peg {
   box-shadow:
-    0 0 1.25rem theme(colors.white),
-    0 0 0.625rem theme(colors.white);
+    0 0 1.25rem #fffbeb,
+    0 0 0.625rem #fffbeb;
 }
 #nprogress .spinner {
   display: block;
@@ -60,8 +60,8 @@ body.overflow-hidden #nprogress .peg {
   height: 1.222rem;
   box-sizing: border-box;
   border: solid 0.333rem transparent;
-  border-top-color: theme(colors.amber.600);
-  border-left-color: theme(colors.amber.600);
+  border-top-color: #d97706;
+  border-left-color: #d97706;
   border-radius: 50%;
   animation: nprogress-spinner 500ms linear infinite;
   transition: all 200ms linear;
@@ -71,13 +71,13 @@ body.overflow-hidden #nprogress .peg {
     width: 1.777rem;
     height: 1.777rem;
     border: solid 0.333rem transparent;
-    border-top-color: theme(colors.amber.600);
-    border-left-color: theme(colors.amber.600);
+    border-top-color: #d97706;
+    border-left-color: #d97706;
   }
 }
 body.overflow-hidden #nprogress .spinner-icon {
-  border-top-color: theme(colors.white);
-  border-left-color: theme(colors.white);
+  border-top-color: #fffbeb;
+  border-left-color: #fffbeb;
 }
 .nprogress-custom-parent {
   overflow: hidden;

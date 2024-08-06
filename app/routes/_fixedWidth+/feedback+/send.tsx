@@ -37,7 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return null;
 }
 
-export default function SendFeedback() {
+export default function FeedbackSend() {
   const errors = useActionData<typeof action>();
   const navigate = useNavigate();
   const navigation = useNavigation();
@@ -67,6 +67,7 @@ export default function SendFeedback() {
               Name <span className="text-amber-600">(optional)</span>
             </div>
             <input
+              autoComplete="on"
               type="text"
               name="name"
               className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
@@ -82,6 +83,7 @@ export default function SendFeedback() {
               Contact info <span className="text-amber-600">(optional)</span>
             </div>
             <input
+              autoComplete="off"
               type="text"
               name="contact"
               className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
@@ -95,6 +97,7 @@ export default function SendFeedback() {
           <label className="grid gap-2 sm:col-span-2">
             Your feedback
             <textarea
+              autoComplete="off"
               name="content"
               className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />

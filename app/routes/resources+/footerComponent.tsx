@@ -77,6 +77,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
               >
                 <input
                   placeholder="Name (optional)"
+                  autoComplete="on"
                   type="text"
                   name="name"
                   className="w-full rounded-lg border-stone-300 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
@@ -84,6 +85,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 <input
                   required
                   placeholder="Email"
+                  autoComplete="on"
                   type="email"
                   name="email"
                   className="w-full rounded-lg border-stone-300 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"

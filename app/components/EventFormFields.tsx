@@ -48,6 +48,7 @@ export const EventFormFields = ({
       <label className="grid gap-2 md:col-span-3">
         Title
         <input
+          autoComplete="off"
           type="text"
           name="title"
           onChange={
@@ -65,10 +66,14 @@ export const EventFormFields = ({
           <div>
             URL slug{" "}
             <span className="text-amber-600">
-              ~ {event?.slug ? "Change with caution" : "Should be permament"}
+              ~{" "}
+              {event?.slug
+                ? "change with caution (and use -yyyy)"
+                : "should be permament (use -yyyy)"}
             </span>
           </div>
           <input
+            autoComplete="off"
             type="text"
             name="slug"
             onChange={handleSlugChange}
@@ -101,6 +106,7 @@ export const EventFormFields = ({
       >
         Start date
         <input
+          autoComplete="off"
           type="date"
           name="dateStart"
           defaultValue={event?.dateStart}
@@ -118,6 +124,7 @@ export const EventFormFields = ({
       >
         End date
         <input
+          autoComplete="off"
           type="date"
           name="dateEnd"
           defaultValue={event?.dateEnd}
@@ -135,6 +142,7 @@ export const EventFormFields = ({
           Website link <span className="text-amber-600">(optional)</span>
         </div>
         <input
+          autoComplete="off"
           type="text"
           name="linkWebsite"
           defaultValue={event?.linkWebsite ?? ""}
@@ -151,6 +159,7 @@ export const EventFormFields = ({
           Location link <span className="text-amber-600">(optional)</span>
         </div>
         <input
+          autoComplete="off"
           type="text"
           name="linkLocation"
           defaultValue={event?.linkLocation ?? ""}
@@ -168,7 +177,7 @@ export const EventFormFields = ({
             <div>
               Description{" "}
               <span className="text-amber-600">
-                (optional) ~ Loading markdown editor&hellip;
+                (optional) ~ loading markdown editor&hellip;
               </span>
             </div>
             <textarea

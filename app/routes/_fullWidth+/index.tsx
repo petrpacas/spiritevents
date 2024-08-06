@@ -38,7 +38,7 @@ export async function loader() {
   return { events };
 }
 
-export default function Index() {
+export default function Landing() {
   const { events } = useLoaderData<typeof loader>();
   return (
     <>

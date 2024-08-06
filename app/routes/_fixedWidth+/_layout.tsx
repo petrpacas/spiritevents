@@ -9,7 +9,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { isAuthenticated: !!user };
 }
 
-export default function CommonLayout() {
+export default function FixedWidthLayout() {
   const { isAuthenticated } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
   return (

@@ -43,7 +43,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return null;
 }
 
-export default function SuggestEvent() {
+export default function EventSuggest() {
   const errors = useActionData<typeof action>();
   const navigate = useNavigate();
   const navigation = useNavigation();

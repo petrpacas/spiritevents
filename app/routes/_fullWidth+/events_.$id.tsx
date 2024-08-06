@@ -28,18 +28,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const intent = formData.get("intent");
   switch (intent) {
     case "delete":
-      await prisma.event.delete({ where: { slug: params.slug } });
+      await prisma.event.delete({ where: { slug: params.id } });
       return redirect("/events");
     case "draft":
       await prisma.event.update({
         data: { status: enumEventStatus.DRAFT },
-        where: { slug: params.slug },
+        where: { slug: params.id },
       });
       break;
     case "publish":
       await prisma.event.update({
         data: { status: enumEventStatus.PUBLISHED },
-        where: { slug: params.slug },
+        where: { slug: params.id },
       });
       break;
     default:
@@ -52,7 +52,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
   const event = await prisma.event.findUnique({
     where: {
-      slug: params.slug,
+      slug: params.id,
       status: user ? undefined : enumEventStatus.PUBLISHED,
     },
   });
@@ -62,7 +62,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return { event, isAuthenticated: !!user };
 }
 
-export default function ShowEvent() {
+export default function Event() {
   const { event, isAuthenticated } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
@@ -183,6 +183,7 @@ export default function ShowEvent() {
                   </Form>
                   {event.status === enumEventStatus.PUBLISHED && (
                     <Form
+                      replace
                       method="post"
                       onSubmit={(event) => {
                         const response = confirm(
@@ -206,6 +207,7 @@ export default function ShowEvent() {
                   )}
                   {event.status !== enumEventStatus.PUBLISHED && (
                     <Form
+                      replace
                       method="post"
                       onSubmit={(event) => {
                         const response = confirm(

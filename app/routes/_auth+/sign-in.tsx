@@ -57,6 +57,7 @@ export default function SignIn() {
           <label className="grid gap-2">
             Email
             <input
+              autoComplete="off"
               type="email"
               name="email"
               required

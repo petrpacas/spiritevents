@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   Links,
@@ -11,7 +11,11 @@ import {
 } from "@remix-run/react";
 import NProgress from "nprogress";
 import { useEffect, useMemo } from "react";
-import "./tailwind.css";
+import stylesheet from "./tailwind.css?url";
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { pathname, search } = new URL(request.url);

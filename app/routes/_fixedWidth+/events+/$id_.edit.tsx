@@ -42,7 +42,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
         ? { ...data, status: enumEventStatus.DRAFT }
         : { ...data },
 
-    where: { slug: params.slug },
+    where: { slug: params.id },
   });
   return redirect(`/events/${result.data.slug}`);
 }
@@ -50,7 +50,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   await requireUserSession(request);
   const event = await prisma.event.findUnique({
-    where: { slug: params.slug },
+    where: { slug: params.id },
   });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
@@ -58,7 +58,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return { event };
 }
 
-export default function EditEvent() {
+export default function EventEdit() {
   const errors = useActionData<typeof action>();
   const { event } = useLoaderData<typeof loader>();
   const navigate = useNavigate();

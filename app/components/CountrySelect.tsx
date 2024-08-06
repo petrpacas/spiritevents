@@ -14,6 +14,7 @@ export const CountrySelect = ({
   const countriesObject = filteredCountries || countries;
   return (
     <select
+      autoComplete="off"
       name="country"
       id="country"
       defaultValue={defaultValue}

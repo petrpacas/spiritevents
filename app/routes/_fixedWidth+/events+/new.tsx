@@ -38,7 +38,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return null;
 }
 
-export default function NewEvent() {
+export default function EventNew() {
   const errors = useActionData<typeof action>();
   const navigate = useNavigate();
   const navigation = useNavigation();

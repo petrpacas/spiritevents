@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { allFeedback };
 }
 
-export default function Events() {
+export default function Feedback() {
   const { allFeedback } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   return (
