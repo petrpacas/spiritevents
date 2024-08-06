@@ -6,6 +6,7 @@ import type { typeToFlattenedError } from "zod";
 import { ClientOnly } from "remix-utils/client-only";
 import { useState } from "react";
 import slugify from "slugify";
+import { getTodayDate } from "~/utils";
 import { CountrySelect } from "./CountrySelect";
 import { DescriptionEditor } from "./DescriptionEditor";
 
@@ -68,8 +69,8 @@ export const EventFormFields = ({
             <span className="text-amber-600">
               ~{" "}
               {event?.slug
-                ? "change with caution (and use -yyyy)"
-                : "should be permament (use -yyyy)"}
+                ? "change with caution (name-yyyy)"
+                : "should be permament (name-yyyy)"}
             </span>
           </div>
           <input
@@ -79,7 +80,7 @@ export const EventFormFields = ({
             onChange={handleSlugChange}
             onBlur={handleSlugBlur}
             value={slug}
-            placeholder="e.g. example-event-2024 (use the year)"
+            placeholder="e.g. example-event-2024"
             className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
           />
           {errors?.fieldErrors.slug && (
@@ -110,6 +111,7 @@ export const EventFormFields = ({
           type="date"
           name="dateStart"
           defaultValue={event?.dateStart}
+          min={getTodayDate()}
           placeholder="yyyy-mm-dd"
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
@@ -128,6 +130,7 @@ export const EventFormFields = ({
           type="date"
           name="dateEnd"
           defaultValue={event?.dateEnd}
+          min={getTodayDate()}
           placeholder="yyyy-mm-dd"
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />

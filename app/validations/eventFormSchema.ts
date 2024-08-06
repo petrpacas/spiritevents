@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "~/services";
 import { getTodayDate } from "~/utils";
 
-const restrictedSlugs = ["edit", "new", "suggest"];
+const restrictedSlugs = ["new", "suggest"];
 
 const fields = z
   .object({
@@ -11,7 +11,7 @@ const fields = z
     description: z.string().trim().or(z.literal("")),
     linkLocation: z.string().trim().or(z.literal("")),
     linkWebsite: z.string().trim().or(z.literal("")),
-    ogSlug: z.string().optional(),
+    origSlug: z.string().optional(),
     slug: z
       .string()
       .trim()
@@ -54,8 +54,8 @@ const fields = z
       }),
   })
   .superRefine(async (data, ctx) => {
-    const { ogSlug, slug } = data;
-    if (slug !== ogSlug) {
+    const { origSlug, slug } = data;
+    if (slug !== origSlug) {
       const count = await prisma.event.count({ where: { slug } });
       if (count >= 1) {
         ctx.addIssue({
@@ -71,9 +71,12 @@ const dateFields = z
   .object({
     dateEnd: z.string().date(),
     dateStart: z.string().date(),
+    origDateEnd: z.string().optional(),
+    origDateStart: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    const { dateEnd, dateStart } = data;
+    const { dateEnd, dateStart, origDateEnd, origDateStart } = data;
+    if (dateEnd === origDateEnd && dateStart === origDateStart) return;
     if (dateEnd === "" && dateStart === "") return;
     const dateToday = getTodayDate();
     if (dateStart < dateToday) {
@@ -83,17 +86,16 @@ const dateFields = z
         path: ["dateStart"],
       });
     }
-    if (dateEnd < dateToday) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.invalid_date,
-        message: "End date cannot be earlier than today",
-        path: ["dateEnd"],
-      });
-    }
     if (dateEnd < dateStart) {
       ctx.addIssue({
         code: z.ZodIssueCode.invalid_date,
         message: "End date cannot be earlier than start date",
+        path: ["dateEnd"],
+      });
+    } else if (dateEnd < dateToday) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_date,
+        message: "End date cannot be earlier than today",
         path: ["dateEnd"],
       });
     }

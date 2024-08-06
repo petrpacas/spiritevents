@@ -26,16 +26,18 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
-  const dataWithOgSlugAndStatus = Object.fromEntries(formData);
-  const status = dataWithOgSlugAndStatus.status;
-  const dataWithOgSlug = { ...dataWithOgSlugAndStatus };
-  delete dataWithOgSlug.status;
-  const result = await eventFormSchema.safeParseAsync(dataWithOgSlug);
+  const dataWithOrigsAndStatus = Object.fromEntries(formData);
+  const status = dataWithOrigsAndStatus.status;
+  const dataWithOrigs = { ...dataWithOrigsAndStatus };
+  delete dataWithOrigs.status;
+  const result = await eventFormSchema.safeParseAsync(dataWithOrigs);
   if (!result.success) {
     return result.error.flatten();
   }
   const data = { ...result.data };
-  delete data.ogSlug;
+  delete data.origDateEnd;
+  delete data.origDateStart;
+  delete data.origSlug;
   await prisma.event.update({
     data:
       status === enumEventStatus.SUGGESTED
@@ -71,7 +73,9 @@ export default function EventEdit() {
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
     formData.set("description", description ?? "");
-    formData.set("ogSlug", event.slug ?? "");
+    formData.set("origDateEnd", event.dateEnd);
+    formData.set("origDateStart", event.dateStart);
+    formData.set("origSlug", event.slug ?? "");
     formData.set("status", event.status);
     submit(formData, {
       method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",

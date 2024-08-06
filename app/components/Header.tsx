@@ -24,9 +24,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
   );
   return (
     <>
-      <header
-        className={`${isLanding ? "absolute top-0 w-full" : "bg-amber-50"}`}
-      >
+      <header className={isLanding ? "absolute top-0 w-full" : "bg-amber-50"}>
         <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between p-4 sm:px-8">
           <Link to="/">{isLanding ? <h1>{brandName}</h1> : brandName}</Link>
           <button
@@ -50,7 +48,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               />
             </svg>
             <div
-              className={`${isMenuOpen ? "" : "hidden"}absolute -bottom-[2px] left-0 right-0 h-[2px] bg-white`}
+              className={`${isMenuOpen ? "" : "hidden"} absolute -bottom-[2px] left-0 right-0 h-[2px] bg-white`}
             />
           </button>
           <nav

@@ -26,7 +26,7 @@ export default {
             "--tw-prose-body": theme("colors.amber[950]"),
             "--tw-prose-headings": theme("colors.amber[950]"),
             "--tw-prose-lead": theme("colors.amber[950]"),
-            "--tw-prose-links": theme("colors.amber[950]"),
+            "--tw-prose-links": theme("colors.amber[600]"),
             "--tw-prose-bold": theme("colors.amber[950]"),
             "--tw-prose-counters": theme("colors.amber[950]"),
             "--tw-prose-bullets": theme("colors.amber[950]"),
