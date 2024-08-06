@@ -7,6 +7,7 @@ import {
   useNavigation,
 } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { jsonWithError, jsonWithSuccess } from "remix-toast";
 import { inferFlattenedErrors } from "zod";
 import { prisma } from "~/services";
 import { subscriberFormSchema } from "~/validations";
@@ -25,10 +26,13 @@ export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(formData);
   const result = await subscriberFormSchema.safeParseAsync(data);
   if (!result.success) {
-    return { errors: result.error.flatten() };
+    return jsonWithError(
+      { errors: result.error.flatten() },
+      "Please fix the errors",
+    );
   }
   await prisma.subscriber.create({ data: result.data });
-  return { success: true };
+  return jsonWithSuccess({ success: true }, "Your email was added");
 }
 
 export const Footer = ({ isAuthenticated }: Props) => {

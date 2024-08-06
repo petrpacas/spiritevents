@@ -1,5 +1,5 @@
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -7,25 +7,26 @@ import {
   Scripts,
   ScrollRestoration,
   useFetchers,
+  useLoaderData,
   useNavigation,
 } from "@remix-run/react";
 import NProgress from "nprogress";
 import { useEffect, useMemo } from "react";
-import stylesheet from "./tailwind.css?url";
-
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesheet },
-];
+import { toast as showToast, Toaster } from "react-hot-toast";
+import { getToast } from "remix-toast";
+import "./tailwind.css";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { toast, headers } = await getToast(request);
   const { pathname, search } = new URL(request.url);
   if (pathname.endsWith("/") && pathname !== "/") {
     throw redirect(`${pathname.slice(0, -1)}${search}`, 301);
   }
-  return null;
+  return json({ toast }, { headers });
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { toast } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const fetchers = useFetchers();
   const state = useMemo<"idle" | "working">(
@@ -43,6 +44,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (state === "working") NProgress.start();
     if (state === "idle") NProgress.done();
   }, [state]);
+  useEffect(() => {
+    if (toast) {
+      switch (toast.type) {
+        case "success":
+          showToast.success(toast.message);
+          break;
+        case "error":
+          showToast.error(toast.message);
+          break;
+        default:
+          showToast(toast.message);
+          break;
+      }
+    }
+  }, [toast]);
   return (
     <html lang="en">
       <head>
@@ -64,6 +80,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="relative text-amber-950">
         {children}
+        <Toaster toastOptions={{ className: "!text-amber-950" }} />
         <ScrollRestoration />
         <Scripts />
       </body>

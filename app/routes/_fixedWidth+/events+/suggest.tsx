@@ -7,13 +7,13 @@ import type {
 import { createId } from "@paralleldrive/cuid2";
 import {
   Form,
-  redirect,
   useActionData,
   useNavigate,
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
+import { jsonWithError, redirectWithSuccess } from "remix-toast";
 import { EventFormFields } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { enumEventStatus } from "~/utils";
@@ -28,12 +28,12 @@ export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(formData);
   const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
-    return result.error.flatten();
+    return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
   await prisma.event.create({
     data: { ...result.data, status: enumEventStatus.SUGGESTED },
   });
-  return redirect("/events");
+  return redirectWithSuccess("/events", "Thank you!");
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {

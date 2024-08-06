@@ -5,11 +5,11 @@ import type {
 } from "@remix-run/node";
 import {
   Form,
-  redirect,
   useActionData,
   useNavigate,
   useNavigation,
 } from "@remix-run/react";
+import { jsonWithError, redirectWithSuccess } from "remix-toast";
 import { authenticator, prisma } from "~/services";
 import { feedbackFormSchema } from "~/validations";
 
@@ -22,12 +22,12 @@ export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(formData);
   const result = await feedbackFormSchema.safeParseAsync(data);
   if (!result.success) {
-    return result.error.flatten();
+    return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
   await prisma.feedback.create({
     data: { ...result.data },
   });
-  return redirect("/");
+  return redirectWithSuccess("/", "Thank you!");
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
