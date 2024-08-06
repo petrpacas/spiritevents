@@ -9,9 +9,8 @@ import {
   useFetchers,
   useNavigation,
 } from "@remix-run/react";
-import { useEffect, useMemo } from "react";
 import NProgress from "nprogress";
-import "nprogress/nprogress.css";
+import { useEffect, useMemo } from "react";
 import "./tailwind.css";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -25,20 +24,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export function Layout({ children }: { children: React.ReactNode }) {
   const navigation = useNavigation();
   const fetchers = useFetchers();
-  const state = useMemo<"idle" | "loading">(
+  const state = useMemo<"idle" | "working">(
     function getGlobalState() {
       const states = [
         navigation.state,
         ...fetchers.map((fetcher) => fetcher.state),
       ];
       if (states.every((state) => state === "idle")) return "idle";
-      return "loading";
+      return "working";
     },
     [navigation.state, fetchers],
   );
   useEffect(() => {
-    if (state === "loading")
-      NProgress.configure({ showSpinner: false }).start();
+    if (state === "working") NProgress.start();
     if (state === "idle") NProgress.done();
   }, [state]);
   return (

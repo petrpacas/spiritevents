@@ -1,11 +1,99 @@
+/* TAILWIND */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* MDX EDITOR */
+
 .mdxeditor-toolbar {
-  @apply !rounded-b-none !rounded-tl-sm !rounded-tr-sm;
+  @apply rounded-b-none rounded-tl-sm rounded-tr-sm !important;
+}
+.mdxeditor-popup-container {
+  @apply border-0 shadow-none !important;
 }
 
-.mdxeditor-popup-container {
-  @apply !border-0 !shadow-none;
+/* NPROGRESS */
+
+#nprogress {
+  pointer-events: none;
 }
+#nprogress .bar {
+  background: theme(colors.amber.600);
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.333rem;
+}
+body.overflow-hidden #nprogress .bar {
+  background: theme(colors.white);
+}
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow:
+    0 0 0.999rem theme(colors.amber.600),
+    0 0 0.666rem theme(colors.amber.600);
+  opacity: 1;
+  transform: rotate(3deg) translate(0px, -0.666rem);
+  transition: all 200ms linear;
+}
+body.overflow-hidden #nprogress .peg {
+  box-shadow:
+    0 0 1.25rem theme(colors.white),
+    0 0 0.625rem theme(colors.white);
+}
+#nprogress .spinner {
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  bottom: 0.5rem;
+  right: 0.5rem;
+}
+#nprogress .spinner-icon {
+  width: 1.222rem;
+  height: 1.222rem;
+  box-sizing: border-box;
+  border: solid 0.333rem transparent;
+  border-top-color: theme(colors.amber.600);
+  border-left-color: theme(colors.amber.600);
+  border-radius: 50%;
+  animation: nprogress-spinner 500ms linear infinite;
+  transition: all 200ms linear;
+}
+@media (min-width: 640px) {
+  #nprogress .spinner-icon {
+    width: 1.777rem;
+    height: 1.777rem;
+    border: solid 0.333rem transparent;
+    border-top-color: theme(colors.amber.600);
+    border-left-color: theme(colors.amber.600);
+  }
+}
+body.overflow-hidden #nprogress .spinner-icon {
+  border-top-color: theme(colors.white);
+  border-left-color: theme(colors.white);
+}
+.nprogress-custom-parent {
+  overflow: hidden;
+  position: relative;
+}
+.nprogress-custom-parent #nprogress .spinner,
+.nprogress-custom-parent #nprogress .bar {
+  position: absolute;
+}
+@keyframes nprogress-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* END */

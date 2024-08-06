@@ -3,7 +3,13 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { Form, Link, redirect, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from "@remix-run/react";
 import { marked } from "marked";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, enumEventStatus, getStatusConsts } from "~/utils";
@@ -58,6 +64,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function ShowEvent() {
   const { event, isAuthenticated } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isWorking = navigation.state !== "idle";
   const getCountryNameByCode = (code: string) => {
     const country = countries.find((country) => country.code === code);
     return country ? country.name : code;
@@ -160,12 +169,43 @@ export default function ShowEvent() {
                 </span>
               )}
             </div>
-            <div className="flex flex-wrap justify-end gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               {isAuthenticated && (
                 <>
+                  <Form action="edit">
+                    <button
+                      disabled={isWorking}
+                      type="submit"
+                      className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+                    >
+                      Edit
+                    </button>
+                  </Form>
+                  {event.status === enumEventStatus.PUBLISHED && (
+                    <Form
+                      method="post"
+                      onSubmit={(event) => {
+                        const response = confirm(
+                          "Do you really want to make the event a draft?",
+                        );
+                        if (!response) {
+                          event.preventDefault();
+                        }
+                      }}
+                    >
+                      <button
+                        disabled={isWorking}
+                        type="submit"
+                        name="intent"
+                        value="draft"
+                        className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+                      >
+                        Draft
+                      </button>
+                    </Form>
+                  )}
                   {event.status !== enumEventStatus.PUBLISHED && (
                     <Form
-                      replace
                       method="post"
                       onSubmit={(event) => {
                         const response = confirm(
@@ -177,50 +217,16 @@ export default function ShowEvent() {
                       }}
                     >
                       <button
+                        disabled={isWorking}
                         type="submit"
                         name="intent"
                         value="publish"
-                        className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                        className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
                       >
                         Publish
                       </button>
                     </Form>
                   )}
-                  {event.status !== enumEventStatus.DRAFT && (
-                    <Form
-                      replace
-                      method="post"
-                      onSubmit={
-                        event.status !== enumEventStatus.SUGGESTED
-                          ? (event) => {
-                              const response = confirm(
-                                "Do you really want to make the event a draft?",
-                              );
-                              if (!response) {
-                                event.preventDefault();
-                              }
-                            }
-                          : undefined
-                      }
-                    >
-                      <button
-                        type="submit"
-                        name="intent"
-                        value="draft"
-                        className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
-                      >
-                        Draft
-                      </button>
-                    </Form>
-                  )}
-                  <Form action="edit">
-                    <button
-                      type="submit"
-                      className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
-                    >
-                      Edit
-                    </button>
-                  </Form>
                   <Form
                     replace
                     method="post"
@@ -234,22 +240,25 @@ export default function ShowEvent() {
                     }}
                   >
                     <button
+                      disabled={isWorking}
                       type="submit"
                       name="intent"
                       value="delete"
-                      className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                      className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
                     >
                       Delete
                     </button>
                   </Form>
                 </>
               )}
-              <Link
-                to="/events"
-                className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              <button
+                disabled={isWorking}
+                type="button"
+                onClick={() => navigate(-1)}
+                className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
               >
                 Back
-              </Link>
+              </button>
             </div>
           </div>
         </div>

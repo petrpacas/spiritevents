@@ -12,9 +12,9 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.classList.add("overflow-hidden");
     } else {
-      document.body.style.overflow = "unset";
+      document.body.classList.remove("overflow-hidden");
     }
   }, [isMenuOpen]);
   const brandName = (

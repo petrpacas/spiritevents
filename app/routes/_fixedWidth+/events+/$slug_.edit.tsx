@@ -10,6 +10,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useNavigation,
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
@@ -61,6 +62,7 @@ export default function EditEvent() {
   const errors = useActionData<typeof action>();
   const { event } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  const navigation = useNavigation();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -77,28 +79,32 @@ export default function EditEvent() {
     });
   };
   return (
-    <Form method="post" onSubmit={handleSubmit} className="grid gap-8">
-      <h1 className="text-3xl font-bold sm:text-4xl">Editing {event.title}</h1>
-      <EventFormFields
-        event={event}
-        errors={errors}
-        mdxEditorRef={mdxEditorRef}
-      />
-      <div className="flex justify-end gap-4">
-        <button
-          type="submit"
-          className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
-        >
-          Save
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
-        >
-          Cancel
-        </button>
-      </div>
+    <Form method="post" onSubmit={handleSubmit}>
+      <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
+        <h1 className="text-3xl font-bold sm:text-4xl">
+          Editing {event.title}
+        </h1>
+        <EventFormFields
+          event={event}
+          errors={errors}
+          mdxEditorRef={mdxEditorRef}
+        />
+        <div className="flex justify-end gap-4">
+          <button
+            type="submit"
+            className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+          >
+            Back
+          </button>
+        </div>
+      </fieldset>
     </Form>
   );
 }

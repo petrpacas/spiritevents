@@ -1,9 +1,9 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   Form,
-  Link,
   useLoaderData,
   useNavigate,
+  useNavigation,
   useSubmit,
 } from "@remix-run/react";
 import { CountrySelect, EventListCard } from "~/components";
@@ -46,6 +46,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Events() {
   const { country, events, isAuthenticated } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isWorking = navigation.state !== "idle";
   const submit = useSubmit();
   const getCountryNameByCode = (code: string) => {
     const country = countries.find((country) => country.code === code);
@@ -73,9 +75,10 @@ export default function Events() {
                 Showing events in{" "}
                 <div className="inline-grid">
                   <button
+                    disabled={isWorking}
                     type="button"
-                    onClick={() => navigate(-1)}
-                    className="col-start-1 row-start-1 rounded border border-stone-300 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow"
+                    onClick={() => navigate("/events")}
+                    className="col-start-1 row-start-1 rounded border border-stone-300 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
                   >
                     {getCountryNameByCode(country)}
                   </button>
@@ -102,16 +105,18 @@ export default function Events() {
                   submit(event.currentTarget);
                 }}
               >
-                <label
-                  className="grid items-center gap-2 md:flex"
-                  htmlFor="country"
-                >
-                  Showing events in
-                  <CountrySelect
-                    filteredCountries={filteredCountries}
-                    className="rounded border border-stone-300 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow"
-                  />
-                </label>
+                <fieldset disabled={isWorking}>
+                  <label
+                    className="grid items-center gap-2 md:flex"
+                    htmlFor="country"
+                  >
+                    Showing events in
+                    <CountrySelect
+                      filteredCountries={filteredCountries}
+                      className="rounded border border-stone-300 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+                    />
+                  </label>
+                </fieldset>
               </Form>
             )}
           </>
@@ -142,24 +147,25 @@ export default function Events() {
       </div>
       {isAuthenticated && (
         <div className="flex items-center justify-center gap-2 text-sm max-[399px]:flex-col sm:gap-4 sm:text-base md:text-lg">
-          <div className="rounded border border-transparent bg-emerald-50 p-2 sm:px-4">
+          <div className="rounded border border-amber-600 bg-emerald-100 p-2 sm:px-4">
             <span className="text-amber-600">(S)</span> Suggested
           </div>
-          <div className="rounded border border-transparent bg-stone-50 p-2 sm:px-4">
+          <div className="rounded border border-amber-600 bg-sky-100 p-2 sm:px-4">
             <span className="text-amber-600">(D)</span> Draft
           </div>
-          <div className="rounded border border-stone-300 bg-white p-2 sm:px-4">
+          <div className="rounded border border-amber-600 bg-white p-2 sm:px-4">
             Published
           </div>
         </div>
       )}
       <div className="flex justify-end gap-4">
-        <Link
-          to={country ? "/events" : "/"}
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
           className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
-          {country ? "Back to events" : "Back to homepage"}
-        </Link>
+          Back
+        </button>
       </div>
     </div>
   );

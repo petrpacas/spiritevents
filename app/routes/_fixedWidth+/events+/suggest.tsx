@@ -10,6 +10,7 @@ import {
   redirect,
   useActionData,
   useNavigate,
+  useNavigation,
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
@@ -42,9 +43,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return null;
 }
 
-export default function NewEvent() {
+export default function SuggestEvent() {
   const errors = useActionData<typeof action>();
   const navigate = useNavigate();
+  const navigation = useNavigation();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -60,45 +62,47 @@ export default function NewEvent() {
     });
   };
   return (
-    <Form method="post" onSubmit={handleSubmit} className="grid gap-8">
-      <h1 className="text-3xl font-bold sm:text-4xl">Suggest a new event</h1>
-      <p className="text-lg sm:text-xl">
-        Do you know of any conscious festival that deserves to be known and
-        found by like-minded people from around the world?
-      </p>
-      <p className="text-lg sm:text-xl">
-        Suggesting it will support not only the event but also other seekers.
-      </p>
-      <p className="text-lg sm:text-xl">
-        If you choose to do so, I&apos;d like to kindly ask you to fill in the
-        title, the country, and the dates the suggested event is happening in.
-        Thank you very much 🙏
-      </p>
-      <hr className="mt-8 border-amber-600" />
-      <p className="text-center text-lg font-semibold sm:text-xl">
-        Let&apos;s make this place a true portal together
-      </p>
-      <hr className="mb-8 border-amber-600" />
-      <EventFormFields
-        errors={errors}
-        mdxEditorRef={mdxEditorRef}
-        isSuggestion
-      />
-      <div className="flex justify-end gap-4">
-        <button
-          type="submit"
-          className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
-        >
-          Suggest event
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
-        >
-          Cancel
-        </button>
-      </div>
+    <Form method="post" onSubmit={handleSubmit}>
+      <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
+        <h1 className="text-3xl font-bold sm:text-4xl">Suggest a new event</h1>
+        <p className="text-lg sm:text-xl">
+          Do you know of any conscious festival that deserves to be known and
+          found by like-minded people from around the world?
+        </p>
+        <p className="text-lg sm:text-xl">
+          Suggesting it will support not only the event but also other seekers.
+        </p>
+        <p className="text-lg sm:text-xl">
+          If you choose to do so, I&apos;d like to kindly ask you to fill in the
+          title, the country, and the dates the suggested event is happening in.
+          Thank you very much 🙏
+        </p>
+        <hr className="mt-8 border-amber-600" />
+        <p className="text-center text-lg font-semibold sm:text-xl">
+          Let&apos;s make this place a true portal together
+        </p>
+        <hr className="mb-8 border-amber-600" />
+        <EventFormFields
+          errors={errors}
+          mdxEditorRef={mdxEditorRef}
+          isSuggestion
+        />
+        <div className="flex justify-end gap-4">
+          <button
+            type="submit"
+            className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+          >
+            Suggest
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+          >
+            Back
+          </button>
+        </div>
+      </fieldset>
     </Form>
   );
 }
