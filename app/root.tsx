@@ -6,7 +6,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useFetchers,
+  useNavigation,
 } from "@remix-run/react";
+import { useEffect, useMemo } from "react";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 import "./tailwind.css";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -18,6 +23,24 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const navigation = useNavigation();
+  const fetchers = useFetchers();
+  const state = useMemo<"idle" | "loading">(
+    function getGlobalState() {
+      const states = [
+        navigation.state,
+        ...fetchers.map((fetcher) => fetcher.state),
+      ];
+      if (states.every((state) => state === "idle")) return "idle";
+      return "loading";
+    },
+    [navigation.state, fetchers],
+  );
+  useEffect(() => {
+    if (state === "loading")
+      NProgress.configure({ showSpinner: false }).start();
+    if (state === "idle") NProgress.done();
+  }, [state]);
   return (
     <html lang="en">
       <head>
