@@ -16,7 +16,7 @@ export default function CommonLayout() {
     <div className="grid min-h-lvh grid-rows-[auto_1fr_auto]">
       <Header isAuthenticated={isAuthenticated} key={pathname} />
       <main className="flex justify-center">
-        <div className="grid w-full max-w-7xl px-4 py-16 sm:px-8">
+        <div className="grid w-full max-w-7xl px-4 pb-16 pt-8 sm:px-8 sm:pt-16">
           <Outlet />
         </div>
       </main>

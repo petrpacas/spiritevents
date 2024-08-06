@@ -120,11 +120,11 @@ export default function Events() {
       <div className="grid gap-2 sm:gap-4">
         {events.length === 0 ? (
           <>
-            <hr className="border-stone-300" />
+            <hr className="mt-8 border-amber-600" />
             <p className="text-center text-lg sm:text-xl">
               No events yet&hellip;
             </p>
-            <hr className="border-stone-300" />
+            <hr className="mb-8 border-amber-600" />
           </>
         ) : (
           events.map((event) => (
@@ -142,11 +142,10 @@ export default function Events() {
       </div>
       {isAuthenticated && (
         <div className="flex items-center justify-center gap-2 text-sm max-[399px]:flex-col sm:gap-4 sm:text-base md:text-lg">
-          Legend:
-          <div className="rounded border border-transparent bg-emerald-100 p-2 sm:px-4">
+          <div className="rounded border border-transparent bg-emerald-50 p-2 sm:px-4">
             <span className="text-amber-600">(S)</span> Suggested
           </div>
-          <div className="rounded border border-transparent bg-stone-100 p-2 sm:px-4">
+          <div className="rounded border border-transparent bg-stone-50 p-2 sm:px-4">
             <span className="text-amber-600">(D)</span> Draft
           </div>
           <div className="rounded border border-stone-300 bg-white p-2 sm:px-4">

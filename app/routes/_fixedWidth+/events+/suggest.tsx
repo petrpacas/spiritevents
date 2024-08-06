@@ -74,11 +74,11 @@ export default function NewEvent() {
         title, the country, and the dates the suggested event is happening in.
         Thank you very much 🙏
       </p>
-      <hr className="border-amber-600" />
+      <hr className="mt-8 border-amber-600" />
       <p className="text-center text-lg font-semibold sm:text-xl">
-        Let&apos;s create this portal together!
+        Let&apos;s make this place a true portal together
       </p>
-      <hr className="border-amber-600" />
+      <hr className="mb-8 border-amber-600" />
       <EventFormFields
         errors={errors}
         mdxEditorRef={mdxEditorRef}

@@ -130,12 +130,12 @@ export default function ShowEvent() {
           </div>
         </div>
       </div>
-      <div className={`flex justify-center`}>
+      <div className={`flex justify-center ${statusBg}`}>
         <div className="grid w-full max-w-7xl px-4 py-16 sm:px-8">
           <div className="grid gap-8">
             {event.description && (
               <div
-                className="prose-amber-basic prose prose-lg mx-auto w-full text-center sm:prose-xl"
+                className="prose prose-lg prose-amber-basic mx-auto w-full text-center sm:prose-xl"
                 id="description"
                 dangerouslySetInnerHTML={{
                   __html: marked.parse(event.description),
@@ -164,19 +164,45 @@ export default function ShowEvent() {
               {isAuthenticated && (
                 <>
                   {event.status !== enumEventStatus.PUBLISHED && (
-                    <Form replace method="post">
+                    <Form
+                      replace
+                      method="post"
+                      onSubmit={(event) => {
+                        const response = confirm(
+                          "Do you really want to publish the event?",
+                        );
+                        if (!response) {
+                          event.preventDefault();
+                        }
+                      }}
+                    >
                       <button
                         type="submit"
                         name="intent"
                         value="publish"
-                        className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                        className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
                       >
                         Publish
                       </button>
                     </Form>
                   )}
                   {event.status !== enumEventStatus.DRAFT && (
-                    <Form replace method="post">
+                    <Form
+                      replace
+                      method="post"
+                      onSubmit={
+                        event.status !== enumEventStatus.SUGGESTED
+                          ? (event) => {
+                              const response = confirm(
+                                "Do you really want to make the event a draft?",
+                              );
+                              if (!response) {
+                                event.preventDefault();
+                              }
+                            }
+                          : undefined
+                      }
+                    >
                       <button
                         type="submit"
                         name="intent"
@@ -190,7 +216,7 @@ export default function ShowEvent() {
                   <Form action="edit">
                     <button
                       type="submit"
-                      className="rounded border border-transparent bg-sky-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                      className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"
                     >
                       Edit
                     </button>
@@ -200,7 +226,7 @@ export default function ShowEvent() {
                     method="post"
                     onSubmit={(event) => {
                       const response = confirm(
-                        "Do you really want to delete this event?",
+                        "Do you really want to delete the event?",
                       );
                       if (!response) {
                         event.preventDefault();

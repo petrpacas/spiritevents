@@ -30,11 +30,11 @@ export default function Events() {
       <div className="grid gap-4 sm:gap-8">
         {allFeedback.length === 0 ? (
           <>
-            <hr className="border-stone-300" />
+            <hr className="mt-8 border-amber-600" />
             <p className="text-center text-lg sm:text-xl">
               No feedback yet&hellip;
             </p>
-            <hr className="border-stone-300" />
+            <hr className="mb-8 border-amber-600" />
           </>
         ) : (
           allFeedback.map((feedback) => (

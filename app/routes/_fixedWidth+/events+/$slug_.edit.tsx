@@ -15,6 +15,7 @@ import {
 import { useRef } from "react";
 import { EventFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
+import { enumEventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -24,15 +25,22 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  const result = await eventFormSchema.safeParseAsync(data);
+  const dataWithOgSlugAndStatus = Object.fromEntries(formData);
+  const status = dataWithOgSlugAndStatus.status;
+  const dataWithOgSlug = { ...dataWithOgSlugAndStatus };
+  delete dataWithOgSlug.status;
+  const result = await eventFormSchema.safeParseAsync(dataWithOgSlug);
   if (!result.success) {
     return result.error.flatten();
   }
-  const cleanData = { ...result.data };
-  delete cleanData.ogSlug;
+  const data = { ...result.data };
+  delete data.ogSlug;
   await prisma.event.update({
-    data: cleanData,
+    data:
+      status === enumEventStatus.SUGGESTED
+        ? { ...data, status: enumEventStatus.DRAFT }
+        : { ...data },
+
     where: { slug: params.slug },
   });
   return redirect(`/events/${result.data.slug}`);
@@ -62,6 +70,7 @@ export default function EditEvent() {
     const description = mdxEditorRef.current?.getMarkdown();
     formData.set("description", description ?? "");
     formData.set("ogSlug", event.slug ?? "");
+    formData.set("status", event.status);
     submit(formData, {
       method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
       action: $form.getAttribute("action") ?? $form.action,

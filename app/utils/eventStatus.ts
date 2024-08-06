@@ -4,27 +4,27 @@ export const getStatusConsts = (status?: keyof typeof enumEventStatus) => {
   let statusLetter = undefined;
   let statusBg = "bg-white";
   let statusGradient =
-    "bg-[linear-gradient(rgba(254,243,199,1),rgba(254,243,199,.888),rgba(254,243,199,1))]";
-  let statusGlow = "drop-shadow-[0_0_1.875rem_rgb(254,243,199)]";
-  let statusGlowMd = "md:drop-shadow-[0_0_2.25rem_rgb(254,243,199)]";
+    "bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]";
+  let statusGlow = "drop-shadow-[0_0_1.875rem_rgb(255,251,235)]";
+  let statusGlowMd = "md:drop-shadow-[0_0_2.25rem_rgb(255,251,235)]";
   switch (status) {
     case enumEventStatus.DRAFT:
       statusLetter = "(D)";
-      statusBg = "bg-stone-100";
+      statusBg = "bg-stone-50";
       statusGradient =
-        "bg-[linear-gradient(rgba(245,245,244,1),rgba(245,245,244,.888),rgba(245,245,244,1))]";
-      statusGlow = "drop-shadow-[0_0_1.875rem_rgb(245,245,244)]";
-      statusGlowMd = "md:drop-shadow-[0_0_2.25rem_rgb(245,245,244)]";
+        "bg-[linear-gradient(rgba(250,250,249,1),rgba(250,250,249,.8),rgba(250,250,249,1))]";
+      statusGlow = "drop-shadow-[0_0_1.875rem_rgb(250,250,249)]";
+      statusGlowMd = "md:drop-shadow-[0_0_2.25rem_rgb(250,250,249)]";
       break;
     case enumEventStatus.PUBLISHED:
       break;
     case enumEventStatus.SUGGESTED:
       statusLetter = "(S)";
-      statusBg = "bg-emerald-100";
+      statusBg = "bg-emerald-50";
       statusGradient =
-        "bg-[linear-gradient(rgba(209,250,229,1),rgba(209,250,229,.888),rgba(209,250,229,1))]";
-      statusGlow = "drop-shadow-[0_0_1.875rem_rgb(209,250,229)]";
-      statusGlowMd = "md:drop-shadow-[0_0_2.25rem_rgb(209,250,229)]";
+        "bg-[linear-gradient(rgba(236,253,245,1),rgba(236,253,245,.8),rgba(236,253,245,1))]";
+      statusGlow = "drop-shadow-[0_0_1.875rem_rgb(236,253,245)]";
+      statusGlowMd = "md:drop-shadow-[0_0_2.25rem_rgb(236,253,245)]";
       break;
     default:
       break;

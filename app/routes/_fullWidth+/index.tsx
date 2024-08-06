@@ -46,7 +46,7 @@ export default function Index() {
         className="grid min-h-lvh bg-cover bg-center"
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
-        <div className="grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(254,243,199,1),rgba(254,243,199,.777),rgba(254,243,199,1))]">
+        <div className="grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
           <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-3xl font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] sm:px-8 sm:py-32 sm:text-4xl sm:leading-relaxed sm:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
             Your gateway to discovering conscious{" "}
             <br className="max-lg:hidden" />
@@ -60,7 +60,7 @@ export default function Index() {
           </h2>
         </div>
       </div>
-      <div className="grid gap-16 py-16">
+      <div className="grid gap-8 py-8 sm:gap-16 sm:py-16">
         <div className="bg-transparent">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
             <h2 className="text-2xl sm:text-3xl">

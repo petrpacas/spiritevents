@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import type { PluginUtils } from "tailwindcss/types/config";
 import defaultTheme from "tailwindcss/defaultTheme";
 import {
   scopedPreflightStyles,
@@ -19,7 +20,7 @@ export default {
       fontFamily: {
         sans: ["Poppins", ...defaultTheme.fontFamily.sans],
       },
-      typography: ({ theme }) => ({
+      typography: ({ theme }: PluginUtils) => ({
         "amber-basic": {
           css: {
             "--tw-prose-body": theme("colors.amber[950]"),

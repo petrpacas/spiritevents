@@ -50,11 +50,7 @@ export default function SendFeedback() {
         Anything constructive is welcome. Anonymous, signed, everything goes
         here. Thank you for sharing 🙏
       </p>
-      <hr className="border-amber-600" />
-      <p className="text-center text-lg font-semibold sm:text-xl">
-        Let&apos;s build this portal together!
-      </p>
-      <hr className="border-amber-600" />
+      <hr className="my-8 border-amber-600" />
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-2">
           <div>
