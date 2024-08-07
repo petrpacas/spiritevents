@@ -62,33 +62,29 @@ export default function Events() {
   };
   const eventCountries = getCountryCodesFromEvents();
   const filteredCountries = filterCountriesForEvent(eventCountries);
-  // CHATGPT MAGIC
-  type EventsWithYearHeading = {
+  type EventsWithYear = {
     year: number;
-    eventsByYear: typeof events;
+    events: typeof events;
   };
-  function groupEventsByYear(
-    eventsByYear: typeof events,
-  ): EventsWithYearHeading[] {
-    const allEvents: Record<number, typeof events> = {};
-    for (const eachEvent of eventsByYear) {
-      const year = new Date(eachEvent.dateStart).getFullYear();
-      if (!allEvents[year]) {
-        allEvents[year] = [];
+  function groupEventsByYear(allEvents: typeof events): EventsWithYear[] {
+    const groupedEvents: Record<number, typeof events> = {};
+    for (const event of allEvents) {
+      const year = new Date(event.dateStart).getFullYear();
+      if (!groupedEvents[year]) {
+        groupedEvents[year] = [];
       }
-      allEvents[year].push(eachEvent);
+      groupedEvents[year].push(event);
     }
-    const result: EventsWithYearHeading[] = [];
-    for (const year in allEvents) {
+    const result: EventsWithYear[] = [];
+    for (const year in groupedEvents) {
       result.push({
         year: parseInt(year),
-        eventsByYear: allEvents[year],
+        events: groupedEvents[year],
       });
     }
     return result;
   }
   const eventsByYear = groupEventsByYear(events);
-  // END CHATGPT MAGIC
   return (
     <div className="grid gap-8">
       <div className="grid gap-4 max-md:w-full md:flex md:items-center md:justify-between">
@@ -163,7 +159,7 @@ export default function Events() {
           eventsByYear.map((group, index) => (
             <Fragment key={index}>
               <h2 className="text-2xl font-bold sm:text-3xl">{group.year}</h2>
-              {group.eventsByYear.map((event) => (
+              {group.events.map((event) => (
                 <EventListCard
                   key={event.slug}
                   slug={event.slug}

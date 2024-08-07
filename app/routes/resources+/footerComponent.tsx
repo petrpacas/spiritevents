@@ -71,8 +71,8 @@ export const Footer = ({ isAuthenticated }: Props) => {
               </p>
             </div>
             <fetcher.Form
-              method="post"
               action="/resources/footerComponent"
+              method="post"
               ref={formRef}
             >
               <fieldset

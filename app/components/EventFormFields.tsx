@@ -3,12 +3,12 @@ import type { Event } from "@prisma/client";
 import type { SerializeFrom } from "@remix-run/node";
 import type { RefObject } from "react";
 import type { typeToFlattenedError } from "zod";
+import { lazy, Suspense, useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
-import { useState } from "react";
 import slugify from "slugify";
 import { getTodayDate } from "~/utils";
 import { CountrySelect } from "./CountrySelect";
-import { DescriptionEditor } from "./DescriptionEditor";
+const DescriptionEditor = lazy(() => import("./lazy/DescriptionEditor"));
 
 type Props = {
   errors: SerializeFrom<typeToFlattenedError<Event, string>> | undefined;
@@ -44,6 +44,27 @@ export const EventFormFields = ({
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleSlugChange(e);
   };
+  const descriptionFallback = (
+    <label className="grid gap-2 md:col-span-6">
+      <div>
+        Description{" "}
+        <span className="text-amber-600">
+          (optional) ~ loading markdown editor&hellip;
+        </span>
+      </div>
+      <textarea
+        name="description"
+        readOnly
+        defaultValue={event?.description ?? ""}
+        className="min-h-20 rounded border-stone-200 shadow-sm transition-shadow read-only:bg-stone-200 hover:shadow-md active:shadow"
+      />
+      {errors?.fieldErrors.description && (
+        <p className="text-red-600">
+          {errors.fieldErrors.description.join(", ")}
+        </p>
+      )}
+    </label>
+  );
   return (
     <div className="grid gap-4 md:grid-cols-6 md:items-start">
       <label className="grid gap-2 md:col-span-3">
@@ -174,45 +195,25 @@ export const EventFormFields = ({
           </p>
         )}
       </label>
-      <ClientOnly
-        fallback={
-          <label className="grid gap-2 md:col-span-6">
-            <div>
-              Description{" "}
-              <span className="text-amber-600">
-                (optional) ~ loading markdown editor&hellip;
-              </span>
-            </div>
-            <textarea
-              name="description"
-              readOnly
-              defaultValue={event?.description ?? ""}
-              className="min-h-20 rounded border-stone-200 shadow-sm transition-shadow read-only:bg-stone-200 hover:shadow-md active:shadow"
-            />
-            {errors?.fieldErrors.description && (
-              <p className="text-red-600">
-                {errors.fieldErrors.description.join(", ")}
-              </p>
-            )}
-          </label>
-        }
-      >
+      <ClientOnly fallback={descriptionFallback}>
         {() => (
-          <div className="grid gap-2 md:col-span-6">
-            <div>
-              Description <span className="text-amber-600">(optional)</span>
+          <Suspense fallback={descriptionFallback}>
+            <div className="grid gap-2 md:col-span-6">
+              <div>
+                Description <span className="text-amber-600">(optional)</span>
+              </div>
+              <DescriptionEditor
+                ref={mdxEditorRef}
+                className="overflow-x-auto rounded border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+                markdown={event?.description ?? ""}
+              />
+              {errors?.fieldErrors.description && (
+                <p className="text-red-600">
+                  {errors.fieldErrors.description.join(", ")}
+                </p>
+              )}
             </div>
-            <DescriptionEditor
-              ref={mdxEditorRef}
-              className="overflow-x-auto rounded border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow"
-              markdown={event?.description ?? ""}
-            />
-            {errors?.fieldErrors.description && (
-              <p className="text-red-600">
-                {errors.fieldErrors.description.join(", ")}
-              </p>
-            )}
-          </div>
+          </Suspense>
         )}
       </ClientOnly>
     </div>
