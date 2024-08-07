@@ -6,7 +6,6 @@ import type {
 } from "@remix-run/node";
 import {
   Form,
-  redirect,
   useActionData,
   useLoaderData,
   useNavigate,
@@ -14,6 +13,7 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
+import { jsonWithError, redirectWithSuccess } from "remix-toast";
 import { EventFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
 import { enumEventStatus } from "~/utils";
@@ -32,7 +32,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
   delete dataWithOrigs.status;
   const result = await eventFormSchema.safeParseAsync(dataWithOrigs);
   if (!result.success) {
-    return result.error.flatten();
+    return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
   const data = { ...result.data };
   delete data.origDateEnd;
@@ -46,7 +46,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     where: { slug: params.id },
   });
-  return redirect(`/events/${result.data.slug}`);
+  return redirectWithSuccess(`/events/${result.data.slug}`, "Event saved");
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -78,8 +78,9 @@ export default function EventEdit() {
     formData.set("origSlug", event.slug ?? "");
     formData.set("status", event.status);
     submit(formData, {
-      method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
       action: $form.getAttribute("action") ?? $form.action,
+      method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
+      replace: true,
     });
   };
   return (

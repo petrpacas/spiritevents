@@ -7,8 +7,9 @@ import {
   Scripts,
   ScrollRestoration,
   useFetchers,
-  useLoaderData,
   useNavigation,
+  // useRouteError,
+  useRouteLoaderData,
 } from "@remix-run/react";
 import NProgress from "nprogress";
 import { useEffect, useMemo } from "react";
@@ -22,11 +23,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (pathname.endsWith("/") && pathname !== "/") {
     throw redirect(`${pathname.slice(0, -1)}${search}`, 301);
   }
-  return json({ toast }, { headers });
+  if (toast && headers) {
+    return json({ toast }, { headers });
+  } else {
+    return null;
+  }
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { toast } = useLoaderData<typeof loader>();
+  // const error = useRouteError();
+  const data = useRouteLoaderData<typeof loader>("root");
   const navigation = useNavigation();
   const fetchers = useFetchers();
   const state = useMemo<"idle" | "working">(
@@ -45,20 +51,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (state === "idle") NProgress.done();
   }, [state]);
   useEffect(() => {
-    if (toast) {
-      switch (toast.type) {
+    if (data?.toast) {
+      switch (data.toast.type) {
         case "success":
-          showToast.success(toast.message);
+          showToast.success(data.toast.message, { position: "bottom-center" });
           break;
         case "error":
-          showToast.error(toast.message);
+          showToast.error(data.toast.message, { position: "bottom-center" });
           break;
         default:
-          showToast(toast.message);
+          showToast(data.toast.message, { position: "bottom-center" });
           break;
       }
     }
-  }, [toast]);
+  }, [data?.toast]);
   return (
     <html lang="en">
       <head>

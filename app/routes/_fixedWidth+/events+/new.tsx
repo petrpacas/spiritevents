@@ -6,13 +6,13 @@ import type {
 } from "@remix-run/node";
 import {
   Form,
-  redirect,
   useActionData,
   useNavigate,
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
 import { useRef } from "react";
+import { jsonWithError, redirectWithSuccess } from "remix-toast";
 import { EventFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
 import { eventFormSchema } from "~/validations";
@@ -27,10 +27,10 @@ export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(formData);
   const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
-    return result.error.flatten();
+    return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
   await prisma.event.create({ data: result.data });
-  return redirect("/events");
+  return redirectWithSuccess("/events", "Event added");
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {

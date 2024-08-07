@@ -1,10 +1,27 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
+import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
+import { jsonWithSuccess } from "remix-toast";
 import { prisma, requireUserSession } from "~/services";
 
 export const meta: MetaFunction = () => {
   return [{ title: "See feedback ~ SeekGathering" }];
 };
+
+export async function action({ request }: ActionFunctionArgs) {
+  await requireUserSession(request);
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  const id = data.id;
+  if (typeof id === "string") {
+    await prisma.feedback.delete({ where: { id } });
+    return jsonWithSuccess("/events", "Feedback deleted");
+  }
+  return null;
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserSession(request);
@@ -22,6 +39,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Feedback() {
+  const fetcher = useFetcher();
   const { allFeedback } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   return (
@@ -66,6 +84,28 @@ export default function Feedback() {
                 <span className="text-amber-600">Content:</span>{" "}
                 {feedback.content}
               </div>
+              <fetcher.Form
+                method="post"
+                className="justify-self-end md:max-xl:col-span-2 xl:col-span-3"
+                onSubmit={(event) => {
+                  const response = confirm(
+                    "Do you really want to delete the event?",
+                  );
+                  if (!response) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                <button
+                  // disabled={isWorking}
+                  type="submit"
+                  name="id"
+                  value={feedback.id}
+                  className="rounded border border-red-600 bg-white px-2 py-1 text-red-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+                >
+                  Delete
+                </button>
+              </fetcher.Form>
             </div>
           ))
         )}

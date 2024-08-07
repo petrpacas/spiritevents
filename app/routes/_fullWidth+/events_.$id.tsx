@@ -5,12 +5,13 @@ import type {
 } from "@remix-run/node";
 import {
   Form,
-  redirect,
+  useFetcher,
   useLoaderData,
   useNavigate,
   useNavigation,
 } from "@remix-run/react";
 import { marked } from "marked";
+import { jsonWithSuccess, redirectWithSuccess } from "remix-toast";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, enumEventStatus, getStatusConsts } from "~/utils";
 
@@ -29,19 +30,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
   switch (intent) {
     case "delete":
       await prisma.event.delete({ where: { slug: params.id } });
-      return redirect("/events");
+      return redirectWithSuccess("/events", "Event deleted");
     case "draft":
       await prisma.event.update({
         data: { status: enumEventStatus.DRAFT },
         where: { slug: params.id },
       });
-      break;
+      return jsonWithSuccess(null, "Event set as draft");
     case "publish":
       await prisma.event.update({
         data: { status: enumEventStatus.PUBLISHED },
         where: { slug: params.id },
       });
-      break;
+      return jsonWithSuccess(null, "Event published");
     default:
       break;
   }
@@ -63,6 +64,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Event() {
+  const fetcher = useFetcher();
   const { event, isAuthenticated } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
@@ -182,12 +184,11 @@ export default function Event() {
                     </button>
                   </Form>
                   {event.status === enumEventStatus.PUBLISHED && (
-                    <Form
-                      replace
+                    <fetcher.Form
                       method="post"
                       onSubmit={(event) => {
                         const response = confirm(
-                          "Do you really want to make the event a draft?",
+                          "Do you really want to set the event as a draft?",
                         );
                         if (!response) {
                           event.preventDefault();
@@ -201,13 +202,12 @@ export default function Event() {
                         value="draft"
                         className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
                       >
-                        Draft
+                        Set as draft
                       </button>
-                    </Form>
+                    </fetcher.Form>
                   )}
                   {event.status !== enumEventStatus.PUBLISHED && (
-                    <Form
-                      replace
+                    <fetcher.Form
                       method="post"
                       onSubmit={(event) => {
                         const response = confirm(
@@ -227,10 +227,9 @@ export default function Event() {
                       >
                         Publish
                       </button>
-                    </Form>
+                    </fetcher.Form>
                   )}
-                  <Form
-                    replace
+                  <fetcher.Form
                     method="post"
                     onSubmit={(event) => {
                       const response = confirm(
@@ -250,7 +249,7 @@ export default function Event() {
                     >
                       Delete
                     </button>
-                  </Form>
+                  </fetcher.Form>
                 </>
               )}
               <button

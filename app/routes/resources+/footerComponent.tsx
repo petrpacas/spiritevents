@@ -32,7 +32,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
   await prisma.subscriber.create({ data: result.data });
-  return jsonWithSuccess({ success: true }, "Your email was added");
+  return jsonWithSuccess({ success: true }, "Added you!");
 }
 
 export const Footer = ({ isAuthenticated }: Props) => {

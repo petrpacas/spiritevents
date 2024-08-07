@@ -27,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await prisma.feedback.create({
     data: { ...result.data },
   });
-  return redirectWithSuccess("/", "Thank you!");
+  return redirectWithSuccess("/", "Much appreciated!");
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
