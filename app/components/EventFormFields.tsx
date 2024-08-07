@@ -6,7 +6,6 @@ import type { typeToFlattenedError } from "zod";
 import { useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import slugify from "slugify";
-import { getTodayDate } from "~/utils";
 import { CountrySelect } from "./CountrySelect";
 import { DescriptionEditor } from "./DescriptionEditor";
 
@@ -111,7 +110,6 @@ export const EventFormFields = ({
           type="date"
           name="dateStart"
           defaultValue={event?.dateStart}
-          min={getTodayDate()}
           placeholder="yyyy-mm-dd"
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
@@ -130,7 +128,6 @@ export const EventFormFields = ({
           type="date"
           name="dateEnd"
           defaultValue={event?.dateEnd}
-          min={getTodayDate()}
           placeholder="yyyy-mm-dd"
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />

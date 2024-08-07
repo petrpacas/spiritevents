@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
     {
       name: "description",
       content:
-        "Your gateway to discovering conscious gatherings and festivals intended to nourish, uplift, and connect",
+        "Connect with your tribe again and discover gatherings and festivals focused on the healing of the soul",
     },
   ];
 };
@@ -48,24 +48,66 @@ export default function Landing() {
       >
         <div className="grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
           <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-3xl font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] sm:px-8 sm:py-32 sm:text-4xl sm:leading-relaxed sm:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
-            Your gateway to discovering conscious{" "}
-            <br className="max-lg:hidden" />
-            <strong className="text-amber-600">
-              gatherings and festivals
-            </strong>{" "}
-            intended to <br className="max-lg:hidden" />
-            <strong className="text-amber-600">
-              nourish, uplift, and connect
-            </strong>
+            Connect with your <strong className="text-amber-600">tribe</strong>{" "}
+            again <br className="max-lg:hidden" /> and discover{" "}
+            <strong className="text-amber-600">gatherings and festivals</strong>{" "}
+            <br className="max-lg:hidden" /> focused on the{" "}
+            <strong className="text-amber-600">healing</strong> of the soul
           </h2>
         </div>
       </div>
-      <div className="grid gap-8 py-8 sm:gap-16 sm:py-16">
+
+      <div className="bg-transparent">
+        <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-8 sm:pb-24 sm:pt-32">
+          <div className="mx-auto grid w-full max-w-4xl gap-8 text-center sm:gap-16">
+            <h2 className="text-3xl sm:text-4xl">
+              All the <strong>magic</strong>,
+              <br className="min-[500px]:hidden" /> all in{" "}
+              <strong>one place</strong>
+            </h2>
+            <div className="grid text-xl italic leading-relaxed max-[499px]:gap-4 sm:text-2xl sm:leading-relaxed">
+              <p>The community, the connections, the people.</p>
+              <p> The arts, the movement, the experiences. </p>
+              <p> The wisdom, the insights, the growth.</p>
+            </div>
+            <p className="justify-self-center border-y border-amber-600 py-4 text-xl italic max-sm:my-4 sm:px-4 sm:py-8 sm:text-2xl">
+              The ancient. The indigenous. The modern.
+            </p>
+            <div className="grid gap-8">
+              <p className="text-lg sm:text-xl">
+                We each have our own reasons why we love attending such events.
+                We all come from a different place, literally and figuratively.
+                In such gatherings though we quickly realize that indeed{" "}
+                <strong>we are all related</strong>.
+              </p>
+              <p className="text-lg sm:text-xl">
+                If you were to search for your next opportunity to{" "}
+                <span className="text-amber-600">enter the vortex</span> that is
+                a festival of this kind, where would you look? The informations
+                are scattered and hard to come by without having the right
+                connections in real life or on social media.
+              </p>
+              <p className="text-lg sm:text-xl">
+                It&apos;s <strong>not very easy</strong> to stay informed about{" "}
+                <strong>what&apos;s happening where and when</strong>.
+              </p>
+            </div>
+            <p className="justify-self-center border-y border-amber-600 py-4 text-xl max-sm:my-4 sm:px-4 sm:py-8 sm:text-2xl">
+              <span className="font-semibold">
+                <span className="text-amber-600">Seek</span>Gathering
+              </span>{" "}
+              aims to change it.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-8 pb-8 sm:gap-16 sm:pb-16">
         <div className="bg-transparent">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
             <h2 className="text-2xl sm:text-3xl">
-              📅 Choose from the myriad of extraordinary{" "}
-              <strong>gatherings</strong>
+              📅 Choose from the myriad of healing{" "}
+              <strong>festivals and gatherings</strong>
             </h2>
             <div className="grid gap-2 sm:gap-4">
               {events.map((event) => (
@@ -79,10 +121,13 @@ export default function Landing() {
                 />
               ))}
             </div>
-            <div className="grid gap-8 xl:grid-cols-3 xl:gap-16">
+            <div className="grid items-center gap-8 sm:max-xl:flex sm:max-xl:justify-between xl:grid-cols-3 xl:gap-16">
+              <p className="text-xl sm:text-2xl xl:col-span-2">
+                and many more&hellip;
+              </p>
               <Link
                 to="/events"
-                className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end lg:self-center xl:col-start-3"
+                className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
               >
                 Browse upcoming events
                 <svg
@@ -108,18 +153,22 @@ export default function Landing() {
           <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16">
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
               <div className="grid gap-8 xl:col-span-2">
-                <h2 className="text-2xl sm:text-3xl">
+                <h3 className="text-2xl sm:text-3xl">
                   🌀 Let&apos;s make this place a true portal{" "}
                   <strong>together</strong>
-                </h2>
+                </h3>
                 <div className="grid gap-4 text-lg sm:text-xl">
                   <p>
-                    Do you know of any conscious festival that deserves to be
+                    Here&apos;s the deal:{" "}
+                    <em>I&apos;m just one guy and I need your help.</em>
+                  </p>
+                  <p>
+                    Do you know of any relevant festival that deserves to be
                     known and found by like-minded people from around the world?
                   </p>
                   <p>
-                    Suggesting it will support not only the event but also other
-                    seekers.
+                    Suggesting it will not only support the event itself, but
+                    also all the other seekers.
                   </p>
                 </div>
               </div>
@@ -151,16 +200,16 @@ export default function Landing() {
           <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16">
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
               <div className="grid gap-8 xl:col-span-2">
-                <h2 className="text-2xl sm:text-3xl">
+                <h3 className="text-2xl sm:text-3xl">
                   🚧 Share your <strong>thoughts</strong>
-                </h2>
+                </h3>
                 <div className="grid gap-4 text-lg sm:text-xl">
                   <p>
-                    What you see here is just a hatchling, a prototype, an
-                    absolute work in progress. Bearing that in mind:
+                    What you see here is very much a <em>work in progress</em>.
+                    Bearing that in mind:
                   </p>
                   <p>
-                    Would you want to share any feedback with me? What features
+                    Would you want to share any feedback with me? Which features
                     would you like to be added first? Or is there anything that
                     doesn&apos;t make sense to you?
                   </p>

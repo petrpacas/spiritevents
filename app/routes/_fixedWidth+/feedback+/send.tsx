@@ -48,21 +48,21 @@ export default function FeedbackSend() {
           Send me your feedback
         </h1>
         <p className="text-lg sm:text-xl">
-          What you see here is just a hatchling, a prototype, an absolute work
-          in progress. Bearing that in mind:
+          What you see here is very much a <em>work in progress</em>. Bearing
+          that in mind:
         </p>
         <p className="text-lg sm:text-xl">
-          Would you want to share any feedback with me? What features would you
+          Would you want to share any feedback with me? Which features would you
           like to be added first? Or is there anything that doesn&apos;t make
           sense to you?
         </p>
         <p className="text-lg sm:text-xl">
-          Anything constructive is welcome. Anonymous, signed, everything goes
-          here. Thank you for sharing 🙏
+          Anything constructive is welcome. Make it anonymous, sign it, up to
+          you. I&apos;m all ears 🙏
         </p>
         <hr className="my-8 border-amber-600" />
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-2">
+        <div className="grid gap-4 md:grid-cols-2 md:items-start">
+          <label className="grid gap-2 sm:col-span-1">
             <div>
               Name <span className="text-amber-600">(optional)</span>
             </div>
@@ -70,7 +70,7 @@ export default function FeedbackSend() {
               autoComplete="on"
               type="text"
               name="name"
-              className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="w-full rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.name && (
               <p className="text-red-600">
@@ -78,7 +78,7 @@ export default function FeedbackSend() {
               </p>
             )}
           </label>
-          <label className="grid gap-2">
+          <label className="grid gap-2 sm:col-span-1">
             <div>
               Contact info <span className="text-amber-600">(optional)</span>
             </div>
@@ -86,7 +86,7 @@ export default function FeedbackSend() {
               autoComplete="off"
               type="text"
               name="contact"
-              className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="w-full rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.contact && (
               <p className="text-red-600">
@@ -99,7 +99,7 @@ export default function FeedbackSend() {
             <textarea
               autoComplete="off"
               name="content"
-              className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="min-h-20 w-full rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.content && (
               <p className="text-red-600">
@@ -111,14 +111,14 @@ export default function FeedbackSend() {
         <div className="flex justify-end gap-4">
           <button
             type="submit"
-            className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+            className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
           >
             Send
           </button>
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
           >
             Back
           </button>

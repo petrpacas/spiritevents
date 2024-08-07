@@ -66,22 +66,46 @@ export default function EventSuggest() {
       <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
         <h1 className="text-3xl font-bold sm:text-4xl">Suggest a new event</h1>
         <p className="text-lg sm:text-xl">
-          Do you know of any conscious festival that deserves to be known and
+          Here&apos;s the deal:{" "}
+          <em>I&apos;m just one guy and I need your help.</em>
+        </p>
+        <p className="text-lg sm:text-xl">
+          Do you know of any relevant festival that deserves to be known and
           found by like-minded people from around the world?
         </p>
-        <p className="text-lg sm:text-xl">
-          Suggesting it will support not only the event but also other seekers.
+        <p className="text-lg text-amber-600 sm:text-xl">
+          Suggesting it will not only support the event itself, but also all the
+          other seekers.
         </p>
         <p className="text-lg sm:text-xl">
-          If you choose to do so, I&apos;d like to kindly ask you to fill in the
-          title, the country, and the dates the suggested event is happening in.
-          Thank you very much 🙏
+          If you choose to do send a suggestion, I&apos;d like to kindly ask you
+          to fill in the title, the country, and the dates of the suggested
+          event in the form below.{" "}
+          <strong>You have my deepest thanks if you do&hellip;</strong>
         </p>
-        <hr className="mt-8 border-amber-600" />
-        <p className="text-center text-lg font-semibold sm:text-xl">
+        <p className="text-lg sm:text-xl">
+          If you don&apos;t want to fiddle with the form, no worries, go ahead
+          and just reach out through the contacts{" "}
+          <button
+            type="button"
+            className="underline"
+            onClick={() => {
+              const el = document.getElementById("contacts");
+              if (el)
+                el.scrollIntoView({
+                  behavior: "auto",
+                  block: "start",
+                  inline: "center",
+                });
+            }}
+          >
+            in the footer
+          </button>
+          !
+        </p>
+        <div className="my-8 border-y border-amber-600 py-8 text-center text-lg font-semibold sm:px-4 sm:text-xl">
           Let&apos;s make this place a true portal together
-        </p>
-        <hr className="mb-8 border-amber-600" />
+        </div>
         <EventFormFields
           errors={errors}
           mdxEditorRef={mdxEditorRef}
@@ -90,14 +114,14 @@ export default function EventSuggest() {
         <div className="flex justify-end gap-4">
           <button
             type="submit"
-            className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+            className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
           >
             Suggest
           </button>
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
           >
             Back
           </button>

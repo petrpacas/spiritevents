@@ -8,7 +8,6 @@ import {
   ScrollRestoration,
   useFetchers,
   useNavigation,
-  // useRouteError,
   useRouteLoaderData,
 } from "@remix-run/react";
 import NProgress from "nprogress";
@@ -31,10 +30,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  // const error = useRouteError();
-  const data = useRouteLoaderData<typeof loader>("root");
-  const navigation = useNavigation();
   const fetchers = useFetchers();
+  const navigation = useNavigation();
+  const data = useRouteLoaderData<typeof loader>("root");
   const state = useMemo<"idle" | "working">(
     function getGlobalState() {
       const states = [
@@ -54,13 +52,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (data?.toast) {
       switch (data.toast.type) {
         case "success":
-          showToast.success(data.toast.message, { position: "bottom-center" });
+          showToast.success(data.toast.message);
           break;
         case "error":
-          showToast.error(data.toast.message, { position: "bottom-center" });
+          showToast.error(data.toast.message);
           break;
         default:
-          showToast(data.toast.message, { position: "bottom-center" });
+          showToast(data.toast.message);
           break;
       }
     }
@@ -86,7 +84,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="relative text-amber-950">
         {children}
-        <Toaster toastOptions={{ className: "!text-amber-950" }} />
+        <Toaster
+          toastOptions={{
+            className: "!text-amber-950",
+            duration: 3333,
+            position: "bottom-center",
+          }}
+        />
         <ScrollRestoration />
         <Scripts />
       </body>

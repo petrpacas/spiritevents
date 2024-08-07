@@ -56,17 +56,18 @@ export const Footer = ({ isAuthenticated }: Props) => {
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:pt-16 xl:gap-16">
         <div className="grid items-start gap-16 xl:grid-cols-3">
           <div className="grid items-start gap-8 xl:col-span-2 xl:grid-cols-2 xl:gap-x-16">
-            <h2 className="text-2xl sm:text-3xl xl:col-span-2">
+            <h3 className="text-2xl sm:text-3xl xl:col-span-2">
               🔄 Stay in the <strong>loop</strong>
-            </h2>
-            <div className="grid gap-4 text-lg sm:text-xl">
-              <p>
+            </h3>
+            <div className="grid gap-4">
+              <p className="text-lg sm:text-xl">
                 Don&apos;t expect to get any email from me anytime soon, but if
-                and when one goes out, it could be really worth your while!
+                and when one goes out, it could be really{" "}
+                <em>worth your while to be in the list</em>!
               </p>
-              <p className="text-amber-600">
-                (By joining you agree to receive the newsletter,
-                obviously&hellip;)
+              <p className="text-amber-600 sm:text-lg">
+                (By joining you agree to receive the potential newsletter,
+                legally speaking.)
               </p>
             </div>
             <fetcher.Form
@@ -105,7 +106,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 )}
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50 sm:py-4 sm:max-[829px]:col-span-2 xl:px-8"
+                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 sm:py-4 sm:max-[829px]:col-span-2 xl:px-8"
                 >
                   Join the mailing list
                   <svg
@@ -126,10 +127,10 @@ export const Footer = ({ isAuthenticated }: Props) => {
               </fieldset>
             </fetcher.Form>
           </div>
-          <div className="grid gap-8 text-center xl:text-left">
-            <h2 className="text-2xl font-bold max-[319px]:grid sm:text-3xl">
+          <div className="grid gap-8 text-center xl:text-left" id="contacts">
+            <h3 className="text-2xl font-bold max-[319px]:grid sm:text-3xl">
               👋 <span className="text-amber-600">Seek</span>Gathering
-            </h2>
+            </h3>
             <div className="grid gap-2 text-lg sm:text-xl">
               <div>
                 <a
@@ -198,7 +199,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
               <button
                 disabled={navigation.state !== "idle"}
                 type="submit"
-                className="inline-flex items-center gap-2 rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:cursor-wait disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
               >
                 Admin sign out
                 <svg
