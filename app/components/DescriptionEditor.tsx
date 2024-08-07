@@ -11,10 +11,8 @@ import {
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
-  ListsToggle,
   MDXEditor,
   Separator,
-  StrikeThroughSupSubToggles,
   toolbarPlugin,
   UndoRedo,
 } from "@mdxeditor/editor";
@@ -35,7 +33,7 @@ export const DescriptionEditor = forwardRef<MDXEditorMethods, Props>(
         contentEditableClassName="no-tw"
         plugins={[
           diffSourcePlugin({ diffMarkdown: markdown || "" }),
-          headingsPlugin(),
+          headingsPlugin({ allowedHeadingLevels: [2, 3, 4, 5, 6] }),
           linkDialogPlugin(),
           linkPlugin(),
           listsPlugin(),
@@ -44,15 +42,11 @@ export const DescriptionEditor = forwardRef<MDXEditorMethods, Props>(
               <DiffSourceToggleWrapper>
                 <UndoRedo />
                 <Separator />
+                <CreateLink />
+                <Separator />
                 <BoldItalicUnderlineToggles />
                 <Separator />
                 <BlockTypeSelect />
-                <Separator />
-                <CreateLink />
-                <Separator />
-                <ListsToggle />
-                <Separator />
-                <StrikeThroughSupSubToggles />
                 <Separator />
               </DiffSourceToggleWrapper>
             ),

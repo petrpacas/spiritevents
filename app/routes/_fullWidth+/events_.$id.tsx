@@ -10,8 +10,13 @@ import {
   useNavigate,
   useNavigation,
 } from "@remix-run/react";
-import { marked } from "marked";
+import rehypeExternalLinks from "rehype-external-links";
+import rehypeStringify from "rehype-stringify";
+import rehypeSanitize from "rehype-sanitize";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
 import { jsonWithSuccess, redirectWithSuccess } from "remix-toast";
+import { unified } from "unified";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, enumEventStatus, getStatusConsts } from "~/utils";
 
@@ -60,6 +65,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (!event) {
     throw new Response("Not Found", { status: 404 });
   }
+  const description = event.description;
+  const parsedDescription = description
+    ? await unified()
+        .use(remarkParse)
+        .use(remarkRehype)
+        .use(rehypeSanitize)
+        .use(rehypeExternalLinks, {
+          rel: ["noopener", "noreferrer"],
+          target: "_blank",
+        })
+        .use(rehypeStringify)
+        .process(description)
+    : null;
+  event.description = parsedDescription ? String(parsedDescription) : null;
   return { event, isAuthenticated: !!user };
 }
 
@@ -103,7 +122,7 @@ export default function Event() {
                       href={event.linkWebsite}
                       className="text-lg font-medium text-amber-600 underline sm:text-xl"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
                       Event website
                     </a>
@@ -121,7 +140,7 @@ export default function Event() {
                       href={event.linkLocation}
                       className="text-lg font-medium text-amber-600 underline sm:text-xl"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
                       Location map
                     </a>
@@ -149,7 +168,7 @@ export default function Event() {
                 className="prose prose-lg prose-amber-basic mx-auto w-full text-center sm:prose-xl"
                 id="description"
                 dangerouslySetInnerHTML={{
-                  __html: marked.parse(event.description),
+                  __html: event.description,
                 }}
               />
             )}

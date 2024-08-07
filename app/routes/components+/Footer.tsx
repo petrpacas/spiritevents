@@ -144,7 +144,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   href="https://instagram.com/seekgathering"
                   className="text-amber-600 underline"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   instagram
                 </a>
@@ -154,7 +154,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   href="https://facebook.com/seekgatheringcom"
                   className="text-amber-600 underline"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   facebook
                 </a>
@@ -167,7 +167,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   href="https://www.elizabethgottwald.com/"
                   className="text-amber-600 underline"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   Elizabeth Gottwald
                 </a>
@@ -178,7 +178,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   href="https://www.soulfocus.media/"
                   className="text-amber-600 underline"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   Phoebe Montague
                 </a>
