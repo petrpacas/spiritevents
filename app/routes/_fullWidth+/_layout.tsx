@@ -1,7 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
-import { Header } from "~/components";
-import { Footer } from "~/routes/resources+";
+import { Footer, Header } from "~/components";
 import { authenticator } from "~/services";
 
 export async function loader({ request }: LoaderFunctionArgs) {

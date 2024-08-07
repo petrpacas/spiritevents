@@ -16,11 +16,6 @@ type Props = {
   isAuthenticated: boolean;
 };
 
-type ActionData = {
-  errors?: inferFlattenedErrors<typeof subscriberFormSchema>;
-  success: boolean;
-};
-
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
@@ -32,10 +27,14 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
   await prisma.subscriber.create({ data: result.data });
-  return jsonWithSuccess({ success: true }, "Added you!");
+  return jsonWithSuccess({ success: true }, "Welcome on board!");
 }
 
 export const Footer = ({ isAuthenticated }: Props) => {
+  type ActionData = {
+    errors?: inferFlattenedErrors<typeof subscriberFormSchema>;
+    success: boolean;
+  };
   const fetcher = useFetcher<ActionData>();
   const actionData = fetcher.data;
   const { pathname, search } = useLocation();
@@ -71,7 +70,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
               </p>
             </div>
             <fetcher.Form
-              action="/resources/footerComponent"
+              action="/components/Footer"
               method="post"
               ref={formRef}
             >

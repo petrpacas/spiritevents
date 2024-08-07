@@ -25,7 +25,7 @@ type Props = {
   markdown?: string;
 };
 
-const DescriptionEditor = forwardRef<MDXEditorMethods, Props>(
+export const DescriptionEditor = forwardRef<MDXEditorMethods, Props>(
   ({ className, markdown }: Props, ref: ForwardedRef<MDXEditorMethods>) => {
     return (
       <MDXEditor
@@ -64,5 +64,3 @@ const DescriptionEditor = forwardRef<MDXEditorMethods, Props>(
 );
 
 DescriptionEditor.displayName = "DescriptionEditor";
-
-export default DescriptionEditor;
