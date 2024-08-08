@@ -14,10 +14,12 @@ import {
 } from "@remix-run/react";
 import { useRef } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
-import { EventFormFields } from "~/components";
+import { descriptionEditorStyles, EventFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
 import { enumEventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
+
+export const links = () => [...descriptionEditorStyles()];
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `Editing ${data?.event?.title} ~ SeekGathering` }];

@@ -35,6 +35,8 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             <span className="sr-only">Menu</span>
             <svg
               className="h-6 w-6"
+              width="16px"
+              height="16px"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -61,6 +63,8 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               {isAuthenticated ? "All events" : "Upcoming events"}
               <svg
                 className="h-6 w-6"
+                width="16px"
+                height="16px"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -83,6 +87,8 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                   Add event
                   <svg
                     className="h-6 w-6"
+                    width="16px"
+                    height="16px"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -103,6 +109,8 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                   See feedback
                   <svg
                     className="h-6 w-6"
+                    width="16px"
+                    height="16px"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -126,6 +134,8 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                   Suggest event
                   <svg
                     className="h-6 w-6"
+                    width="16px"
+                    height="16px"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -146,6 +156,8 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                   Send feedback
                   <svg
                     className="h-6 w-6"
+                    width="16px"
+                    height="16px"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"

@@ -14,7 +14,11 @@ import NProgress from "nprogress";
 import { useEffect, useMemo } from "react";
 import { toast as showToast, Toaster } from "react-hot-toast";
 import { getToast } from "remix-toast";
-import "./tailwind.css";
+import styles from "./tailwind.css?url";
+
+export const links = () => {
+  return [{ rel: "stylesheet", href: styles }];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { toast, headers } = await getToast(request);
@@ -68,8 +72,36 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#fffbeb" />
+        <meta name="msapplication-navbutton-color" content="#fffbeb" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="#fffbeb" />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Petr Pacas" />
+        <meta property="og:image" content="/logo.png" />
         <Meta />
-        <link rel="icon" href="/favicon.ico?v=2024-08-04" type="image/x-icon" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png?v=2024-08-08"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png?v=2024-08-08"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png?v=2024-08-08"
+        />
+        <link
+          rel="shortcut icon"
+          type="image/x-icon"
+          href="/favicon.ico?v=2024-08-08"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"

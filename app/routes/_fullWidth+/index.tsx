@@ -4,18 +4,17 @@ import { EventListCard } from "~/components";
 import { prisma } from "~/services";
 import { getTodayDate, enumEventStatus } from "~/utils";
 
-// GET PERMISSION
+// GET PERMISSIONS
 import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
 // import bgImage from "~/images/phoebe-montague_medicine-festival-2023-watermark.jpg";
-// GET PERMISSION
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "SeekGathering" },
+    { title: "SeekGathering ~ All the magic, all in one place" },
     {
       name: "description",
       content:
-        "Reunite with your tribe and discover gatherings and festivals focused on healing and being",
+        "Reunite with your tribe and discover gatherings and festivals focused on healing and full being",
     },
   ];
 };
@@ -48,12 +47,12 @@ export default function Landing() {
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
         <div className="grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
-          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-4xl font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] sm:px-8 sm:py-32 sm:text-4xl sm:leading-relaxed sm:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
+          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 sm:py-32 md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
             Reunite with your <strong className="text-amber-600">tribe</strong>{" "}
             <br className="max-lg:hidden" /> and discover{" "}
             <strong className="text-amber-600">gatherings and festivals</strong>{" "}
             <br className="max-lg:hidden" /> focused on{" "}
-            <strong className="text-amber-600">healing</strong> and{" "}
+            <strong className="text-amber-600">healing</strong> and full{" "}
             <strong className="text-amber-600">being</strong>
           </h2>
         </div>
@@ -64,7 +63,7 @@ export default function Landing() {
           <div className="mx-auto grid w-full max-w-4xl gap-8 text-center sm:gap-16">
             <h2 className="text-3xl sm:text-4xl">
               All the <strong>magic</strong>,
-              <br className="min-[500px]:hidden" /> all in{" "}
+              <br className="min-[490px]:hidden" /> all in{" "}
               <strong>one place</strong>
             </h2>
             <div className="grid text-xl italic leading-relaxed max-[499px]:gap-4 sm:text-2xl sm:leading-relaxed">
@@ -84,12 +83,10 @@ export default function Landing() {
               </p>
               <p className="text-lg sm:text-xl">
                 If you were to search for your next opportunity to{" "}
-                <span className="text-amber-600">
-                  <em>enter the vortex</em>
-                </span>{" "}
-                that is a festival of this kind, where would you look? The
-                informations are scattered and hard to come by without having
-                the right connections in real life or on social media.
+                <span className="text-amber-600">enter the vortex</span> again,
+                where would you look? The informations are scattered and hard to
+                come by without having the right connections in real life or on
+                social media.
               </p>
               <p className="text-lg sm:text-xl">
                 It&apos;s <strong>not easy</strong> to stay informed about{" "}
@@ -136,6 +133,8 @@ export default function Landing() {
                 Browse upcoming events
                 <svg
                   className="h-6 w-6 max-[339px]:hidden"
+                  width="16px"
+                  height="16px"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -183,6 +182,8 @@ export default function Landing() {
                 Suggest a new event
                 <svg
                   className="h-6 w-6 max-[339px]:hidden"
+                  width="16px"
+                  height="16px"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -226,6 +227,8 @@ export default function Landing() {
                 Send me your feedback
                 <svg
                   className="h-6 w-6 max-[339px]:hidden"
+                  width="16px"
+                  height="16px"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"

@@ -1,6 +1,6 @@
-import { forwardRef } from "react";
 import type { MDXEditorMethods } from "@mdxeditor/editor";
 import type { ForwardedRef } from "react";
+import { forwardRef } from "react";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -16,7 +16,11 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from "@mdxeditor/editor";
-import "@mdxeditor/editor/style.css";
+import styles from "@mdxeditor/editor/style.css?url";
+
+export const links = () => {
+  return [{ rel: "stylesheet", href: styles }];
+};
 
 type Props = {
   className?: string;

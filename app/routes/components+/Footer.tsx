@@ -77,7 +77,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
             >
               <fieldset
                 disabled={fetcher.state !== "idle"}
-                className="grid gap-2 self-start sm:max-[829px]:grid-cols-2 min-[830px]:max-xl:grid-cols-3"
+                className="grid gap-2 self-start sm:max-[839px]:grid-cols-2 min-[840px]:max-xl:grid-cols-3"
               >
                 <input
                   placeholder="Name (optional)"
@@ -95,22 +95,24 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   className="w-full rounded-lg border-stone-300 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
                 />
                 {actionData?.errors?.fieldErrors.name && (
-                  <p className="text-center text-red-600 sm:max-[829px]:col-span-2 min-[830px]:max-xl:order-4 min-[830px]:max-xl:col-span-3">
+                  <p className="text-center text-red-600 sm:max-[839px]:col-span-2 min-[840px]:max-xl:order-4 min-[840px]:max-xl:col-span-3">
                     {actionData.errors.fieldErrors.name.join(", ")}
                   </p>
                 )}
                 {actionData?.errors?.fieldErrors.email && (
-                  <p className="text-center text-red-600 sm:max-[829px]:col-span-2 min-[830px]:max-xl:order-4 min-[830px]:max-xl:col-span-3">
+                  <p className="text-center text-red-600 sm:max-[839px]:col-span-2 min-[840px]:max-xl:order-4 min-[840px]:max-xl:col-span-3">
                     {actionData.errors.fieldErrors.email.join(", ")}
                   </p>
                 )}
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 sm:py-4 sm:max-[829px]:col-span-2 xl:px-8"
+                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 sm:py-4 sm:max-[839px]:col-span-2 xl:px-8"
                 >
                   Join the mailing list
                   <svg
                     className="h-6 w-6 max-[339px]:hidden"
+                    width="16px"
+                    height="16px"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -128,7 +130,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
             </fetcher.Form>
           </div>
           <div className="grid gap-8 text-center xl:text-left" id="contacts">
-            <h3 className="text-2xl font-bold max-[319px]:grid sm:text-3xl">
+            <h3 className="text-2xl font-bold sm:text-3xl">
               👋 <span className="text-amber-600">Seek</span>Gathering
             </h3>
             <div className="grid gap-2 text-lg sm:text-xl">
@@ -204,6 +206,8 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 Admin sign out
                 <svg
                   className="h-6 w-6"
+                  width="16px"
+                  height="16px"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -226,6 +230,8 @@ export const Footer = ({ isAuthenticated }: Props) => {
               Admin sign in
               <svg
                 className="h-6 w-6"
+                width="16px"
+                height="16px"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

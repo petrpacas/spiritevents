@@ -20,10 +20,9 @@ import { unified } from "unified";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, enumEventStatus, getStatusConsts } from "~/utils";
 
-// GET PERMISSION
+// GET PERMISSIONS
 import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
 // import bgImage from "~/images/phoebe-montague_medicine-festival-2023-watermark.jpg";
-// GET PERMISSION
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `${data?.event?.title} ~ SeekGathering` }];

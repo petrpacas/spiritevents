@@ -14,10 +14,12 @@ import {
 } from "@remix-run/react";
 import { useRef } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
-import { EventFormFields } from "~/components";
+import { descriptionEditorStyles, EventFormFields } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { enumEventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
+
+export const links = () => [...descriptionEditorStyles()];
 
 export const meta: MetaFunction = () => {
   return [{ title: "Suggest event ~ SeekGathering" }];
@@ -64,7 +66,25 @@ export default function EventSuggest() {
   return (
     <Form method="post" onSubmit={handleSubmit}>
       <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
-        <h1 className="text-3xl font-bold sm:text-4xl">Suggest a new event</h1>
+        <h1 className="flex items-center gap-2 text-3xl font-bold sm:text-4xl">
+          <svg
+            className="h-8 w-8 text-amber-600 max-[452px]:hidden sm:h-10 sm:w-10"
+            width="16px"
+            height="16px"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+            />
+          </svg>
+          <span>Suggest a new event</span>
+        </h1>
         <p className="text-lg sm:text-xl">
           Here&apos;s the deal:{" "}
           <em>I&apos;m just one guy and I need your help.</em>
@@ -87,7 +107,7 @@ export default function EventSuggest() {
           no worries, go ahead and just reach out through the contacts{" "}
           <button
             type="button"
-            className="underline"
+            className="text-amber-600 underline"
             onClick={() => {
               const el = document.getElementById("contacts");
               if (el)
