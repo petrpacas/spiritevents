@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Links,
@@ -16,7 +16,7 @@ import { toast as showToast, Toaster } from "react-hot-toast";
 import { getToast } from "remix-toast";
 import styles from "./tailwind.css?url";
 
-export const links = () => {
+export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 

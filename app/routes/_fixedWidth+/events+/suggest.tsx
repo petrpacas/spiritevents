@@ -1,6 +1,7 @@
 import type { MDXEditorMethods } from "@mdxeditor/editor";
 import type {
   ActionFunctionArgs,
+  LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
@@ -19,7 +20,7 @@ import { authenticator, prisma } from "~/services";
 import { enumEventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
-export const links = () => [...descriptionEditorStyles()];
+export const links: LinksFunction = () => [...descriptionEditorStyles()];
 
 export const meta: MetaFunction = () => {
   return [{ title: "Suggest event ~ SeekGathering" }];

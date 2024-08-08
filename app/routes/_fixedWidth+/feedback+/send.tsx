@@ -24,9 +24,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
-  await prisma.feedback.create({
-    data: { ...result.data },
-  });
+  await prisma.feedback.create({ data: result.data });
   return redirectWithSuccess("/", "Noted!");
 }
 

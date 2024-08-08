@@ -84,7 +84,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                   to="/events/new"
                   className="flex items-center gap-2 rounded border border-emerald-600 bg-transparent px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
                 >
-                  Add event
+                  New event
                   <svg
                     className="h-6 w-6"
                     width="16px"

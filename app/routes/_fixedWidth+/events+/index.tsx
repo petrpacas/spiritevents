@@ -126,7 +126,9 @@ export default function Events() {
                   <button
                     disabled={isWorking}
                     type="button"
-                    onClick={() => navigate("/events")}
+                    onClick={() =>
+                      navigate("/events", { preventScrollReset: true })
+                    }
                     className="col-start-1 row-start-1 rounded border border-stone-300 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
                   >
                     {getCountryNameByCode(country)}
@@ -153,7 +155,9 @@ export default function Events() {
               <Form
                 className="sm:flex sm:justify-end"
                 onChange={(event) => {
-                  submit(event.currentTarget);
+                  submit(event.currentTarget, {
+                    preventScrollReset: true,
+                  });
                 }}
               >
                 <fieldset disabled={isWorking}>

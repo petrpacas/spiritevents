@@ -1,3 +1,4 @@
+import type { LinksFunction } from "@remix-run/node";
 import type { MDXEditorMethods } from "@mdxeditor/editor";
 import type { ForwardedRef } from "react";
 import { forwardRef } from "react";
@@ -18,7 +19,7 @@ import {
 } from "@mdxeditor/editor";
 import styles from "@mdxeditor/editor/style.css?url";
 
-export const links = () => {
+export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 

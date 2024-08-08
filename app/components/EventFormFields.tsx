@@ -22,6 +22,8 @@ export const EventFormFields = ({
   isSuggestion,
   mdxEditorRef,
 }: Props) => {
+  const [dateStartState, setDateStart] = useState(event?.dateStart ?? "");
+  const [dateEndState, setDateEnd] = useState(event?.dateEnd ?? "");
   const [slug, setSlug] = useState(event?.slug ?? "");
   const handleSlugBlur = () => {
     setSlug((prevSlug) =>
@@ -66,10 +68,11 @@ export const EventFormFields = ({
           <div>
             URL slug{" "}
             <span className="text-amber-600">
-              ~{" "}
-              {event?.slug
-                ? "change with caution (name-yyyy)"
-                : "should be permament (name-yyyy)"}
+              ~ {event?.slug ? "change with caution" : "should be permament"}
+              <span className="max-xl:hidden">
+                {" "}
+                (and have year [-yyyy] at the end)
+              </span>
             </span>
           </div>
           <input
@@ -109,9 +112,14 @@ export const EventFormFields = ({
           autoComplete="off"
           type="date"
           name="dateStart"
-          defaultValue={event?.dateStart}
           placeholder="yyyy-mm-dd"
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          value={dateStartState}
+          onChange={(e) => setDateStart(e.target.value)}
+          onBlur={(e) => {
+            if (dateStartState > dateEndState || dateEndState === "")
+              setDateEnd(e.target.value);
+          }}
         />
         {errors?.fieldErrors.dateStart && (
           <p className="text-red-600">
@@ -127,9 +135,14 @@ export const EventFormFields = ({
           autoComplete="off"
           type="date"
           name="dateEnd"
-          defaultValue={event?.dateEnd}
           placeholder="yyyy-mm-dd"
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          value={dateEndState}
+          onChange={(e) => setDateEnd(e.target.value)}
+          onBlur={(e) => {
+            if (dateEndState < dateStartState || dateStartState === "")
+              setDateStart(e.target.value);
+          }}
         />
         {errors?.fieldErrors.dateEnd && (
           <p className="text-red-600">

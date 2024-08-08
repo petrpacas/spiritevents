@@ -41,7 +41,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         data: { status: enumEventStatus.DRAFT },
         where: { slug: params.id },
       });
-      return jsonWithSuccess(null, "Event set as draft");
+      return jsonWithSuccess(null, "Event set as a draft");
     case "publish":
       await prisma.event.update({
         data: { status: enumEventStatus.PUBLISHED },
