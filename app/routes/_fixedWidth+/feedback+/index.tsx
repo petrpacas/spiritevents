@@ -46,17 +46,9 @@ export default function Feedback() {
   return (
     <div className="grid gap-8">
       <h1 className="text-3xl font-bold sm:text-4xl">See feedback</h1>
-      <div className="grid gap-4 sm:gap-8">
-        {allFeedback.length === 0 ? (
-          <>
-            <hr className="mt-8 border-amber-600" />
-            <p className="text-center text-lg sm:text-xl">
-              No feedback yet&hellip;
-            </p>
-            <hr className="mb-8 border-amber-600" />
-          </>
-        ) : (
-          allFeedback.map((feedback) => (
+      {allFeedback.length > 0 ? (
+        <div className="grid gap-4">
+          {allFeedback.map((feedback) => (
             <div
               className="grid gap-2 rounded-lg border border-stone-300 p-2 sm:gap-4 sm:p-4 md:grid-cols-2"
               key={feedback.id}
@@ -112,9 +104,14 @@ export default function Feedback() {
                 </fetcher.Form>
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p className="justify-self-center border-y border-amber-600 py-4 text-xl italic max-sm:my-4 sm:px-4 sm:py-8 sm:text-2xl">
+          No feedback yet&hellip;
+        </p>
+      )}
+
       <div className="flex justify-end gap-4">
         <button
           disabled={isWorking}

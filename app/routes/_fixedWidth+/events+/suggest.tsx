@@ -35,7 +35,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await prisma.event.create({
     data: { ...result.data, status: enumEventStatus.SUGGESTED },
   });
-  return redirectWithSuccess("/events", "Noted!");
+  return redirectWithSuccess("/events", "Much appreciated!");
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {

@@ -110,7 +110,7 @@ export default function Landing() {
               📅 Choose from the myriad of nourishing{" "}
               <strong>festivals and gatherings</strong>
             </h2>
-            <div className="grid gap-2 sm:gap-4">
+            <div className="grid gap-4">
               {events.map((event) => (
                 <EventListCard
                   key={event.slug}

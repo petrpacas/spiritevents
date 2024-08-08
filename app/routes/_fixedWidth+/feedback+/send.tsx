@@ -27,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await prisma.feedback.create({
     data: { ...result.data },
   });
-  return redirectWithSuccess("/", "Much appreciated!");
+  return redirectWithSuccess("/", "Noted!");
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -78,7 +78,7 @@ export default function FeedbackSend() {
         </p>
         <hr className="my-8 border-amber-600" />
         <div className="grid gap-4 md:grid-cols-2 md:items-start">
-          <label className="grid gap-2 sm:col-span-1">
+          <label className="grid gap-2 md:col-span-1">
             <div>
               Name <span className="text-amber-600">(optional)</span>
             </div>
@@ -86,7 +86,7 @@ export default function FeedbackSend() {
               autoComplete="on"
               type="text"
               name="name"
-              className="w-full rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.name && (
               <p className="text-red-600">
@@ -94,7 +94,7 @@ export default function FeedbackSend() {
               </p>
             )}
           </label>
-          <label className="grid gap-2 sm:col-span-1">
+          <label className="grid gap-2 md:col-span-1">
             <div>
               Contact info <span className="text-amber-600">(optional)</span>
             </div>
@@ -102,7 +102,7 @@ export default function FeedbackSend() {
               autoComplete="off"
               type="text"
               name="contact"
-              className="w-full rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.contact && (
               <p className="text-red-600">
@@ -110,12 +110,12 @@ export default function FeedbackSend() {
               </p>
             )}
           </label>
-          <label className="grid gap-2 sm:col-span-2">
+          <label className="grid gap-2 md:col-span-2">
             Your feedback
             <textarea
               autoComplete="off"
               name="content"
-              className="min-h-20 w-full rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.content && (
               <p className="text-red-600">
