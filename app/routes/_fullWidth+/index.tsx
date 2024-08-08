@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
     {
       name: "description",
       content:
-        "Reunite with your tribe and discover gatherings and festivals focused on healing and full being",
+        "Reunite with your tribe and discover gatherings and festivals focused on healing and truly being",
     },
   ];
 };
@@ -52,7 +52,7 @@ export default function Landing() {
             <br className="max-lg:hidden" /> and discover{" "}
             <strong className="text-amber-600">gatherings and festivals</strong>{" "}
             <br className="max-lg:hidden" /> focused on{" "}
-            <strong className="text-amber-600">healing</strong> and full{" "}
+            <strong className="text-amber-600">healing</strong> and truly{" "}
             <strong className="text-amber-600">being</strong>
           </h2>
         </div>

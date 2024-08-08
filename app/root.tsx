@@ -77,7 +77,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="apple-mobile-web-app-status-bar-style" content="#fffbeb" />
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Petr Pacas" />
-        <meta property="og:image" content="/logo.png" />
+        <meta
+          property="og:image"
+          content="https://seekgathering.com/logo.png"
+        />
         <Meta />
         <link
           rel="apple-touch-icon"
