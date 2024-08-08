@@ -70,22 +70,21 @@ export default function EventSuggest() {
           <em>I&apos;m just one guy and I need your help.</em>
         </p>
         <p className="text-lg sm:text-xl">
-          Do you know of any relevant festival that deserves to be known and
-          found by like-minded people from around the world?
+          Do you know of any relevant festival that deserves to be found by
+          like-minded people from around the world?
         </p>
         <p className="text-lg text-amber-600 sm:text-xl">
-          Suggesting it will not only support the event itself, but also all the
-          other seekers.
+          Suggesting it will not only support the event, but also all the other
+          seekers.
         </p>
         <p className="text-lg sm:text-xl">
-          If you choose to do send a suggestion, I&apos;d like to kindly ask you
-          to fill in the title, the country, and the dates of the suggested
-          event in the form below.{" "}
-          <strong>You have my deepest thanks if you do&hellip;</strong>
+          If you choose to send a suggestion, I&apos;d like to kindly ask you to
+          fill the form below with the event title, country, and the dates.{" "}
+          <strong>You have my deepest thanks if you do it!</strong>
         </p>
         <p className="text-lg sm:text-xl">
-          If you don&apos;t want to fiddle with the form, no worries, go ahead
-          and just reach out through the contacts{" "}
+          If you want to contribute but don&apos;t want to fiddle with the form,
+          no worries, go ahead and just reach out through the contacts{" "}
           <button
             type="button"
             className="underline"
@@ -101,10 +100,10 @@ export default function EventSuggest() {
           >
             in the footer
           </button>
-          !
+          . Everything counts.
         </p>
         <div className="my-8 border-y border-amber-600 py-8 text-center text-lg font-semibold sm:px-4 sm:text-xl">
-          Let&apos;s make this place a true portal together
+          Let&apos;s make this place a true portal together 🌀
         </div>
         <EventFormFields
           errors={errors}

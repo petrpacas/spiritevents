@@ -21,7 +21,8 @@ import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, enumEventStatus, getStatusConsts } from "~/utils";
 
 // GET PERMISSION
-import bgImage from "~/images/phoebe-montague_medicine-festival-2023-watermark.jpg";
+import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
+// import bgImage from "~/images/phoebe-montague_medicine-festival-2023-watermark.jpg";
 // GET PERMISSION
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -151,7 +152,7 @@ export default function Event() {
                 <span>{new Date(event.dateStart).toDateString()}</span>
                 {event.dateEnd !== event.dateStart && (
                   <>
-                    <span className="text-amber-600">&gt;&gt;</span>
+                    <span className="font-normal text-amber-600">&gt;&gt;</span>
                     <span>{new Date(event.dateEnd).toDateString()}</span>
                   </>
                 )}

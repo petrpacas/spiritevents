@@ -163,7 +163,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
             </div>
             <div className="grid gap-2">
               <div className="max-[399px]:grid">
-                Landing cover photo by{" "}
+                Cover photo by{" "}
                 <a
                   href="https://www.elizabethgottwald.com/"
                   className="text-amber-600 underline"
@@ -173,7 +173,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   Elizabeth Gottwald
                 </a>
               </div>
-              <div className="max-[399px]:grid">
+              {/* <div className="max-[399px]:grid">
                 Event cover photo by{" "}
                 <a
                   href="https://www.soulfocus.media/"
@@ -183,7 +183,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 >
                   Phoebe Montague
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

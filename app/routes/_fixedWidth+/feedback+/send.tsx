@@ -58,7 +58,7 @@ export default function FeedbackSend() {
         </p>
         <p className="text-lg sm:text-xl">
           Anything constructive is welcome. Make it anonymous, sign it, up to
-          you. I&apos;m all ears 🙏
+          you. I&apos;m all ears!
         </p>
         <hr className="my-8 border-amber-600" />
         <div className="grid gap-4 md:grid-cols-2 md:items-start">

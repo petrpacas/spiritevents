@@ -6,6 +6,7 @@ import { getTodayDate, enumEventStatus } from "~/utils";
 
 // GET PERMISSION
 import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
+// import bgImage from "~/images/phoebe-montague_medicine-festival-2023-watermark.jpg";
 // GET PERMISSION
 
 export const meta: MetaFunction = () => {
@@ -14,7 +15,7 @@ export const meta: MetaFunction = () => {
     {
       name: "description",
       content:
-        "Connect with your tribe again and discover gatherings and festivals focused on the healing of the soul",
+        "Reunite with your tribe and discover gatherings and festivals focused on healing and being",
     },
   ];
 };
@@ -47,12 +48,13 @@ export default function Landing() {
         style={{ backgroundImage: `url('${bgImage}')` }}
       >
         <div className="grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
-          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-3xl font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] sm:px-8 sm:py-32 sm:text-4xl sm:leading-relaxed sm:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
-            Connect with your <strong className="text-amber-600">tribe</strong>{" "}
-            again <br className="max-lg:hidden" /> and discover{" "}
+          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-4xl font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] sm:px-8 sm:py-32 sm:text-4xl sm:leading-relaxed sm:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
+            Reunite with your <strong className="text-amber-600">tribe</strong>{" "}
+            <br className="max-lg:hidden" /> and discover{" "}
             <strong className="text-amber-600">gatherings and festivals</strong>{" "}
-            <br className="max-lg:hidden" /> focused on the{" "}
-            <strong className="text-amber-600">healing</strong> of the soul
+            <br className="max-lg:hidden" /> focused on{" "}
+            <strong className="text-amber-600">healing</strong> and{" "}
+            <strong className="text-amber-600">being</strong>
           </h2>
         </div>
       </div>
@@ -76,19 +78,21 @@ export default function Landing() {
             <div className="grid gap-8">
               <p className="text-lg sm:text-xl">
                 We each have our own reasons why we love attending such events.
-                We all come from a different place, literally and figuratively.
-                In such gatherings though we quickly realize that indeed{" "}
+                We all come from different places, literally and figuratively.
+                In these gatherings though we quickly realize that indeed{" "}
                 <strong>we are all related</strong>.
               </p>
               <p className="text-lg sm:text-xl">
                 If you were to search for your next opportunity to{" "}
-                <span className="text-amber-600">enter the vortex</span> that is
-                a festival of this kind, where would you look? The informations
-                are scattered and hard to come by without having the right
-                connections in real life or on social media.
+                <span className="text-amber-600">
+                  <em>enter the vortex</em>
+                </span>{" "}
+                that is a festival of this kind, where would you look? The
+                informations are scattered and hard to come by without having
+                the right connections in real life or on social media.
               </p>
               <p className="text-lg sm:text-xl">
-                It&apos;s <strong>not very easy</strong> to stay informed about{" "}
+                It&apos;s <strong>not easy</strong> to stay informed about{" "}
                 <strong>what&apos;s happening where and when</strong>.
               </p>
             </div>
@@ -106,7 +110,7 @@ export default function Landing() {
         <div className="bg-transparent">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
             <h2 className="text-2xl sm:text-3xl">
-              📅 Choose from the myriad of healing{" "}
+              📅 Choose from the myriad of nourishing{" "}
               <strong>festivals and gatherings</strong>
             </h2>
             <div className="grid gap-2 sm:gap-4">
@@ -164,11 +168,11 @@ export default function Landing() {
                   </p>
                   <p>
                     Do you know of any relevant festival that deserves to be
-                    known and found by like-minded people from around the world?
+                    found by like-minded people from around the world?
                   </p>
                   <p>
-                    Suggesting it will not only support the event itself, but
-                    also all the other seekers.
+                    Suggesting it will not only support the event, but also all
+                    the other seekers.
                   </p>
                 </div>
               </div>

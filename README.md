@@ -1,5 +1,5 @@
 # SeekGathering
 
-Connect with your **tribe** again and discover **gatherings and festivals** focused on the **healing** of the soul
+Reunite with your **tribe** and discover **gatherings and festivals** focused on **healing** and **being**
 
 https://seekgathering.com
