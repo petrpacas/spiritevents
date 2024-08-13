@@ -22,10 +22,17 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await authenticator.isAuthenticated(request);
   const requestUrl = new URL(request.url);
+  const user = await authenticator.isAuthenticated(request);
   const country = requestUrl.searchParams.get("country");
-  const events = await prisma.event.findMany({
+  const allEventCountries = await prisma.event.groupBy({
+    by: "country",
+    where: {
+      dateEnd: user ? undefined : { gte: getTodayDate() },
+      status: user ? undefined : enumEventStatus.PUBLISHED,
+    },
+  });
+  const allEvents = await prisma.event.findMany({
     orderBy: [{ dateStart: "asc" }, { title: "asc" }],
     select: {
       country: true,
@@ -41,34 +48,28 @@ export async function loader({ request }: LoaderFunctionArgs) {
       status: user ? undefined : enumEventStatus.PUBLISHED,
     },
   });
-  return { country, events, isAuthenticated: !!user };
+  return { allEventCountries, allEvents, country, isAuthenticated: !!user };
 }
 
 export default function Events() {
-  const { country, events, isAuthenticated } = useLoaderData<typeof loader>();
+  const { allEventCountries, allEvents, country, isAuthenticated } =
+    useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isWorking = navigation.state !== "idle";
   const submit = useSubmit();
-  const getCountryNameByCode = (code: string) => {
-    const country = countries.find((country) => country.code === code);
-    return country ? country.name : code;
+  const getCountryObjects = (countryCodes: string[]) => {
+    return countries.filter((c) => countryCodes.includes(c.code));
   };
-  const getCountryCodesFromEvents = () => {
-    return events.map((event) => event.country);
-  };
-  const filterCountriesForEvent = (eventCountries: string[]) => {
-    return countries.filter((country) => eventCountries.includes(country.code));
-  };
-  const eventCountries = getCountryCodesFromEvents();
-  const filteredCountries = filterCountriesForEvent(eventCountries);
+  const allCountryCodes = allEventCountries.map((e) => e.country);
+  const countryObjects = getCountryObjects(allCountryCodes);
   type EventsWithYear = {
     year: number;
-    events: typeof events;
+    events: typeof allEvents;
   };
-  function groupEventsByYear(allEvents: typeof events): EventsWithYear[] {
-    const groupedEvents: Record<number, typeof events> = {};
-    for (const event of allEvents) {
+  function groupEventsByYear(events: typeof allEvents): EventsWithYear[] {
+    const groupedEvents: Record<number, typeof allEvents> = {};
+    for (const event of events) {
       const year = new Date(event.dateStart).getFullYear();
       if (!groupedEvents[year]) {
         groupedEvents[year] = [];
@@ -84,7 +85,17 @@ export default function Events() {
     }
     return result;
   }
-  const eventsByYear = groupEventsByYear(events);
+  const eventsByYear = groupEventsByYear(allEvents);
+  const handleFormChange = (e: React.FormEvent<HTMLFormElement>) => {
+    {
+      const $form = e.currentTarget;
+      const formData = new FormData($form);
+      if (formData.get("country") === "") formData.delete("country");
+      submit(formData, {
+        preventScrollReset: true,
+      });
+    }
+  };
   return (
     <div className="grid gap-8">
       <div className="grid items-center gap-8">
@@ -117,67 +128,28 @@ export default function Events() {
           </Link>
           !
         </p>
-        {events.length > 0 && (
-          <>
-            {country ? (
-              <div className="grid gap-2 sm:flex sm:items-center sm:justify-end">
-                Showing events in{" "}
-                <div className="inline-grid">
-                  <button
-                    disabled={isWorking}
-                    type="button"
-                    onClick={() =>
-                      navigate("/events", { preventScrollReset: true })
-                    }
-                    className="col-start-1 row-start-1 rounded border border-stone-300 bg-white py-1 pl-3 pr-10 text-left shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                  >
-                    {getCountryNameByCode(country)}
-                  </button>
-                  <svg
-                    className="pointer-events-none relative right-3 col-start-1 row-start-1 h-5 w-5 self-center justify-self-end text-gray-500 forced-colors:hidden"
-                    width="16px"
-                    height="16px"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18 18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
-              </div>
-            ) : (
-              <Form
-                className="sm:flex sm:justify-end"
-                onChange={(event) => {
-                  submit(event.currentTarget, {
-                    preventScrollReset: true,
-                  });
-                }}
+        {allEvents.length > 0 && (
+          <Form
+            className="sm:flex sm:justify-end"
+            onChange={(e) => handleFormChange(e)}
+          >
+            <fieldset disabled={isWorking}>
+              <label
+                className="grid items-center gap-2 sm:flex"
+                htmlFor="country"
               >
-                <fieldset disabled={isWorking}>
-                  <label
-                    className="grid items-center gap-2 sm:flex"
-                    htmlFor="country"
-                  >
-                    Showing events in
-                    <CountrySelect
-                      filteredCountries={filteredCountries}
-                      className="rounded border border-stone-300 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                    />
-                  </label>
-                </fieldset>
-              </Form>
-            )}
-          </>
+                Showing events in
+                <CountrySelect
+                  countries={countryObjects}
+                  defaultValue={country || undefined}
+                  className="rounded border border-stone-300 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                />
+              </label>
+            </fieldset>
+          </Form>
         )}
       </div>
-      {events.length > 0 ? (
+      {allEvents.length > 0 ? (
         <div className="grid gap-8">
           {eventsByYear.map((group, index) => (
             <div className="grid gap-4" key={index}>
@@ -202,7 +174,7 @@ export default function Events() {
         </p>
       )}
       {isAuthenticated ? (
-        events.length > 0 && (
+        allEvents.length > 0 && (
           <div className="flex items-center justify-center gap-2 text-sm max-[399px]:flex-col sm:gap-4 sm:text-base md:text-lg">
             <div className="rounded border border-amber-600 bg-emerald-100 p-2 sm:px-4">
               <span className="text-amber-600">(S)</span> Suggested

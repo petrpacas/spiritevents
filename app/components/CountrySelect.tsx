@@ -1,17 +1,17 @@
-import { countries } from "~/utils";
+import { countries as allCountries } from "~/utils";
 
 type Props = {
   className?: string;
+  countries?: typeof allCountries;
   defaultValue?: string;
-  filteredCountries?: typeof countries;
 };
 
 export const CountrySelect = ({
   className,
+  countries,
   defaultValue,
-  filteredCountries,
 }: Props) => {
-  const countriesObject = filteredCountries || countries;
+  const countryObjects = countries || allCountries;
   return (
     <select
       autoComplete="off"
@@ -20,12 +20,12 @@ export const CountrySelect = ({
       defaultValue={defaultValue}
       className={className}
     >
-      {!defaultValue && (
-        <option value="">
-          {filteredCountries ? "all countries" : "Select a country"}
-        </option>
-      )}
-      {countriesObject.map((country) => (
+      {countries ? (
+        <option value="">all countries</option>
+      ) : !defaultValue ? (
+        <option value="">Select a country</option>
+      ) : undefined}
+      {countryObjects.map((country) => (
         <option key={country.code} value={country.code}>
           {country.name}
         </option>
