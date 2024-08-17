@@ -102,8 +102,8 @@ export default function EventSuggest() {
         </p>
         <p className="text-lg sm:text-xl">
           If you choose to send a suggestion, I&apos;d like to kindly ask you to
-          fill the form below with the event title, country, and the dates.{" "}
-          <strong>You have my deepest thanks if you do it!</strong>
+          fill the form below with the event title and the country it&apos;s
+          happening in.
         </p>
         <p className="text-lg sm:text-xl">
           If you want to contribute but don&apos;t want to fiddle with the form,
@@ -124,7 +124,7 @@ export default function EventSuggest() {
           >
             in the footer
           </button>
-          . Everything counts.
+          .
         </p>
         <div className="my-8 border-y border-amber-600 py-8 text-center text-lg font-semibold sm:px-4 sm:text-xl">
           Let&apos;s make this place a true portal together 🌀
