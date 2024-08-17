@@ -58,14 +58,16 @@ export default function EventNew() {
     const $form = e.currentTarget;
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
+    const dateStart = formData.get("dateStart");
+    const dateEnd = formData.get("dateEnd");
+    if (dateStart !== null && dateStart !== "" && dateEnd === "") {
+      formData.set("dateEnd", dateStart);
+    }
     formData.set("description", description ?? "");
-    submit(formData, {
-      method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
-      action: $form.getAttribute("action") ?? $form.action,
-    });
+    submit(formData, { method: "POST" });
   };
   return (
-    <Form method="post" onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
         <h1 className="flex items-center gap-2 text-3xl font-bold sm:text-4xl">
           <svg

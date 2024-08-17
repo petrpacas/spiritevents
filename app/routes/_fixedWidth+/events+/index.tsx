@@ -64,13 +64,16 @@ export default function Events() {
   const allCountryCodes = allEventCountries.map((e) => e.country);
   const countryObjects = getCountryObjects(allCountryCodes);
   type EventsWithYear = {
-    year: number;
+    year: string;
     events: typeof allEvents;
   };
   function groupEventsByYear(events: typeof allEvents): EventsWithYear[] {
-    const groupedEvents: Record<number, typeof allEvents> = {};
+    const groupedEvents: Record<string, typeof allEvents> = {};
     for (const event of events) {
-      const year = new Date(event.dateStart).getFullYear();
+      const year =
+        event.dateStart === ""
+          ? "0"
+          : new Date(event.dateStart).getFullYear().toString();
       if (!groupedEvents[year]) {
         groupedEvents[year] = [];
       }
@@ -79,22 +82,20 @@ export default function Events() {
     const result: EventsWithYear[] = [];
     for (const year in groupedEvents) {
       result.push({
-        year: parseInt(year),
+        year,
         events: groupedEvents[year],
       });
     }
     return result;
   }
   const eventsByYear = groupEventsByYear(allEvents);
-  const handleFormChange = (e: React.FormEvent<HTMLFormElement>) => {
-    {
-      const $form = e.currentTarget;
-      const formData = new FormData($form);
-      if (formData.get("country") === "") formData.delete("country");
-      submit(formData, {
-        preventScrollReset: true,
-      });
+  const handleCountryChange = (e: React.FormEvent<HTMLFormElement>) => {
+    const $form = e.currentTarget;
+    const formData = new FormData($form);
+    if (formData.get("country") === "") {
+      formData.delete("country");
     }
+    submit(formData, { preventScrollReset: true });
   };
   return (
     <div className="grid gap-8">
@@ -131,7 +132,7 @@ export default function Events() {
         {allEvents.length > 0 && (
           <Form
             className="sm:flex sm:justify-end"
-            onChange={(e) => handleFormChange(e)}
+            onChange={handleCountryChange}
           >
             <fieldset disabled={isWorking}>
               <label
@@ -153,7 +154,9 @@ export default function Events() {
         <div className="grid gap-8">
           {eventsByYear.map((group, index) => (
             <div className="grid gap-4" key={index}>
-              <h2 className="text-2xl font-bold sm:text-3xl">{group.year}</h2>
+              <h2 className="text-2xl font-bold sm:text-3xl">
+                {group.year === "0" ? "Missing date info" : group.year}
+              </h2>
               {group.events.map((event) => (
                 <EventListCard
                   key={event.slug}

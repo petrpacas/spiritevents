@@ -31,7 +31,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
   const status = data.status;
-  delete data.status;
   const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
@@ -39,12 +38,13 @@ export async function action({ params, request }: ActionFunctionArgs) {
   delete result.data.origDateEnd;
   delete result.data.origDateStart;
   delete result.data.origSlug;
+  delete result.data.status;
   await prisma.event.update({
     data:
       status === enumEventStatus.SUGGESTED
         ? { ...result.data, status: enumEventStatus.DRAFT }
         : result.data,
-    where: { slug: params.id },
+    where: { slug: params.slug },
   });
   return redirectWithSuccess(`/events/${result.data.slug}`, "Event saved");
 }
@@ -52,7 +52,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   await requireUserSession(request);
   const event = await prisma.event.findUnique({
-    where: { slug: params.id },
+    where: { slug: params.slug },
   });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
@@ -72,19 +72,20 @@ export default function EventEdit() {
     const $form = e.currentTarget;
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
+    const dateStart = formData.get("dateStart");
+    const dateEnd = formData.get("dateEnd");
+    if (dateStart !== null && dateStart !== "" && dateEnd === "") {
+      formData.set("dateEnd", dateStart);
+    }
     formData.set("description", description ?? "");
     formData.set("origDateEnd", event.dateEnd);
     formData.set("origDateStart", event.dateStart);
-    formData.set("origSlug", event.slug ?? "");
+    formData.set("origSlug", event.slug);
     formData.set("status", event.status);
-    submit(formData, {
-      action: $form.getAttribute("action") ?? $form.action,
-      method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
-      replace: true,
-    });
+    submit(formData, { method: "POST", replace: true });
   };
   return (
-    <Form method="post" onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
         <h1 className="flex items-center gap-2 text-3xl font-bold sm:text-4xl">
           <svg

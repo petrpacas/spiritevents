@@ -43,14 +43,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
         navigation.state,
         ...fetchers.map((fetcher) => fetcher.state),
       ];
-      if (states.every((state) => state === "idle")) return "idle";
+      if (states.every((state) => state === "idle")) {
+        return "idle";
+      }
       return "working";
     },
     [navigation.state, fetchers],
   );
   useEffect(() => {
-    if (state === "working") NProgress.start();
-    if (state === "idle") NProgress.done();
+    if (state === "working") {
+      NProgress.start();
+    }
+    if (state === "idle") {
+      NProgress.done();
+    }
   }, [state]);
   useEffect(() => {
     if (data?.toast) {

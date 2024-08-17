@@ -1,30 +1,58 @@
 import type { MDXEditorMethods } from "@mdxeditor/editor";
-import type { Event } from "@prisma/client";
-import type { SerializeFrom } from "@remix-run/node";
 import type { RefObject } from "react";
-import type { typeToFlattenedError } from "zod";
 import { useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import slugify from "slugify";
+import { z } from "zod";
 import { CountrySelect } from "./CountrySelect";
 import { DescriptionEditor } from "./DescriptionEditor";
+import { enumEventStatus } from "~/utils";
+import { eventFormSchema } from "~/validations";
 
 type Props = {
-  errors: SerializeFrom<typeToFlattenedError<Event, string>> | undefined;
-  event?: SerializeFrom<Event>;
-  isSuggestion?: boolean;
+  errors?: z.inferFlattenedErrors<typeof eventFormSchema>;
+  event?: z.infer<typeof eventFormSchema>;
+  isSuggesting?: boolean;
   mdxEditorRef: RefObject<MDXEditorMethods>;
 };
 
 export const EventFormFields = ({
   errors,
   event,
-  isSuggestion,
+  isSuggesting,
   mdxEditorRef,
 }: Props) => {
+  const [slugModified, setSlugModified] = useState(false);
   const [dateStartState, setDateStart] = useState(event?.dateStart ?? "");
   const [dateEndState, setDateEnd] = useState(event?.dateEnd ?? "");
   const [slug, setSlug] = useState(event?.slug ?? "");
+  const [title, setTitle] = useState(event?.title ?? "");
+  const isSlugFreelyModifiable =
+    !isSuggesting &&
+    event?.status !== enumEventStatus.DRAFT &&
+    event?.status !== enumEventStatus.PUBLISHED;
+  const handleSlugFocus = () => {
+    if (event?.status !== enumEventStatus.SUGGESTED || slugModified) {
+      return;
+    }
+    setSlugModified(true);
+    setSlug(
+      slugify(title, {
+        lower: true,
+        strict: true,
+      }),
+    );
+  };
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSlugModified(true);
+    setSlug(
+      slugify(e.currentTarget.value, {
+        lower: true,
+        strict: true,
+        trim: false,
+      }),
+    );
+  };
   const handleSlugBlur = () => {
     setSlug((prevSlug) =>
       slugify(prevSlug, {
@@ -33,42 +61,44 @@ export const EventFormFields = ({
       }),
     );
   };
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
-    const slugValue = slugify(value, {
-      lower: true,
-      strict: true,
-      trim: false,
-    });
-    setSlug(slugValue);
-  };
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleSlugChange(e);
+    setTitle(e.currentTarget.value);
+    if (isSlugFreelyModifiable) {
+      handleSlugChange(e);
+    }
+  };
+  const handleTitleBlur = () => {
+    setTitle((prevTitle) => prevTitle.trim().replace(/\s+/g, " "));
+    handleSlugBlur();
   };
   return (
     <div className="grid gap-4 md:grid-cols-6 md:items-start">
       <label className="grid gap-2 md:col-span-3">
-        Title
+        <div>
+          Title <span className="text-amber-600">(required)</span>
+        </div>
         <input
           autoComplete="off"
           type="text"
           name="title"
-          onChange={
-            event?.title || isSuggestion ? undefined : handleTitleChange
-          }
-          defaultValue={event?.title}
+          onChange={handleTitleChange}
+          onBlur={handleTitleBlur}
+          value={title}
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.title && (
           <p className="text-red-600">{errors.fieldErrors.title.join(", ")}</p>
         )}
       </label>
-      {!isSuggestion && (
+      {!isSuggesting && (
         <label className="grid gap-2 md:col-span-3">
           <div>
             URL slug{" "}
             <span className="text-amber-600">
-              ~ {event?.slug ? "change with caution" : "should be permament"}
+              ~{" "}
+              {isSlugFreelyModifiable
+                ? "should be permament"
+                : "change with caution"}
               <span className="max-xl:hidden">
                 {" "}
                 (and have year [-yyyy] at the end)
@@ -79,11 +109,12 @@ export const EventFormFields = ({
             autoComplete="off"
             type="text"
             name="slug"
+            onFocus={handleSlugFocus}
             onChange={handleSlugChange}
             onBlur={handleSlugBlur}
             value={slug}
             placeholder="e.g. example-event-2024"
-            className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+            className={`rounded border-stone-200 placeholder-stone-400 ${isSlugFreelyModifiable ? (event?.status === enumEventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow`}
           />
           {errors?.fieldErrors.slug && (
             <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
@@ -91,9 +122,11 @@ export const EventFormFields = ({
         </label>
       )}
       <label
-        className={`${isSuggestion ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
+        className={`${isSuggesting ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
       >
-        Country
+        <div>
+          Country <span className="text-amber-600">(required)</span>
+        </div>
         <CountrySelect
           defaultValue={event?.country}
           className="w-full rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
@@ -105,7 +138,7 @@ export const EventFormFields = ({
         )}
       </label>
       <label
-        className={`${isSuggestion ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
+        className={`${isSuggesting ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
       >
         Start date
         <input
@@ -113,12 +146,13 @@ export const EventFormFields = ({
           type="date"
           name="dateStart"
           placeholder="yyyy-mm-dd"
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
           value={dateStartState}
           onChange={(e) => setDateStart(e.target.value)}
           onBlur={(e) => {
-            if (dateStartState > dateEndState || dateEndState === "")
+            if (dateStartState > dateEndState || dateEndState === "") {
               setDateEnd(e.target.value);
+            }
           }}
         />
         {errors?.fieldErrors.dateStart && (
@@ -128,7 +162,7 @@ export const EventFormFields = ({
         )}
       </label>
       <label
-        className={`${isSuggestion ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
+        className={`${isSuggesting ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
       >
         End date
         <input
@@ -136,12 +170,13 @@ export const EventFormFields = ({
           type="date"
           name="dateEnd"
           placeholder="yyyy-mm-dd"
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
           value={dateEndState}
           onChange={(e) => setDateEnd(e.target.value)}
           onBlur={(e) => {
-            if (dateEndState < dateStartState || dateStartState === "")
+            if (dateEndState < dateStartState || dateStartState === "") {
               setDateStart(e.target.value);
+            }
           }}
         />
         {errors?.fieldErrors.dateEnd && (
@@ -151,14 +186,12 @@ export const EventFormFields = ({
         )}
       </label>
       <label className="grid gap-2 md:col-span-3">
-        <div>
-          Website link <span className="text-amber-600">(optional)</span>
-        </div>
+        Website link
         <input
           autoComplete="off"
           type="text"
           name="linkWebsite"
-          defaultValue={event?.linkWebsite ?? ""}
+          defaultValue={event?.linkWebsite}
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.linkWebsite && (
@@ -168,14 +201,12 @@ export const EventFormFields = ({
         )}
       </label>
       <label className="grid gap-2 md:col-span-3">
-        <div>
-          Location link <span className="text-amber-600">(optional)</span>
-        </div>
+        Location link
         <input
           autoComplete="off"
           type="text"
           name="linkLocation"
-          defaultValue={event?.linkLocation ?? ""}
+          defaultValue={event?.linkLocation}
           className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.linkLocation && (
@@ -188,15 +219,13 @@ export const EventFormFields = ({
         fallback={
           <label className="grid gap-2 md:col-span-6">
             <div>
-              Description{" "}
-              <span className="text-amber-600">
-                (optional) ~ loading markdown editor&hellip;
-              </span>
+              Description {isSuggesting && "or your personal message"}{" "}
+              <span className="text-amber-600">~ loading editor&hellip;</span>
             </div>
             <textarea
               name="description"
               readOnly
-              defaultValue={event?.description ?? ""}
+              defaultValue={event?.description}
               className="min-h-20 rounded border-stone-200 shadow-sm transition-shadow read-only:bg-stone-200 hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.description && (
@@ -209,13 +238,11 @@ export const EventFormFields = ({
       >
         {() => (
           <div className="grid gap-2 md:col-span-6">
-            <div>
-              Description <span className="text-amber-600">(optional)</span>
-            </div>
+            Description {isSuggesting && "or your personal message"}
             <DescriptionEditor
               ref={mdxEditorRef}
               className="overflow-x-auto rounded border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow"
-              markdown={event?.description ?? ""}
+              markdown={event?.description}
             />
             {errors?.fieldErrors.description && (
               <p className="text-red-600">

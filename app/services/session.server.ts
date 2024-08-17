@@ -11,9 +11,13 @@ type EmailPassword = {
 
 export async function login({ email, password }: EmailPassword) {
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return null;
+  if (!user) {
+    return null;
+  }
   const isCorrectPassword = await bcrypt.compare(password, user.password);
-  if (!isCorrectPassword) return null;
+  if (!isCorrectPassword) {
+    return null;
+  }
   return user;
 }
 
@@ -22,7 +26,9 @@ export async function register({ email, password }: EmailPassword) {
   const user = await prisma.user.create({
     data: { email, password: passwordHash, role: UserRole.USER },
   });
-  if (!user) return null;
+  if (!user) {
+    return null;
+  }
   return user;
 }
 

@@ -1,7 +1,7 @@
 import slugify from "slugify";
 import { z } from "zod";
 import { prisma } from "~/services";
-import { getTodayDate } from "~/utils";
+import { enumEventStatus, getTodayDate } from "~/utils";
 
 const restrictedSlugs = ["new", "suggest"];
 
@@ -67,17 +67,38 @@ const fields = z
     }
   });
 
-const dateFields = z
+const moreFields = z
   .object({
-    dateEnd: z.string().date(),
-    dateStart: z.string().date(),
+    dateEnd: z.string().date().or(z.literal("")),
+    dateStart: z.string().date().or(z.literal("")),
     origDateEnd: z.string().optional(),
     origDateStart: z.string().optional(),
+    status: z.nativeEnum(enumEventStatus).optional(),
   })
   .superRefine((data, ctx) => {
-    const { dateEnd, dateStart, origDateEnd, origDateStart } = data;
-    if (dateEnd === origDateEnd && dateStart === origDateStart) return;
-    if (dateEnd === "" && dateStart === "") return;
+    const { dateEnd, dateStart, origDateEnd, origDateStart, status } = data;
+    if (dateEnd === origDateEnd && dateStart === origDateStart) {
+      return;
+    }
+    if (
+      dateEnd === "" &&
+      dateStart === "" &&
+      status !== enumEventStatus.PUBLISHED
+    ) {
+      return;
+    }
+    if (
+      dateEnd === "" &&
+      dateStart === "" &&
+      status == enumEventStatus.PUBLISHED
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_date,
+        message: "Date cannot be empty in a published event",
+        path: ["dateStart"],
+      });
+      return;
+    }
     const dateToday = getTodayDate();
     if (dateStart < dateToday) {
       ctx.addIssue({
@@ -101,4 +122,4 @@ const dateFields = z
     }
   });
 
-export const eventFormSchema = fields.and(dateFields);
+export const eventFormSchema = fields.and(moreFields);

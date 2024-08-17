@@ -84,7 +84,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   autoComplete="on"
                   type="text"
                   name="name"
-                  className="w-full rounded-lg border-stone-300 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
+                  className="w-full rounded-lg border-stone-300 py-2 text-lg placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
                 />
                 <input
                   required
@@ -92,7 +92,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   autoComplete="on"
                   type="email"
                   name="email"
-                  className="w-full rounded-lg border-stone-300 py-2 text-lg shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
+                  className="w-full rounded-lg border-stone-300 py-2 text-lg placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
                 />
                 {actionData?.errors?.fieldErrors.name && (
                   <p className="text-center text-red-600 sm:max-[839px]:col-span-2 min-[840px]:max-xl:order-4 min-[840px]:max-xl:col-span-3">

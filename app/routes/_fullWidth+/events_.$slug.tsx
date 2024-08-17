@@ -15,7 +15,11 @@ import rehypeStringify from "rehype-stringify";
 import rehypeSanitize from "rehype-sanitize";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import { jsonWithSuccess, redirectWithSuccess } from "remix-toast";
+import {
+  jsonWithError,
+  jsonWithSuccess,
+  redirectWithSuccess,
+} from "remix-toast";
 import { unified } from "unified";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, enumEventStatus, getStatusConsts } from "~/utils";
@@ -31,23 +35,28 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function action({ request, params }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
+  const dateStart = formData.get("dateStart");
   const intent = formData.get("intent");
   switch (intent) {
     case "delete":
-      await prisma.event.delete({ where: { slug: params.id } });
+      await prisma.event.delete({ where: { slug: params.slug } });
       return redirectWithSuccess("/events", "Event deleted");
     case "draft":
       await prisma.event.update({
         data: { status: enumEventStatus.DRAFT },
-        where: { slug: params.id },
+        where: { slug: params.slug },
       });
       return jsonWithSuccess(null, "Event set as a draft");
     case "publish":
-      await prisma.event.update({
-        data: { status: enumEventStatus.PUBLISHED },
-        where: { slug: params.id },
-      });
-      return jsonWithSuccess(null, "Event published");
+      if (dateStart === "") {
+        return jsonWithError(null, "Event is missing date info");
+      } else {
+        await prisma.event.update({
+          data: { status: enumEventStatus.PUBLISHED },
+          where: { slug: params.slug },
+        });
+        return jsonWithSuccess(null, "Event published");
+      }
     default:
       break;
   }
@@ -58,7 +67,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
   const event = await prisma.event.findUnique({
     where: {
-      slug: params.id,
+      slug: params.slug,
       status: user ? undefined : enumEventStatus.PUBLISHED,
     },
   });
@@ -77,8 +86,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         })
         .use(rehypeStringify)
         .process(description)
-    : null;
-  event.description = parsedDescription ? String(parsedDescription) : null;
+    : "";
+  event.description = String(parsedDescription);
   return { event, isAuthenticated: !!user };
 }
 
@@ -94,6 +103,18 @@ export default function Event() {
   };
   const [statusLetter, statusBg, statusGradient, statusGlow, statusGlowMd] =
     getStatusConsts(event.status);
+  const handlePublishSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const response = confirm("Do you really want to publish the event?");
+    if (!response) {
+      return;
+    }
+    const $form = e.currentTarget;
+    const formData = new FormData($form);
+    formData.set("dateStart", event.dateStart);
+    formData.set("intent", "publish");
+    fetcher.submit(formData, { method: "POST" });
+  };
   return (
     <>
       <div
@@ -148,12 +169,20 @@ export default function Event() {
                 )}
               </div>
               <div className="grid gap-4 text-2xl font-semibold leading-tight sm:text-3xl sm:leading-tight lg:flex lg:justify-center">
-                <span>{new Date(event.dateStart).toDateString()}</span>
-                {event.dateEnd !== event.dateStart && (
+                {event.dateStart ? (
                   <>
-                    <span className="font-normal text-amber-600">&gt;&gt;</span>
-                    <span>{new Date(event.dateEnd).toDateString()}</span>
+                    <span>{new Date(event.dateStart).toDateString()}</span>
+                    {event.dateEnd !== event.dateStart && (
+                      <>
+                        <span className="font-normal text-amber-600">
+                          &gt;&gt;
+                        </span>
+                        <span>{new Date(event.dateEnd).toDateString()}</span>
+                      </>
+                    )}
                   </>
+                ) : (
+                  <span className="text-red-600">Missing date info</span>
                 )}
               </div>
             </div>
@@ -205,12 +234,12 @@ export default function Event() {
                   {event.status === enumEventStatus.PUBLISHED && (
                     <fetcher.Form
                       method="post"
-                      onSubmit={(event) => {
+                      onSubmit={(e) => {
                         const response = confirm(
                           "Do you really want to set the event as a draft?",
                         );
                         if (!response) {
-                          event.preventDefault();
+                          e.preventDefault();
                         }
                       }}
                     >
@@ -226,22 +255,10 @@ export default function Event() {
                     </fetcher.Form>
                   )}
                   {event.status !== enumEventStatus.PUBLISHED && (
-                    <fetcher.Form
-                      method="post"
-                      onSubmit={(event) => {
-                        const response = confirm(
-                          "Do you really want to publish the event?",
-                        );
-                        if (!response) {
-                          event.preventDefault();
-                        }
-                      }}
-                    >
+                    <fetcher.Form onSubmit={handlePublishSubmit}>
                       <button
-                        disabled={isWorking}
+                        disabled={isWorking || event.dateStart === ""}
                         type="submit"
-                        name="intent"
-                        value="publish"
                         className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
                       >
                         Publish
@@ -250,12 +267,12 @@ export default function Event() {
                   )}
                   <fetcher.Form
                     method="post"
-                    onSubmit={(event) => {
+                    onSubmit={(e) => {
                       const response = confirm(
                         "Do you really want to delete the event?",
                       );
                       if (!response) {
-                        event.preventDefault();
+                        e.preventDefault();
                       }
                     }}
                   >

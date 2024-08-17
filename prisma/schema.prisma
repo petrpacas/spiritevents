@@ -36,9 +36,9 @@ model Event {
   country      String
   dateEnd      String
   dateStart    String
-  description  String?
-  linkLocation String?
-  linkWebsite  String?
+  description  String
+  linkLocation String
+  linkWebsite  String
   slug         String      @unique
   status       EventStatus @default(PUBLISHED)
   title        String
@@ -49,8 +49,8 @@ model Subscriber {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String  @unique
-  name  String?
+  email String @unique
+  name  String
 }
 
 model Feedback {
@@ -58,7 +58,7 @@ model Feedback {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  contact String?
+  contact String
   content String
-  name    String?
+  name    String
 }

@@ -101,12 +101,12 @@ export default function Feedback() {
                 <fetcher.Form
                   method="post"
                   className="place-self-end"
-                  onSubmit={(event) => {
+                  onSubmit={(e) => {
                     const response = confirm(
                       "Do you really want to delete the event?",
                     );
                     if (!response) {
-                      event.preventDefault();
+                      e.preventDefault();
                     }
                   }}
                 >

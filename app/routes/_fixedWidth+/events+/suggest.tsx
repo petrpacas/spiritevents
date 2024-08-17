@@ -57,15 +57,17 @@ export default function EventSuggest() {
     const $form = e.currentTarget;
     const formData = new FormData($form);
     const description = mdxEditorRef.current?.getMarkdown();
-    formData.set("slug", createId());
+    const dateStart = formData.get("dateStart");
+    const dateEnd = formData.get("dateEnd");
+    if (dateStart !== null && dateStart !== "" && dateEnd === "") {
+      formData.set("dateEnd", dateStart);
+    }
     formData.set("description", description ?? "");
-    submit(formData, {
-      method: ($form.getAttribute("method") ?? $form.method) as "GET" | "POST",
-      action: $form.getAttribute("action") ?? $form.action,
-    });
+    formData.set("slug", createId());
+    submit(formData, { method: "POST" });
   };
   return (
-    <Form method="post" onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
         <h1 className="flex items-center gap-2 text-3xl font-bold sm:text-4xl">
           <svg
@@ -111,12 +113,13 @@ export default function EventSuggest() {
             className="text-amber-600 underline"
             onClick={() => {
               const el = document.getElementById("contacts");
-              if (el)
+              if (el) {
                 el.scrollIntoView({
                   behavior: "auto",
                   block: "start",
                   inline: "center",
                 });
+              }
             }}
           >
             in the footer
@@ -127,9 +130,9 @@ export default function EventSuggest() {
           Let&apos;s make this place a true portal together 🌀
         </div>
         <EventFormFields
+          isSuggesting
           errors={errors}
           mdxEditorRef={mdxEditorRef}
-          isSuggestion
         />
         <div className="flex justify-end gap-4">
           <button

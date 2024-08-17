@@ -33,11 +33,11 @@ export const DescriptionEditor = forwardRef<MDXEditorMethods, Props>(
     return (
       <MDXEditor
         ref={ref}
-        markdown={markdown || ""}
+        markdown={markdown ?? ""}
         className={className}
         contentEditableClassName="no-tw"
         plugins={[
-          diffSourcePlugin({ diffMarkdown: markdown || "" }),
+          diffSourcePlugin({ diffMarkdown: markdown ?? "" }),
           headingsPlugin({ allowedHeadingLevels: [2, 3, 4, 5, 6] }),
           linkDialogPlugin(),
           linkPlugin(),
