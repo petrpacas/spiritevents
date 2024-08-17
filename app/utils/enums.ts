@@ -1,15 +1,9 @@
-import type {
-  EventStatus as EventStatus,
-  UserRole as UserRole,
-} from "@prisma/client";
+import type { EventStatus as originEventStatus } from "@prisma/client";
 
-export const enumEventStatus: { [K in EventStatus]: K } = {
+export const EventStatus: { [K in originEventStatus]: K } = {
   DRAFT: "DRAFT",
   SUGGESTED: "SUGGESTED",
   PUBLISHED: "PUBLISHED",
 };
 
-export const enumUserRole: { [K in UserRole]: K } = {
-  ADMIN: "ADMIN",
-  USER: "USER",
-};
+export type EventStatus = originEventStatus;

@@ -1,12 +1,6 @@
 import { countries } from "./countries";
 import { getTodayDate } from "./dateFunctions";
-import { enumEventStatus, enumUserRole } from "./enums";
-import { getStatusConsts } from "./eventStatus";
+import { EventStatus } from "./enums";
+import { getStatusColors } from "./statusColors";
 
-export {
-  countries,
-  enumEventStatus,
-  enumUserRole,
-  getStatusConsts,
-  getTodayDate,
-};
+export { countries, EventStatus, getStatusColors, getTodayDate };

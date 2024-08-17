@@ -1,6 +1,6 @@
-import { enumEventStatus } from "./enums";
+import { EventStatus } from "./enums";
 
-export const getStatusConsts = (status?: keyof typeof enumEventStatus) => {
+export const getStatusColors = (status?: keyof typeof EventStatus) => {
   let statusLetter = undefined;
   let statusBg = "bg-white";
   let statusGradient =
@@ -8,7 +8,7 @@ export const getStatusConsts = (status?: keyof typeof enumEventStatus) => {
   let statusGlow = "drop-shadow-[0_0_1.875rem_rgb(255,251,235)]";
   let statusGlowMd = "md:drop-shadow-[0_0_2.25rem_rgb(255,251,235)]";
   switch (status) {
-    case enumEventStatus.DRAFT:
+    case EventStatus.DRAFT:
       statusLetter = "(D)";
       statusBg = "bg-sky-50";
       statusGradient =
@@ -16,9 +16,9 @@ export const getStatusConsts = (status?: keyof typeof enumEventStatus) => {
       statusGlow = "drop-shadow-[0_0_1.875rem_rgb(240,249,255)]";
       statusGlowMd = "md:drop-shadow-[0_0_2.25rem_rgb(240,249,255)]";
       break;
-    case enumEventStatus.PUBLISHED:
+    case EventStatus.PUBLISHED:
       break;
-    case enumEventStatus.SUGGESTED:
+    case EventStatus.SUGGESTED:
       statusLetter = "(S)";
       statusBg = "bg-emerald-50";
       statusGradient =

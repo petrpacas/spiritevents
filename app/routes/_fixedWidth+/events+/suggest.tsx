@@ -17,7 +17,7 @@ import { useRef } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
 import { descriptionEditorStyles, EventFormFields } from "~/components";
 import { authenticator, prisma } from "~/services";
-import { enumEventStatus } from "~/utils";
+import { EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 export const links: LinksFunction = () => [...descriptionEditorStyles()];
@@ -34,7 +34,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
   await prisma.event.create({
-    data: { ...result.data, status: enumEventStatus.SUGGESTED },
+    data: { ...result.data, status: EventStatus.SUGGESTED },
   });
   return redirectWithSuccess("/events", "Much appreciated!");
 }

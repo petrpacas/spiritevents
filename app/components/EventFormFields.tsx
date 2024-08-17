@@ -1,17 +1,19 @@
 import type { MDXEditorMethods } from "@mdxeditor/editor";
+import { type Event } from "@prisma/client";
 import type { RefObject } from "react";
+import { SerializeFrom } from "@remix-run/node";
 import { useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import slugify from "slugify";
 import { z } from "zod";
 import { CountrySelect } from "./CountrySelect";
 import { DescriptionEditor } from "./DescriptionEditor";
-import { enumEventStatus } from "~/utils";
+import { EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 type Props = {
   errors?: z.inferFlattenedErrors<typeof eventFormSchema>;
-  event?: z.infer<typeof eventFormSchema>;
+  event?: SerializeFrom<Event>;
   isSuggesting?: boolean;
   mdxEditorRef: RefObject<MDXEditorMethods>;
 };
@@ -29,10 +31,10 @@ export const EventFormFields = ({
   const [title, setTitle] = useState(event?.title ?? "");
   const isSlugFreelyModifiable =
     !isSuggesting &&
-    event?.status !== enumEventStatus.DRAFT &&
-    event?.status !== enumEventStatus.PUBLISHED;
+    event?.status !== EventStatus.DRAFT &&
+    event?.status !== EventStatus.PUBLISHED;
   const handleSlugFocus = () => {
-    if (event?.status !== enumEventStatus.SUGGESTED || slugModified) {
+    if (event?.status !== EventStatus.SUGGESTED || slugModified) {
       return;
     }
     setSlugModified(true);
@@ -114,7 +116,7 @@ export const EventFormFields = ({
             onBlur={handleSlugBlur}
             value={slug}
             placeholder="e.g. example-event-2024"
-            className={`rounded border-stone-200 placeholder-stone-400 ${isSlugFreelyModifiable ? (event?.status === enumEventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow`}
+            className={`rounded border-stone-200 placeholder-stone-400 ${isSlugFreelyModifiable ? (event?.status === EventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow`}
           />
           {errors?.fieldErrors.slug && (
             <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>

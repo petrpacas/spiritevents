@@ -22,7 +22,7 @@ import {
 } from "remix-toast";
 import { unified } from "unified";
 import { authenticator, prisma, requireUserSession } from "~/services";
-import { countries, enumEventStatus, getStatusConsts } from "~/utils";
+import { countries, EventStatus, getStatusColors } from "~/utils";
 
 // GET PERMISSIONS
 import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
@@ -43,7 +43,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       return redirectWithSuccess("/events", "Event deleted");
     case "draft":
       await prisma.event.update({
-        data: { status: enumEventStatus.DRAFT },
+        data: { status: EventStatus.DRAFT },
         where: { slug: params.slug },
       });
       return jsonWithSuccess(null, "Event set as a draft");
@@ -52,7 +52,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         return jsonWithError(null, "Event is missing date info");
       } else {
         await prisma.event.update({
-          data: { status: enumEventStatus.PUBLISHED },
+          data: { status: EventStatus.PUBLISHED },
           where: { slug: params.slug },
         });
         return jsonWithSuccess(null, "Event published");
@@ -68,7 +68,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const event = await prisma.event.findUnique({
     where: {
       slug: params.slug,
-      status: user ? undefined : enumEventStatus.PUBLISHED,
+      status: user ? undefined : EventStatus.PUBLISHED,
     },
   });
   if (!event) {
@@ -102,7 +102,7 @@ export default function Event() {
     return country ? country.name : code;
   };
   const [statusLetter, statusBg, statusGradient, statusGlow, statusGlowMd] =
-    getStatusConsts(event.status);
+    getStatusColors(event.status);
   const handlePublishSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const response = confirm("Do you really want to publish the event?");
@@ -231,7 +231,7 @@ export default function Event() {
                       Edit
                     </button>
                   </Form>
-                  {event.status === enumEventStatus.PUBLISHED && (
+                  {event.status === EventStatus.PUBLISHED && (
                     <fetcher.Form
                       method="post"
                       onSubmit={(e) => {
@@ -254,17 +254,18 @@ export default function Event() {
                       </button>
                     </fetcher.Form>
                   )}
-                  {event.status !== enumEventStatus.PUBLISHED && (
-                    <fetcher.Form onSubmit={handlePublishSubmit}>
-                      <button
-                        disabled={isWorking || event.dateStart === ""}
-                        type="submit"
-                        className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                      >
-                        Publish
-                      </button>
-                    </fetcher.Form>
-                  )}
+                  {event.status !== EventStatus.PUBLISHED &&
+                    event.dateStart !== "" && (
+                      <fetcher.Form onSubmit={handlePublishSubmit}>
+                        <button
+                          disabled={isWorking}
+                          type="submit"
+                          className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                        >
+                          Publish
+                        </button>
+                      </fetcher.Form>
+                    )}
                   <fetcher.Form
                     method="post"
                     onSubmit={(e) => {

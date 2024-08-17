@@ -17,7 +17,7 @@ import { useRef } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
 import { descriptionEditorStyles, EventFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
-import { enumEventStatus } from "~/utils";
+import { EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 export const links: LinksFunction = () => [...descriptionEditorStyles()];
@@ -30,7 +30,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const status = data.status;
+  const status = data.origStatus;
   const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
@@ -38,11 +38,11 @@ export async function action({ params, request }: ActionFunctionArgs) {
   delete result.data.origDateEnd;
   delete result.data.origDateStart;
   delete result.data.origSlug;
-  delete result.data.status;
+  delete result.data.origStatus;
   await prisma.event.update({
     data:
-      status === enumEventStatus.SUGGESTED
-        ? { ...result.data, status: enumEventStatus.DRAFT }
+      status === EventStatus.SUGGESTED
+        ? { ...result.data, status: EventStatus.DRAFT }
         : result.data,
     where: { slug: params.slug },
   });
@@ -81,7 +81,7 @@ export default function EventEdit() {
     formData.set("origDateEnd", event.dateEnd);
     formData.set("origDateStart", event.dateStart);
     formData.set("origSlug", event.slug);
-    formData.set("status", event.status);
+    formData.set("origStatus", event.status);
     submit(formData, { method: "POST", replace: true });
   };
   return (

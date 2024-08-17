@@ -1,13 +1,29 @@
 import slugify from "slugify";
 import { z } from "zod";
 import { prisma } from "~/services";
-import { enumEventStatus, getTodayDate } from "~/utils";
+import { countries, EventStatus, getTodayDate } from "~/utils";
 
 const restrictedSlugs = ["new", "suggest"];
 
-const fields = z
+const dateUnrelatedFields = z
   .object({
-    country: z.string().trim().length(2, "Country must be selected"),
+    country: z.string().superRefine((value, ctx) => {
+      if (value === "" || value.length !== 2) {
+        return ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Country must be selected",
+        });
+      }
+      const countryCodeFound = countries.some(
+        (country) => country.code === value,
+      );
+      if (!countryCodeFound) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Proper country must be selected",
+        });
+      }
+    }),
     description: z.string().trim().or(z.literal("")),
     linkLocation: z.string().trim().or(z.literal("")),
     linkWebsite: z.string().trim().or(z.literal("")),
@@ -67,35 +83,40 @@ const fields = z
     }
   });
 
-const moreFields = z
+const dateRelatedFields = z
   .object({
     dateEnd: z.string().date().or(z.literal("")),
     dateStart: z.string().date().or(z.literal("")),
     origDateEnd: z.string().optional(),
     origDateStart: z.string().optional(),
-    status: z.nativeEnum(enumEventStatus).optional(),
+    origStatus: z.nativeEnum(EventStatus).optional(),
   })
   .superRefine((data, ctx) => {
-    const { dateEnd, dateStart, origDateEnd, origDateStart, status } = data;
+    const { dateEnd, dateStart, origDateEnd, origDateStart, origStatus } = data;
     if (dateEnd === origDateEnd && dateStart === origDateStart) {
       return;
     }
     if (
       dateEnd === "" &&
       dateStart === "" &&
-      status !== enumEventStatus.PUBLISHED
+      origStatus !== EventStatus.PUBLISHED
     ) {
       return;
     }
     if (
       dateEnd === "" &&
       dateStart === "" &&
-      status == enumEventStatus.PUBLISHED
+      origStatus == EventStatus.PUBLISHED
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.invalid_date,
-        message: "Date cannot be empty in a published event",
+        message: "Published events must have a date",
         path: ["dateStart"],
+      });
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_date,
+        message: "Published events must have a date",
+        path: ["dateEnd"],
       });
       return;
     }
@@ -122,4 +143,4 @@ const moreFields = z
     }
   });
 
-export const eventFormSchema = fields.and(moreFields);
+export const eventFormSchema = dateUnrelatedFields.and(dateRelatedFields);

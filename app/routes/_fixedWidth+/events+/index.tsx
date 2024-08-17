@@ -9,7 +9,7 @@ import {
 } from "@remix-run/react";
 import { CountrySelect, EventListCard } from "~/components";
 import { authenticator, prisma } from "~/services";
-import { countries, getTodayDate, enumEventStatus } from "~/utils";
+import { countries, getTodayDate, EventStatus } from "~/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -29,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     by: "country",
     where: {
       dateEnd: user ? undefined : { gte: getTodayDate() },
-      status: user ? undefined : enumEventStatus.PUBLISHED,
+      status: user ? undefined : EventStatus.PUBLISHED,
     },
   });
   const allEvents = await prisma.event.findMany({
@@ -45,7 +45,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     where: {
       country: country || undefined,
       dateEnd: user ? undefined : { gte: getTodayDate() },
-      status: user ? undefined : enumEventStatus.PUBLISHED,
+      status: user ? undefined : EventStatus.PUBLISHED,
     },
   });
   return { allEventCountries, allEvents, country, isAuthenticated: !!user };

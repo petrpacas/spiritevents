@@ -1,12 +1,12 @@
 import { Link } from "@remix-run/react";
-import { enumEventStatus, getTodayDate, getStatusConsts } from "~/utils";
+import { EventStatus, getTodayDate, getStatusColors } from "~/utils";
 
 type Props = {
   country: string;
   dateEnd: string;
   dateStart: string;
   slug: string;
-  status?: keyof typeof enumEventStatus;
+  status?: keyof typeof EventStatus;
   title: string;
 };
 
@@ -18,7 +18,7 @@ export const EventListCard = ({
   status,
   title,
 }: Props) => {
-  const [statusLetter, statusBg] = getStatusConsts(status);
+  const [statusLetter, statusBg] = getStatusColors(status);
   return (
     <Link
       to={`/events/${slug}`}

@@ -2,7 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { EventListCard } from "~/components";
 import { prisma } from "~/services";
-import { getTodayDate, enumEventStatus } from "~/utils";
+import { getTodayDate, EventStatus } from "~/utils";
 
 // GET PERMISSIONS
 import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
@@ -32,7 +32,7 @@ export async function loader() {
     take: 3,
     where: {
       dateEnd: { gte: getTodayDate() },
-      status: enumEventStatus.PUBLISHED,
+      status: EventStatus.PUBLISHED,
     },
   });
   return { events };
