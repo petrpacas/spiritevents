@@ -1,5 +1,5 @@
 import type { MDXEditorMethods } from "@mdxeditor/editor";
-import { type Event } from "@prisma/client";
+import type { Event } from "@prisma/client";
 import type { RefObject } from "react";
 import { SerializeFrom } from "@remix-run/node";
 import { useState } from "react";

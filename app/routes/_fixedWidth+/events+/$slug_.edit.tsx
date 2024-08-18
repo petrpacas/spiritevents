@@ -30,15 +30,13 @@ export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const status = data.origStatus;
+  const status = data.originStatus;
   const result = await eventFormSchema.safeParseAsync(data);
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
-  delete result.data.origDateEnd;
-  delete result.data.origDateStart;
-  delete result.data.origSlug;
-  delete result.data.origStatus;
+  delete result.data.originSlug;
+  delete result.data.originStatus;
   await prisma.event.update({
     data:
       status === EventStatus.SUGGESTED
@@ -71,17 +69,18 @@ export default function EventEdit() {
     e.preventDefault();
     const $form = e.currentTarget;
     const formData = new FormData($form);
-    const description = mdxEditorRef.current?.getMarkdown();
-    const dateStart = formData.get("dateStart");
     const dateEnd = formData.get("dateEnd");
+    const dateStart = formData.get("dateStart");
+    const description = mdxEditorRef.current?.getMarkdown();
     if (dateStart !== null && dateStart !== "" && dateEnd === "") {
       formData.set("dateEnd", dateStart);
     }
+    if (dateEnd !== null && dateEnd !== "" && dateStart === "") {
+      formData.set("dateStart", dateEnd);
+    }
     formData.set("description", description ?? "");
-    formData.set("origDateEnd", event.dateEnd);
-    formData.set("origDateStart", event.dateStart);
-    formData.set("origSlug", event.slug);
-    formData.set("origStatus", event.status);
+    formData.set("originSlug", event.slug);
+    formData.set("originStatus", event.status);
     submit(formData, { method: "POST", replace: true });
   };
   return (

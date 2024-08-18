@@ -56,11 +56,14 @@ export default function EventSuggest() {
     e.preventDefault();
     const $form = e.currentTarget;
     const formData = new FormData($form);
-    const description = mdxEditorRef.current?.getMarkdown();
-    const dateStart = formData.get("dateStart");
     const dateEnd = formData.get("dateEnd");
+    const dateStart = formData.get("dateStart");
+    const description = mdxEditorRef.current?.getMarkdown();
     if (dateStart !== null && dateStart !== "" && dateEnd === "") {
       formData.set("dateEnd", dateStart);
+    }
+    if (dateEnd !== null && dateEnd !== "" && dateStart === "") {
+      formData.set("dateStart", dateEnd);
     }
     formData.set("description", description ?? "");
     formData.set("slug", createId());
