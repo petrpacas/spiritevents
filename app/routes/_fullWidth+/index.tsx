@@ -1,12 +1,9 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { EventListCard } from "~/components";
+import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
 import { prisma } from "~/services";
 import { getTodayDate, EventStatus } from "~/utils";
-
-// GET PERMISSIONS
-import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
-// import bgImage from "~/images/phoebe-montague_medicine-festival-2023-watermark.jpg";
 
 export const meta: MetaFunction = () => {
   return [
@@ -42,11 +39,13 @@ export default function Landing() {
   const { events } = useLoaderData<typeof loader>();
   return (
     <>
-      <div
-        className="grid min-h-lvh bg-cover bg-center"
-        style={{ backgroundImage: `url('${bgImage}')` }}
-      >
-        <div className="grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
+      <div className="relative grid min-h-lvh">
+        <img
+          src={bgImage}
+          alt="Elizabeth Anura - Medicine Festival 2023"
+          className="absolute left-0 top-0 h-full w-full object-cover"
+        />
+        <div className="relative grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
           <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 sm:py-32 md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
             Reunite with your <strong className="text-amber-600">tribe</strong>{" "}
             <br className="max-lg:hidden" /> and discover{" "}

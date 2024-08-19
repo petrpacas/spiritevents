@@ -21,12 +21,9 @@ import {
   redirectWithSuccess,
 } from "remix-toast";
 import { unified } from "unified";
+import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, EventStatus, getStatusColors } from "~/utils";
-
-// GET PERMISSIONS
-import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
-// import bgImage from "~/images/phoebe-montague_medicine-festival-2023-watermark.jpg";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `${data?.event?.title} ~ SeekGathering` }];
@@ -117,12 +114,14 @@ export default function Event() {
   };
   return (
     <>
-      <div
-        className="grid min-h-lvh bg-cover bg-center"
-        style={{ backgroundImage: `url('${bgImage}')` }}
-      >
+      <div className="relative grid min-h-lvh bg-cover bg-center">
+        <img
+          src={bgImage}
+          alt="Elizabeth Anura - Medicine Festival 2023"
+          className="absolute left-0 top-0 h-full w-full object-cover"
+        />
         <div
-          className={`grid min-h-lvh items-center justify-center ${statusGradient}`}
+          className={`relative grid min-h-lvh items-center justify-center ${statusGradient}`}
         >
           <div
             className={`max-w-7xl px-4 py-[6.625rem] ${statusGlow} sm:px-8 sm:py-32 ${statusGlowMd}`}

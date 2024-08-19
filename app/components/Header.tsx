@@ -24,7 +24,9 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
   );
   return (
     <>
-      <header className={isLanding ? "absolute top-0 w-full" : "bg-amber-50"}>
+      <header
+        className={isLanding ? "absolute left-0 top-0 w-full" : "bg-amber-50"}
+      >
         <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between p-4 sm:px-8">
           <Link to="/">{isLanding ? <h1>{brandName}</h1> : brandName}</Link>
           <button

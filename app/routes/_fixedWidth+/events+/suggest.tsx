@@ -20,11 +20,11 @@ import { authenticator, prisma } from "~/services";
 import { EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
-export const links: LinksFunction = () => [...descriptionEditorStyles()];
-
 export const meta: MetaFunction = () => {
   return [{ title: "Suggest event ~ SeekGathering" }];
 };
+
+export const links: LinksFunction = () => [...descriptionEditorStyles()];
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();

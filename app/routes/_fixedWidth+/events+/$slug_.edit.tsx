@@ -20,11 +20,11 @@ import { prisma, requireUserSession } from "~/services";
 import { EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
-export const links: LinksFunction = () => [...descriptionEditorStyles()];
-
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `Editing ${data?.event?.title} ~ SeekGathering` }];
 };
+
+export const links: LinksFunction = () => [...descriptionEditorStyles()];
 
 export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
