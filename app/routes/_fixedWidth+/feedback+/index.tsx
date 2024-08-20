@@ -125,7 +125,7 @@ export default function Feedback() {
           ))}
         </div>
       ) : (
-        <p className="justify-self-center border-y border-amber-600 py-4 text-xl italic max-sm:my-4 sm:px-4 sm:py-8 sm:text-2xl">
+        <p className="my-4 justify-self-center border-y border-amber-600 py-4 text-xl italic sm:my-8 sm:px-4 sm:py-8 sm:text-2xl">
           No feedback yet&hellip;
         </p>
       )}

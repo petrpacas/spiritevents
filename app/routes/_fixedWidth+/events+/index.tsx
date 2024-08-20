@@ -7,6 +7,8 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
+import debounce from "lodash/debounce";
+import { useEffect } from "react";
 import { CountrySelect, EventListCard } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { countries, getTodayDate, EventStatus } from "~/utils";
@@ -25,6 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const requestUrl = new URL(request.url);
   const user = await authenticator.isAuthenticated(request);
   const country = requestUrl.searchParams.get("country");
+  const search = requestUrl.searchParams.get("search");
   const allEventCountries = await prisma.event.groupBy({
     by: "country",
     where: {
@@ -45,14 +48,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
     where: {
       country: country || undefined,
       dateEnd: user ? undefined : { gte: getTodayDate() },
+      title: { contains: search || undefined, mode: "insensitive" },
       status: user ? undefined : EventStatus.PUBLISHED,
     },
   });
-  return { allEventCountries, allEvents, country, isAuthenticated: !!user };
+  return {
+    allEventCountries,
+    allEvents,
+    country,
+    isAuthenticated: !!user,
+    search,
+  };
 }
 
 export default function Events() {
-  const { allEventCountries, allEvents, country, isAuthenticated } =
+  const { allEventCountries, allEvents, country, isAuthenticated, search } =
     useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
@@ -89,14 +99,59 @@ export default function Events() {
     return result;
   }
   const eventsByYear = groupEventsByYear(allEvents);
-  const handleCountryChange = (e: React.FormEvent<HTMLFormElement>) => {
-    const $form = e.currentTarget;
-    const formData = new FormData($form);
+  const handleFiltering = (form: HTMLFormElement) => {
+    const formData = new FormData(form);
+    if (formData.get("search") === "") {
+      formData.delete("search");
+    }
     if (formData.get("country") === "") {
       formData.delete("country");
     }
     submit(formData, { preventScrollReset: true });
   };
+  const handleSearchFiltering = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.form) {
+      handleFiltering(e.target.form);
+    }
+  };
+  const debouncedSearchFiltering = debounce(handleSearchFiltering, 1000);
+  const handleCountryFiltering = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.currentTarget.form) {
+      debouncedSearchFiltering.cancel();
+      handleFiltering(e.currentTarget.form);
+    }
+  };
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    debouncedSearchFiltering.cancel();
+    handleFiltering(e.currentTarget);
+  };
+  const handleSearchClear = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (e.currentTarget.form) {
+      const formData = new FormData(e.currentTarget.form);
+      formData.delete("search");
+      if (formData.get("country") === "") {
+        formData.delete("country");
+      }
+      const searchEl = document.getElementById("search");
+      if (searchEl instanceof HTMLInputElement) {
+        searchEl.focus();
+      }
+      submit(formData, { preventScrollReset: true });
+    }
+  };
+  useEffect(() => {
+    const searchEl = document.getElementById("search");
+    const countryEl = document.getElementById("country");
+    if (searchEl instanceof HTMLInputElement) {
+      searchEl.value = search || "";
+    }
+    if (countryEl instanceof HTMLSelectElement) {
+      countryEl.value = country || "";
+    }
+  }, [country, search]);
   return (
     <div className="grid gap-8">
       <div className="grid items-center gap-8">
@@ -119,7 +174,7 @@ export default function Events() {
           </svg>
           <span>{isAuthenticated ? "All events" : "Upcoming events"}</span>
         </h1>
-        <p className="text-lg sm:text-xl lg:col-span-2 lg:row-start-2">
+        <p className="text-lg sm:text-xl">
           Browse through the myriad of nourishing festivals and gatherings so
           you can get informed and inspired. And if you don&apos;t see the one
           you know and love - or perhaps the one you wish to attend for the
@@ -129,24 +184,43 @@ export default function Events() {
           </Link>
           !
         </p>
-        {allEvents.length > 0 && (
+        {(search || allEvents.length > 0) && (
           <Form
-            className="sm:flex sm:justify-end"
-            onChange={handleCountryChange}
+            onSubmit={handleFormSubmit}
+            className="grid gap-8 py-4 font-medium text-amber-600 sm:flex"
           >
-            <fieldset disabled={isWorking}>
+            <label className="grid items-center gap-2 sm:flex-1 md:flex">
+              Search
+              <input
+                onChange={debouncedSearchFiltering}
+                autoComplete="off"
+                type="text"
+                name="search"
+                id="search"
+                defaultValue={search || ""}
+                className="w-full rounded border border-stone-300 py-2 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+              />
+              {search && (
+                <button type="button" onClick={handleSearchClear}>
+                  [&times;]
+                </button>
+              )}
+            </label>
+            {countryObjects.length > 1 && (
               <label
-                className="grid items-center gap-2 sm:flex"
+                className="grid items-center gap-2 md:flex"
                 htmlFor="country"
               >
                 Showing events in
                 <CountrySelect
+                  onChange={handleCountryFiltering}
+                  disabled={isWorking}
                   countries={countryObjects}
-                  defaultValue={country || undefined}
-                  className="rounded border border-stone-300 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                  defaultValue={country || ""}
+                  className="rounded border border-stone-300 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
                 />
               </label>
-            </fieldset>
+            )}
           </Form>
         )}
       </div>
@@ -172,8 +246,8 @@ export default function Events() {
           ))}
         </div>
       ) : (
-        <p className="justify-self-center border-y border-amber-600 py-4 text-xl italic max-sm:my-4 sm:px-4 sm:py-8 sm:text-2xl">
-          No events yet&hellip;
+        <p className="my-4 justify-self-center border-y border-amber-600 py-4 text-xl italic sm:my-8 sm:px-4 sm:py-8 sm:text-2xl">
+          {search ? "No events found…" : "No events yet…"}
         </p>
       )}
       {isAuthenticated ? (

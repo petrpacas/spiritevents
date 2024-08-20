@@ -4,12 +4,16 @@ type Props = {
   className?: string;
   countries?: typeof allCountries;
   defaultValue?: string;
+  disabled?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 };
 
 export const CountrySelect = ({
   className,
   countries,
   defaultValue,
+  disabled,
+  onChange,
 }: Props) => {
   const countryObjects = countries || allCountries;
   return (
@@ -19,6 +23,8 @@ export const CountrySelect = ({
       id="country"
       defaultValue={defaultValue}
       className={className}
+      onChange={onChange}
+      disabled={disabled}
     >
       {countries ? (
         <option value="">all countries</option>

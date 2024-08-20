@@ -265,8 +265,9 @@ export default function Event() {
                         </button>
                       </fetcher.Form>
                     )}
-                  <fetcher.Form
+                  <Form
                     method="post"
+                    replace
                     onSubmit={(e) => {
                       const response = confirm(
                         "Do you really want to delete the event?",
@@ -285,7 +286,7 @@ export default function Event() {
                     >
                       Delete
                     </button>
-                  </fetcher.Form>
+                  </Form>
                 </>
               )}
               <button
