@@ -124,11 +124,11 @@ export default function Event() {
           className={`relative grid min-h-lvh items-center justify-center ${statusGradient}`}
         >
           <div
-            className={`max-w-7xl px-4 py-[6.625rem] ${statusGlow} sm:px-8 sm:py-32 ${statusGlowMd}`}
+            className={`max-w-7xl px-4 py-[6.625rem] ${statusGlow} sm:px-8 sm:py-[8.625rem] ${statusGlowMd}`}
           >
             <div className="grid gap-16 text-center">
               <div className="grid gap-4">
-                <h1 className="text-4xl font-bold leading-tight sm:text-5xl sm:leading-tight">
+                <h1 className="text-4xl font-bold leading-relaxed sm:text-5xl sm:leading-relaxed">
                   {statusLetter && (
                     <>
                       <span className="text-amber-600">{statusLetter}</span>{" "}
@@ -150,7 +150,7 @@ export default function Event() {
                 )}
               </div>
               <div className="grid gap-4">
-                <p className="text-2xl font-semibold leading-tight sm:text-3xl sm:leading-tight">
+                <p className="text-2xl font-semibold leading-relaxed sm:text-3xl sm:leading-relaxed">
                   {getCountryNameByCode(event.country)}{" "}
                   <span className="text-amber-600">({event.country})</span>
                 </p>
@@ -167,7 +167,7 @@ export default function Event() {
                   </div>
                 )}
               </div>
-              <div className="grid gap-4 text-2xl font-semibold leading-tight sm:text-3xl sm:leading-tight lg:flex lg:justify-center">
+              <div className="grid gap-4 text-2xl font-semibold leading-relaxed sm:text-3xl sm:leading-relaxed lg:flex lg:justify-center">
                 {event.dateStart ? (
                   <>
                     <span>{new Date(event.dateStart).toDateString()}</span>

@@ -46,7 +46,7 @@ export default function Landing() {
           className="absolute left-0 top-0 h-full w-full object-cover"
         />
         <div className="relative grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
-          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 sm:py-32 md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
+          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 sm:py-[8.625rem] md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
             Reunite with your <strong className="text-amber-600">tribe</strong>{" "}
             <br className="max-lg:hidden" /> and discover{" "}
             <strong className="text-amber-600">gatherings and festivals</strong>{" "}
@@ -56,53 +56,51 @@ export default function Landing() {
           </h2>
         </div>
       </div>
-
-      <div className="bg-transparent">
-        <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-8 sm:pb-24 sm:pt-32">
-          <div className="mx-auto grid w-full max-w-4xl gap-8 text-center sm:gap-16">
-            <h2 className="text-3xl sm:text-4xl">
-              All the <strong>magic</strong>,
-              <br className="min-[490px]:hidden" /> all in{" "}
-              <strong>one place</strong>
-            </h2>
-            <div className="grid text-xl italic leading-relaxed max-[499px]:gap-4 sm:text-2xl sm:leading-relaxed">
-              <p>The community, the connections, the people.</p>
-              <p> The arts, the movement, the experiences. </p>
-              <p> The wisdom, the insights, the growth.</p>
+      <div className="grid gap-8 pb-8 sm:gap-16 sm:pb-16">
+        <div className="bg-transparent">
+          <div className="mx-auto w-full max-w-7xl px-4 pb-8 pt-16 sm:px-8 sm:pb-16 sm:pt-32">
+            <div className="mx-auto grid w-full max-w-4xl gap-8 text-center sm:gap-16">
+              <h2 className="text-3xl sm:text-4xl">
+                All the <strong>magic</strong>,
+                <br className="min-[490px]:hidden" /> all in{" "}
+                <strong>one place</strong>
+              </h2>
+              <div className="grid text-xl italic leading-relaxed max-[499px]:gap-4 sm:text-2xl sm:leading-relaxed">
+                <p>The community, the connections, the people.</p>
+                <p> The arts, the movement, the experiences. </p>
+                <p> The wisdom, the insights, the growth.</p>
+              </div>
+              <p className="justify-self-center border-y border-amber-600 py-4 text-xl italic sm:px-4 sm:py-8 sm:text-2xl">
+                The ancient. The indigenous. The modern.
+              </p>
+              <div className="grid gap-4 sm:gap-8">
+                <p className="text-lg sm:text-xl">
+                  We each have our own reasons why we love attending such
+                  events. We all come from different places, literally and
+                  figuratively. In these gatherings though we quickly realize
+                  that indeed <strong>we are all related</strong>.
+                </p>
+                <p className="text-lg sm:text-xl">
+                  If you were to{" "}
+                  <strong>search for your next opportunity</strong> to{" "}
+                  <em>enter the vortex</em> again, where would you look? The
+                  informations are scattered and hard to come by without having
+                  the right connections in real life or on social media.
+                </p>
+                <p className="text-lg sm:text-xl">
+                  It&apos;s not easy to <strong>stay informed</strong> about{" "}
+                  what&apos;s happening where and when.
+                </p>
+              </div>
+              <p className="justify-self-center border-y border-amber-600 py-4 text-xl sm:px-4 sm:py-8 sm:text-2xl">
+                <span className="font-bold">
+                  <span className="text-amber-600">Seek</span>Gathering
+                </span>{" "}
+                aims to change it.
+              </p>
             </div>
-            <p className="justify-self-center border-y border-amber-600 py-4 text-xl italic max-sm:my-4 sm:px-4 sm:py-8 sm:text-2xl">
-              The ancient. The indigenous. The modern.
-            </p>
-            <div className="grid gap-8">
-              <p className="text-lg sm:text-xl">
-                We each have our own reasons why we love attending such events.
-                We all come from different places, literally and figuratively.
-                In these gatherings though we quickly realize that indeed{" "}
-                <strong>we are all related</strong>.
-              </p>
-              <p className="text-lg sm:text-xl">
-                If you were to search for your next opportunity to{" "}
-                <span className="text-amber-600">enter the vortex</span> again,
-                where would you look? The informations are scattered and hard to
-                come by without having the right connections in real life or on
-                social media.
-              </p>
-              <p className="text-lg sm:text-xl">
-                It&apos;s <strong>not easy</strong> to stay informed about{" "}
-                <strong>what&apos;s happening where and when</strong>.
-              </p>
-            </div>
-            <p className="justify-self-center border-y border-amber-600 py-4 text-xl max-sm:my-4 sm:px-4 sm:py-8 sm:text-2xl">
-              <span className="font-semibold">
-                <span className="text-amber-600">Seek</span>Gathering
-              </span>{" "}
-              aims to change it.
-            </p>
           </div>
         </div>
-      </div>
-
-      <div className="grid gap-8 pb-8 sm:gap-16 sm:pb-16">
         <div className="bg-transparent">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
             <h2 className="text-2xl sm:text-3xl">
@@ -150,7 +148,6 @@ export default function Landing() {
             </div>
           </div>
         </div>
-
         <div className="bg-emerald-100">
           <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16">
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
@@ -199,7 +196,6 @@ export default function Landing() {
             </div>
           </div>
         </div>
-
         <div className="bg-sky-100">
           <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 sm:py-16">
             <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">

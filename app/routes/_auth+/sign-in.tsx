@@ -52,7 +52,9 @@ export default function SignIn() {
       className="w-full max-w-80 place-self-center text-center"
     >
       <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
-        <h1 className="text-xl font-bold sm:text-2xl">Sign in</h1>
+        <h1 className="text-xl font-bold leading-relaxed sm:text-2xl sm:leading-relaxed">
+          Sign in
+        </h1>
         <div className="grid gap-4">
           <label className="grid gap-2">
             Email

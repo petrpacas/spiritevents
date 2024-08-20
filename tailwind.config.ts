@@ -7,7 +7,7 @@ import {
 } from "tailwindcss-scoped-preflight";
 
 export default {
-  content: ["./app/**/*.{js,jsx,ts,tsx}"],
+  content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
   plugins: [
     scopedPreflightStyles({
       isolationStrategy: isolateOutsideOfContainer(".no-tw"),
