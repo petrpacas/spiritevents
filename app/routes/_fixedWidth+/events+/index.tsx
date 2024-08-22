@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Prisma } from "@prisma/client";
 import {
   Form,
   Link,
@@ -7,8 +8,8 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import debounce from "lodash/debounce";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 import { CountrySelect, EventListCard } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { countries, getTodayDate, EventStatus } from "~/utils";
@@ -35,23 +36,56 @@ export async function loader({ request }: LoaderFunctionArgs) {
       status: user ? undefined : EventStatus.PUBLISHED,
     },
   });
-  const allEvents = await prisma.event.findMany({
-    orderBy: [{ dateStart: "asc" }, { title: "asc" }],
-    select: {
-      country: true,
-      dateEnd: true,
-      dateStart: true,
-      slug: true,
-      status: true,
-      title: true,
-    },
-    where: {
-      country: country || undefined,
-      dateEnd: user ? undefined : { gte: getTodayDate() },
-      title: { contains: search || undefined, mode: "insensitive" },
-      status: user ? undefined : EventStatus.PUBLISHED,
-    },
-  });
+  type EventObject = {
+    country: string;
+    dateEnd: string;
+    dateStart: string;
+    slug: string;
+    status: EventStatus;
+    title: string;
+  };
+  let allEvents: EventObject[];
+  if (search) {
+    const searchTerms = search
+      .trim()
+      .replace(/\s+/g, " ")
+      .split(" ")
+      .filter((term) => term.length > 0);
+    const whereClauses = searchTerms.map((term) => {
+      return Prisma.sql`unaccent(LOWER(title)) LIKE unaccent(LOWER(${`%${term}%`}))`;
+    });
+    allEvents = await prisma.$queryRaw`
+      SELECT "country", "dateEnd", "dateStart", "slug", "status", "title"
+      FROM "Event"
+      WHERE
+        (${country ? Prisma.sql`country = ${country}` : Prisma.sql`TRUE`})
+        AND (${user ? Prisma.sql`TRUE` : Prisma.sql`"dateEnd" >= ${getTodayDate()}`})
+        AND (${Prisma.join(whereClauses, " AND ")})
+        AND (${
+          user
+            ? Prisma.sql`TRUE`
+            : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'::"EventStatus"`)}`
+        })
+      ORDER BY "dateStart" ASC, "title" ASC
+    `;
+  } else {
+    allEvents = await prisma.event.findMany({
+      select: {
+        country: true,
+        dateEnd: true,
+        dateStart: true,
+        slug: true,
+        status: true,
+        title: true,
+      },
+      where: {
+        country: country || undefined,
+        dateEnd: user ? undefined : { gte: getTodayDate() },
+        status: user ? undefined : EventStatus.PUBLISHED,
+      },
+      orderBy: [{ dateStart: "asc" }, { title: "asc" }],
+    });
+  }
   return {
     allEventCountries,
     allEvents,
@@ -68,6 +102,7 @@ export default function Events() {
   const navigation = useNavigation();
   const isWorking = navigation.state !== "idle";
   const submit = useSubmit();
+  const [isFiltering, setIsFiltering] = useState(false);
   const getCountryObjects = (countryCodes: string[]) => {
     return countries.filter((c) => countryCodes.includes(c.code));
   };
@@ -109,24 +144,27 @@ export default function Events() {
     }
     submit(formData, { preventScrollReset: true });
   };
-  const handleSearchFiltering = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCountryFiltering = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.currentTarget.form) {
+      debouncedTitleFiltering.cancel();
+      handleFiltering(e.currentTarget.form);
+    }
+  };
+  const handleTitleFiltering = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.form) {
       handleFiltering(e.target.form);
     }
   };
-  const debouncedSearchFiltering = debounce(handleSearchFiltering, 1000);
-  const handleCountryFiltering = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.currentTarget.form) {
-      debouncedSearchFiltering.cancel();
-      handleFiltering(e.currentTarget.form);
-    }
-  };
+  const debouncedTitleFiltering = useDebouncedCallback(
+    handleTitleFiltering,
+    1000,
+  );
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    debouncedSearchFiltering.cancel();
+    debouncedTitleFiltering.cancel();
     handleFiltering(e.currentTarget);
   };
-  const handleSearchClear = (
+  const clearTitleFiltering = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     if (e.currentTarget.form) {
@@ -143,13 +181,18 @@ export default function Events() {
     }
   };
   useEffect(() => {
-    const searchEl = document.getElementById("search");
-    const countryEl = document.getElementById("country");
-    if (searchEl instanceof HTMLInputElement) {
-      searchEl.value = search || "";
+    if (!isWorking) {
+      setIsFiltering(false);
     }
+  }, [isWorking]);
+  useEffect(() => {
+    const countryEl = document.getElementById("country");
+    const searchEl = document.getElementById("search");
     if (countryEl instanceof HTMLSelectElement) {
       countryEl.value = country || "";
+    }
+    if (searchEl instanceof HTMLInputElement) {
+      searchEl.value = search || "";
     }
   }, [country, search]);
   return (
@@ -174,38 +217,24 @@ export default function Events() {
           </svg>
           <span>{isAuthenticated ? "All events" : "Upcoming events"}</span>
         </h1>
-        <p className="text-lg sm:text-xl">
-          Browse through the myriad of nourishing festivals and gatherings so
-          you can get informed and inspired. And if you don&apos;t see the one
-          you know and love - or perhaps the one you wish to attend for the
-          first time - send me a{" "}
-          <Link to="/events/suggest" className="text-amber-600 underline">
-            suggestion
-          </Link>
-          !
-        </p>
+        {!(isAuthenticated || country || search) && (
+          <p className="text-lg sm:text-xl">
+            Browse through the myriad of nourishing festivals and gatherings so
+            you can get informed and inspired. And if you don&apos;t see the one
+            you know and love - or perhaps the one you wish to attend for the
+            first time - send me a{" "}
+            <Link to="/events/suggest" className="text-amber-600 underline">
+              suggestion
+            </Link>
+            !
+          </p>
+        )}
         {(search || allEvents.length > 0) && (
           <Form
+            onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
-            className="grid gap-8 py-4 font-medium text-amber-600 sm:flex"
+            className="grid gap-4 border-y border-amber-600 py-8 sm:flex sm:py-4"
           >
-            <label className="grid items-center gap-2 sm:flex-1 md:flex">
-              Search
-              <input
-                onChange={debouncedSearchFiltering}
-                autoComplete="off"
-                type="text"
-                name="search"
-                id="search"
-                defaultValue={search || ""}
-                className="w-full rounded border border-stone-300 py-2 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-              />
-              {search && (
-                <button type="button" onClick={handleSearchClear}>
-                  [&times;]
-                </button>
-              )}
-            </label>
             {countryObjects.length > 1 && (
               <label
                 className="grid items-center gap-2 md:flex"
@@ -214,13 +243,67 @@ export default function Events() {
                 Showing events in
                 <CountrySelect
                   onChange={handleCountryFiltering}
-                  disabled={isWorking}
                   countries={countryObjects}
                   defaultValue={country || ""}
-                  className="rounded border border-stone-300 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                  className="rounded border border-stone-300 py-2 font-bold shadow-sm transition-shadow hover:shadow-md active:shadow"
                 />
               </label>
             )}
+            <label className="grid items-center gap-2 sm:flex-1 md:flex">
+              <span className="flex-shrink">Search title</span>
+              <div className="flex flex-grow gap-2">
+                <input
+                  onChange={debouncedTitleFiltering}
+                  autoComplete="off"
+                  type="text"
+                  name="search"
+                  id="search"
+                  defaultValue={search || ""}
+                  className="flex-grow rounded border border-stone-300 py-2 font-bold placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                />
+                {isFiltering ? (
+                  <div className="flex-shrink self-center">
+                    <svg
+                      className="h-6 w-6 animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="#5b7280"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  search && (
+                    <button
+                      className="flex-shrink"
+                      type="button"
+                      onClick={clearTitleFiltering}
+                    >
+                      <svg
+                        className="h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="#5b7280"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )
+                )}
+              </div>
+            </label>
           </Form>
         )}
       </div>
@@ -292,10 +375,9 @@ export default function Events() {
       )}
       <div className="flex justify-end gap-4">
         <button
-          disabled={isWorking}
           type="button"
           onClick={() => navigate(-1)}
-          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
         >
           Back
         </button>
