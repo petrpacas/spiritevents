@@ -30,14 +30,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const past = requestUrl.searchParams.get("past");
   const country = requestUrl.searchParams.get("country");
   const search = requestUrl.searchParams.get("search");
-  const allEventCountries = await prisma.event.groupBy({
-    by: "country",
-    where: {
-      dateEnd:
-        past === "true" ? { lt: getTodayDate() } : { gte: getTodayDate() },
-      status: user ? undefined : EventStatus.PUBLISHED,
-    },
-  });
+  const isAuthenticated = Boolean(user);
+  const isPast = past === "true";
+  const today = getTodayDate();
   type EventObject = {
     country: string;
     dateEnd: string;
@@ -46,75 +41,52 @@ export async function loader({ request }: LoaderFunctionArgs) {
     status: EventStatus;
     title: string;
   };
-  let allEvents: EventObject[];
-  if (search) {
-    const searchTerms = search
-      .trim()
+  const allCountries = await prisma.event.groupBy({
+    by: ["country"],
+    where: {
+      dateEnd: isPast ? { lt: today } : { gte: today },
+      status: isAuthenticated ? undefined : EventStatus.PUBLISHED,
+    },
+  });
+  const allCountryCodes = allCountries.map((c) => c.country);
+  const searchConditions =
+    search
+      ?.trim()
       .replace(/\s+/g, " ")
       .split(" ")
-      .filter((term) => term.length > 0);
-    const whereClauses = searchTerms.map((term) => {
-      return Prisma.sql`unaccent(LOWER(title)) LIKE unaccent(LOWER(${`%${term}%`}))`;
-    });
-    allEvents = await prisma.$queryRaw`
-      SELECT "country", "dateEnd", "dateStart", "slug", "status", "title"
-      FROM "Event"
-      WHERE
-        (${country ? Prisma.sql`country = ${country}` : Prisma.sql`TRUE`})
-        AND (${
-          past === "true"
-            ? Prisma.sql`"dateEnd" < ${getTodayDate()}`
-            : Prisma.sql`"dateEnd" >= ${getTodayDate()}`
-        })
-        AND (${Prisma.join(whereClauses, " AND ")})
-        AND (${
-          user
-            ? Prisma.sql`TRUE`
-            : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'::"EventStatus"`)}`
-        })
-      ORDER BY "dateStart" ${past === "true" ? Prisma.sql`DESC` : Prisma.sql`ASC`}, "title" ASC
-    `;
-  } else {
-    allEvents = await prisma.event.findMany({
-      select: {
-        country: true,
-        dateEnd: true,
-        dateStart: true,
-        slug: true,
-        status: true,
-        title: true,
-      },
-      where: {
-        country: country || undefined,
-        dateEnd:
-          past === "true" ? { lt: getTodayDate() } : { gte: getTodayDate() },
-        status: user ? undefined : EventStatus.PUBLISHED,
-      },
-      orderBy: [
-        { dateStart: past === "true" ? "desc" : "asc" },
-        { title: "asc" },
-      ],
-    });
-  }
+      .filter((term) => term.length > 0)
+      .map(
+        (term) =>
+          Prisma.sql`unaccent(LOWER(title)) LIKE unaccent(LOWER(${`%${term}%`}))`,
+      ) || [];
+  const allEvents: EventObject[] = await prisma.$queryRaw`
+    SELECT "country", "dateEnd", "dateStart", "slug", "status", "title"
+    FROM "Event"
+    WHERE
+      ${country ? Prisma.sql`country = ${country}` : Prisma.sql`TRUE`}
+      AND (
+        ${isPast ? Prisma.sql`"dateEnd" < ${today}` : Prisma.sql`"dateEnd" >= ${today}`}
+        ${isAuthenticated ? Prisma.sql`OR "dateEnd" = ''` : Prisma.sql``}
+      )
+      ${searchConditions.length > 0 ? Prisma.sql`AND (${Prisma.join(searchConditions, " AND ")})` : Prisma.sql``}
+      AND (${isAuthenticated ? Prisma.sql`TRUE` : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'::"EventStatus"`)} `})
+    ORDER BY
+      "dateStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
+      "title" ASC
+  `;
   return {
-    allEventCountries,
+    allCountryCodes,
     allEvents,
     country,
-    isAuthenticated: !!user,
+    isAuthenticated,
     past,
     search,
   };
 }
 
 export default function Events() {
-  const {
-    allEventCountries,
-    allEvents,
-    country,
-    isAuthenticated,
-    past,
-    search,
-  } = useLoaderData<typeof loader>();
+  const { allCountryCodes, allEvents, country, isAuthenticated, past, search } =
+    useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isWorking = navigation.state !== "idle";
@@ -123,7 +95,6 @@ export default function Events() {
   const getCountryObjects = (countryCodes: string[]) => {
     return countries.filter((c) => countryCodes.includes(c.code));
   };
-  const allCountryCodes = allEventCountries.map((e) => e.country);
   const countryObjects = getCountryObjects(allCountryCodes);
   type EventsWithYear = {
     year: string;
@@ -166,37 +137,39 @@ export default function Events() {
   };
   const handlePastChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.currentTarget.form) {
-      debouncedHandleInputChange.cancel();
+      debouncedHandleSearchChange.cancel();
       const formData = new FormData(e.currentTarget.form);
       if (formData.get("past") === "") {
         formData.delete("past");
       }
-      formData.delete("search");
       formData.delete("country");
+      if (formData.get("search") === "") {
+        formData.delete("search");
+      }
       submit(formData, { preventScrollReset: true });
     }
   };
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.currentTarget.form) {
-      debouncedHandleInputChange.cancel();
+      debouncedHandleSearchChange.cancel();
       handleFiltering(e.currentTarget.form);
     }
   };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.form) {
       handleFiltering(e.target.form);
     }
   };
-  const debouncedHandleInputChange = useDebouncedCallback(
-    handleInputChange,
+  const debouncedHandleSearchChange = useDebouncedCallback(
+    handleSearchChange,
     1000,
   );
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    debouncedHandleInputChange.cancel();
+    debouncedHandleSearchChange.cancel();
     handleFiltering(e.currentTarget);
   };
-  const handleClearTitleFiltering = (
+  const handleClearSearch = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     if (e.currentTarget.form) {
@@ -297,7 +270,7 @@ export default function Events() {
               >
                 happening in
                 <CountrySelect
-                  onChange={handleSelectChange}
+                  onChange={handleCountryChange}
                   countries={countryObjects}
                   defaultValue={country || ""}
                   className="cursor-pointer rounded border border-stone-300 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
@@ -309,7 +282,7 @@ export default function Events() {
               <label className="grid flex-grow gap-2 sm:flex sm:items-center">
                 <span className="flex-shrink">Title search</span>
                 <input
-                  onChange={debouncedHandleInputChange}
+                  onChange={debouncedHandleSearchChange}
                   autoComplete="off"
                   type="text"
                   name="search"
@@ -340,7 +313,7 @@ export default function Events() {
                   <button
                     className="flex-shrink self-end rounded border border-stone-300 bg-white p-1 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-2"
                     type="button"
-                    onClick={handleClearTitleFiltering}
+                    onClick={handleClearSearch}
                   >
                     <svg
                       className="h-6 w-6"

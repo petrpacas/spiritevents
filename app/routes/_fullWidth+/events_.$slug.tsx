@@ -85,7 +85,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         .process(description)
     : "";
   event.description = parsedDescription.toString();
-  return { event, isAuthenticated: !!user };
+  return { event, isAuthenticated: Boolean(user) };
 }
 
 export default function Event() {

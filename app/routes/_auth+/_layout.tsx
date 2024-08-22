@@ -5,7 +5,7 @@ import { authenticator } from "~/services";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
-  return { isAuthenticated: !!user };
+  return { isAuthenticated: Boolean(user) };
 }
 
 export default function AuthLayout() {

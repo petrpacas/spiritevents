@@ -148,7 +148,7 @@ export const EventFormFields = ({
           type="date"
           name="dateStart"
           placeholder="yyyy-mm-dd"
-          className="cursor-pointer rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
           value={dateStartState}
           onChange={(e) => setDateStart(e.target.value)}
           onBlur={(e) => {
@@ -172,7 +172,7 @@ export const EventFormFields = ({
           type="date"
           name="dateEnd"
           placeholder="yyyy-mm-dd"
-          className="cursor-pointer rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
           value={dateEndState}
           onChange={(e) => setDateEnd(e.target.value)}
           onBlur={(e) => {
