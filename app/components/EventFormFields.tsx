@@ -131,7 +131,7 @@ export const EventFormFields = ({
         </div>
         <CountrySelect
           defaultValue={event?.country}
-          className="w-full rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="w-full cursor-pointer rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.country && (
           <p className="text-red-600">
@@ -148,7 +148,7 @@ export const EventFormFields = ({
           type="date"
           name="dateStart"
           placeholder="yyyy-mm-dd"
-          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="cursor-pointer rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
           value={dateStartState}
           onChange={(e) => setDateStart(e.target.value)}
           onBlur={(e) => {
@@ -172,7 +172,7 @@ export const EventFormFields = ({
           type="date"
           name="dateEnd"
           placeholder="yyyy-mm-dd"
-          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="cursor-pointer rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
           value={dateEndState}
           onChange={(e) => setDateEnd(e.target.value)}
           onBlur={(e) => {

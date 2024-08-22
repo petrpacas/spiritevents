@@ -18,7 +18,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
     {
       title:
-        (data?.isAuthenticated ? "All events" : "Upcoming events") +
+        (data?.isAuthenticated ? "All events" : "Discover events") +
         " ~ SeekGathering",
     },
   ];
@@ -27,12 +27,14 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const requestUrl = new URL(request.url);
   const user = await authenticator.isAuthenticated(request);
+  const past = requestUrl.searchParams.get("past");
   const country = requestUrl.searchParams.get("country");
   const search = requestUrl.searchParams.get("search");
   const allEventCountries = await prisma.event.groupBy({
     by: "country",
     where: {
-      dateEnd: user ? undefined : { gte: getTodayDate() },
+      dateEnd:
+        past === "true" ? { lt: getTodayDate() } : { gte: getTodayDate() },
       status: user ? undefined : EventStatus.PUBLISHED,
     },
   });
@@ -59,14 +61,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
       FROM "Event"
       WHERE
         (${country ? Prisma.sql`country = ${country}` : Prisma.sql`TRUE`})
-        AND (${user ? Prisma.sql`TRUE` : Prisma.sql`"dateEnd" >= ${getTodayDate()}`})
+        AND (${
+          past === "true"
+            ? Prisma.sql`"dateEnd" < ${getTodayDate()}`
+            : Prisma.sql`"dateEnd" >= ${getTodayDate()}`
+        })
         AND (${Prisma.join(whereClauses, " AND ")})
         AND (${
           user
             ? Prisma.sql`TRUE`
             : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'::"EventStatus"`)}`
         })
-      ORDER BY "dateStart" ASC, "title" ASC
+      ORDER BY "dateStart" ${past === "true" ? Prisma.sql`DESC` : Prisma.sql`ASC`}, "title" ASC
     `;
   } else {
     allEvents = await prisma.event.findMany({
@@ -80,10 +86,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
       where: {
         country: country || undefined,
-        dateEnd: user ? undefined : { gte: getTodayDate() },
+        dateEnd:
+          past === "true" ? { lt: getTodayDate() } : { gte: getTodayDate() },
         status: user ? undefined : EventStatus.PUBLISHED,
       },
-      orderBy: [{ dateStart: "asc" }, { title: "asc" }],
+      orderBy: [
+        { dateStart: past === "true" ? "desc" : "asc" },
+        { title: "asc" },
+      ],
     });
   }
   return {
@@ -91,13 +101,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
     allEvents,
     country,
     isAuthenticated: !!user,
+    past,
     search,
   };
 }
 
 export default function Events() {
-  const { allEventCountries, allEvents, country, isAuthenticated, search } =
-    useLoaderData<typeof loader>();
+  const {
+    allEventCountries,
+    allEvents,
+    country,
+    isAuthenticated,
+    past,
+    search,
+  } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isWorking = navigation.state !== "idle";
@@ -136,6 +153,9 @@ export default function Events() {
   const eventsByYear = groupEventsByYear(allEvents);
   const handleFiltering = (form: HTMLFormElement) => {
     const formData = new FormData(form);
+    if (formData.get("past") !== "true") {
+      formData.delete("past");
+    }
     if (formData.get("search") === "") {
       formData.delete("search");
     }
@@ -144,35 +164,50 @@ export default function Events() {
     }
     submit(formData, { preventScrollReset: true });
   };
-  const handleCountryFiltering = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handlePastChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.currentTarget.form) {
-      debouncedTitleFiltering.cancel();
+      debouncedHandleInputChange.cancel();
+      const formData = new FormData(e.currentTarget.form);
+      if (formData.get("past") === "") {
+        formData.delete("past");
+      }
+      formData.delete("search");
+      formData.delete("country");
+      submit(formData, { preventScrollReset: true });
+    }
+  };
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.currentTarget.form) {
+      debouncedHandleInputChange.cancel();
       handleFiltering(e.currentTarget.form);
     }
   };
-  const handleTitleFiltering = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.form) {
       handleFiltering(e.target.form);
     }
   };
-  const debouncedTitleFiltering = useDebouncedCallback(
-    handleTitleFiltering,
+  const debouncedHandleInputChange = useDebouncedCallback(
+    handleInputChange,
     1000,
   );
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    debouncedTitleFiltering.cancel();
+    debouncedHandleInputChange.cancel();
     handleFiltering(e.currentTarget);
   };
-  const clearTitleFiltering = (
+  const handleClearTitleFiltering = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     if (e.currentTarget.form) {
       const formData = new FormData(e.currentTarget.form);
-      formData.delete("search");
+      if (formData.get("past") === "") {
+        formData.delete("past");
+      }
       if (formData.get("country") === "") {
         formData.delete("country");
       }
+      formData.delete("search");
       const searchEl = document.getElementById("search");
       if (searchEl instanceof HTMLInputElement) {
         searchEl.focus();
@@ -186,15 +221,19 @@ export default function Events() {
     }
   }, [isWorking]);
   useEffect(() => {
+    const pastEl = document.getElementById("past");
     const countryEl = document.getElementById("country");
     const searchEl = document.getElementById("search");
+    if (pastEl instanceof HTMLSelectElement) {
+      pastEl.value = past || "";
+    }
     if (countryEl instanceof HTMLSelectElement) {
       countryEl.value = country || "";
     }
     if (searchEl instanceof HTMLInputElement) {
       searchEl.value = search || "";
     }
-  }, [country, search]);
+  }, [past, country, search]);
   return (
     <div className="grid gap-8">
       <div className="grid items-center gap-8">
@@ -215,7 +254,9 @@ export default function Events() {
               d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
             />
           </svg>
-          <span>{isAuthenticated ? "All events" : "Upcoming events"}</span>
+          <span>
+            {isAuthenticated ? "All events" : "Discover conscious events"}
+          </span>
         </h1>
         {!(isAuthenticated || country || search) && (
           <p className="text-lg sm:text-xl">
@@ -229,42 +270,80 @@ export default function Events() {
             !
           </p>
         )}
-        {(search || allEvents.length > 0) && (
+        {(past || search || allEvents.length > 0) && (
           <Form
             onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
-            className="grid gap-4 border-y border-amber-600 py-8 sm:flex sm:py-4"
+            className="grid gap-4 rounded-lg bg-stone-50 px-4 py-4 lg:flex lg:items-center"
           >
-            {countryObjects.length > 1 && (
+            <div className="grid gap-2 sm:max-lg:grid-cols-2 lg:flex">
+              <label className="grid items-center gap-2 lg:flex" htmlFor="past">
+                Showing
+                <select
+                  onChange={handlePastChange}
+                  autoComplete="off"
+                  name="past"
+                  id="past"
+                  defaultValue={past || ""}
+                  className="cursor-pointer rounded border border-stone-300 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
+                >
+                  <option value="">upcoming events</option>
+                  <option value="true">past events</option>
+                </select>
+              </label>
               <label
-                className="grid items-center gap-2 md:flex"
+                className="grid items-center gap-2 lg:flex"
                 htmlFor="country"
               >
-                Showing events in
+                happening in
                 <CountrySelect
-                  onChange={handleCountryFiltering}
+                  onChange={handleSelectChange}
                   countries={countryObjects}
                   defaultValue={country || ""}
-                  className="rounded border border-stone-300 py-2 font-bold shadow-sm transition-shadow hover:shadow-md active:shadow"
+                  className="cursor-pointer rounded border border-stone-300 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
                 />
               </label>
-            )}
-            <label className="grid items-center gap-2 sm:flex-1 md:flex">
-              <span className="flex-shrink">Search title</span>
-              <div className="flex flex-grow gap-2">
+            </div>
+            <div className="border-stone-200 max-lg:border-t lg:h-6 lg:border-l-2" />
+            <div className="flex gap-2 lg:flex-grow">
+              <label className="grid flex-grow gap-2 sm:flex sm:items-center">
+                <span className="flex-shrink">Title search</span>
                 <input
-                  onChange={debouncedTitleFiltering}
+                  onChange={debouncedHandleInputChange}
                   autoComplete="off"
                   type="text"
                   name="search"
                   id="search"
                   defaultValue={search || ""}
-                  className="flex-grow rounded border border-stone-300 py-2 font-bold placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                  className="flex-grow rounded border border-stone-300 py-1 font-semibold placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
                 />
-                {isFiltering ? (
-                  <div className="flex-shrink self-center">
+              </label>
+              {isFiltering ? (
+                <div className="flex-shrink self-end rounded border border-stone-300 p-1 shadow-sm sm:p-2">
+                  <svg
+                    className="h-6 w-6 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="#5b7280"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                search && (
+                  <button
+                    className="flex-shrink self-end rounded border border-stone-300 bg-white p-1 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-2"
+                    type="button"
+                    onClick={handleClearTitleFiltering}
+                  >
                     <svg
-                      className="h-6 w-6 animate-spin"
+                      className="h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -274,36 +353,13 @@ export default function Events() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                        d="M6 18 18 6M6 6l12 12"
                       />
                     </svg>
-                  </div>
-                ) : (
-                  search && (
-                    <button
-                      className="flex-shrink"
-                      type="button"
-                      onClick={clearTitleFiltering}
-                    >
-                      <svg
-                        className="h-6 w-6"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="#5b7280"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  )
-                )}
-              </div>
-            </label>
+                  </button>
+                )
+              )}
+            </div>
           </Form>
         )}
       </div>
@@ -335,20 +391,18 @@ export default function Events() {
       )}
       {isAuthenticated ? (
         allEvents.length > 0 && (
-          <div className="flex items-center justify-center gap-2 text-sm max-[399px]:flex-col sm:gap-4 sm:text-base md:text-lg">
-            <div className="rounded border border-amber-600 bg-emerald-100 p-2 sm:px-4">
+          <div className="flex items-center justify-center gap-2 max-[399px]:flex-col sm:gap-4 sm:text-lg">
+            <div className="rounded bg-emerald-100 p-2 sm:px-4">
               <span className="text-amber-600">(S)</span> Suggested
             </div>
-            <div className="rounded border border-amber-600 bg-sky-100 p-2 sm:px-4">
+            <div className="rounded bg-sky-100 p-2 sm:px-4">
               <span className="text-amber-600">(D)</span> Draft
             </div>
-            <div className="rounded border border-amber-600 bg-white p-2 sm:px-4">
-              Published
-            </div>
+            <div className="rounded bg-white p-2 sm:px-4">Published</div>
           </div>
         )
       ) : (
-        <div className="grid max-xl:gap-8 xl:grid-cols-3 xl:gap-16">
+        <div className="grid gap-8 xl:grid-cols-3 xl:gap-16">
           <Link
             to="/events/suggest"
             className="flex items-center justify-center gap-4 rounded-lg border border-emerald-600 px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"

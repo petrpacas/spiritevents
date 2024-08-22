@@ -46,7 +46,7 @@ export default function Landing() {
           className="absolute left-0 top-0 h-full w-full object-cover"
         />
         <div className="relative grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
-          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 sm:py-[8.625rem] md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
+          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
             Reunite with your <strong className="text-amber-600">tribe</strong>{" "}
             <br className="max-lg:hidden" /> and discover{" "}
             <strong className="text-amber-600">gatherings and festivals</strong>{" "}
@@ -120,14 +120,14 @@ export default function Landing() {
               ))}
             </div>
             <div className="grid items-center gap-8 sm:max-xl:flex sm:max-xl:justify-between xl:grid-cols-3 xl:gap-16">
-              <p className="text-xl sm:text-2xl xl:col-span-2">
+              <p className="text-xl md:text-2xl xl:col-span-2">
                 and many more&hellip;
               </p>
               <Link
                 to="/events"
                 className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
               >
-                Browse upcoming events
+                Discover conscious events
                 <svg
                   className="h-6 w-6 max-[339px]:hidden"
                   width="16px"

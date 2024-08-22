@@ -15,7 +15,7 @@ export default function FixedWidthLayout() {
     <div className="grid min-h-lvh grid-rows-[auto_1fr_auto]">
       <Header isAuthenticated={isAuthenticated} key={pathname} />
       <main className="flex justify-center">
-        <div className="grid w-full max-w-7xl px-4 pb-16 pt-8 sm:px-8 sm:pt-16">
+        <div className="grid w-full max-w-7xl px-4 pb-16 pt-8 sm:px-8">
           <Outlet />
         </div>
       </main>

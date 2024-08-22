@@ -84,7 +84,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         .use(rehypeStringify)
         .process(description)
     : "";
-  event.description = String(parsedDescription);
+  event.description = parsedDescription.toString();
   return { event, isAuthenticated: !!user };
 }
 
@@ -124,7 +124,7 @@ export default function Event() {
           className={`relative grid min-h-lvh items-center justify-center ${statusGradient}`}
         >
           <div
-            className={`max-w-7xl px-4 py-[6.625rem] ${statusGlow} sm:px-8 sm:py-[8.625rem] ${statusGlowMd}`}
+            className={`max-w-7xl px-4 py-[6.625rem] ${statusGlow} sm:px-8 ${statusGlowMd}`}
           >
             <div className="grid gap-16 text-center">
               <div className="grid gap-4">

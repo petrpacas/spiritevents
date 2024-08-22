@@ -62,7 +62,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               to="/events"
               className="flex items-center gap-2 rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
             >
-              {isAuthenticated ? "All events" : "Upcoming events"}
+              {isAuthenticated ? "All events" : "Discover events"}
               <svg
                 className="h-6 w-6"
                 width="16px"
