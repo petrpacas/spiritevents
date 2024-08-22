@@ -267,10 +267,10 @@ export default function Events() {
           <Form
             onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
-            className="grid gap-8 rounded-lg bg-stone-50 px-4 py-4 sm:gap-4 lg:flex lg:items-center"
+            className="grid gap-8 rounded-lg bg-stone-50 px-4 py-4 sm:gap-4 xl:flex xl:items-center"
           >
-            <div className="grid gap-4 sm:max-lg:grid-cols-2 lg:flex">
-              <label className="grid items-center gap-2 lg:flex" htmlFor="past">
+            <div className="grid gap-4 sm:max-xl:grid-cols-2 xl:flex">
+              <label className="grid items-center gap-2 xl:flex" htmlFor="past">
                 Showing
                 <select
                   onChange={handlePastChange}
@@ -285,7 +285,7 @@ export default function Events() {
                 </select>
               </label>
               <label
-                className="grid items-center gap-2 lg:flex"
+                className="grid items-center gap-2 xl:flex"
                 htmlFor="country"
               >
                 happening in
@@ -297,7 +297,7 @@ export default function Events() {
                 />
               </label>
             </div>
-            <div className="border-stone-200 max-lg:hidden lg:h-6 lg:border-l-2" />
+            <div className="border-stone-200 max-xl:hidden xl:h-6 xl:border-l-2" />
             <div className="flex flex-grow gap-2">
               <label className="grid flex-grow gap-2 sm:flex sm:items-center">
                 <span className="flex-shrink">Title search</span>
