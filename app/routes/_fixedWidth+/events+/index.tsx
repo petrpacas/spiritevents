@@ -247,9 +247,9 @@ export default function Events() {
           <Form
             onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
-            className="grid gap-4 rounded-lg bg-stone-50 px-4 py-4 lg:flex lg:items-center"
+            className="grid gap-8 rounded-lg bg-stone-50 px-4 py-4 sm:gap-4 lg:flex lg:items-center"
           >
-            <div className="grid gap-2 sm:max-lg:grid-cols-2 lg:flex">
+            <div className="grid gap-4 sm:max-lg:grid-cols-2 lg:flex">
               <label className="grid items-center gap-2 lg:flex" htmlFor="past">
                 Showing
                 <select
@@ -277,8 +277,8 @@ export default function Events() {
                 />
               </label>
             </div>
-            <div className="border-stone-200 max-lg:border-t lg:h-6 lg:border-l-2" />
-            <div className="flex gap-2 lg:flex-grow">
+            <div className="border-stone-200 max-lg:hidden lg:h-6 lg:border-l-2" />
+            <div className="flex flex-grow gap-2">
               <label className="grid flex-grow gap-2 sm:flex sm:items-center">
                 <span className="flex-shrink">Title search</span>
                 <input
@@ -288,7 +288,7 @@ export default function Events() {
                   name="search"
                   id="search"
                   defaultValue={search || ""}
-                  className="flex-grow rounded border border-stone-300 py-1 font-semibold placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
+                  className="flex-grow rounded border border-stone-300 py-1 font-semibold placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:w-full sm:py-2"
                 />
               </label>
               {isFiltering ? (
