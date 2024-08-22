@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { CountrySelect, EventListCard } from "~/components";
 import { authenticator, prisma } from "~/services";
-import { countries, getTodayDate, EventStatus } from "~/utils";
+import { countries, getTodayDate, EventStatus, monthNames } from "~/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -96,32 +96,52 @@ export default function Events() {
     return countries.filter((c) => countryCodes.includes(c.code));
   };
   const countryObjects = getCountryObjects(allCountryCodes);
-  type EventsWithYear = {
-    year: string;
+  type EventsWithMonth = {
+    month: string;
     events: typeof allEvents;
   };
-  function groupEventsByYear(events: typeof allEvents): EventsWithYear[] {
-    const groupedEvents: Record<string, typeof allEvents> = {};
+  type EventsWithYear = {
+    year: string;
+    months: EventsWithMonth[];
+  };
+  function groupEventsByYearAndMonth(
+    events: typeof allEvents,
+  ): EventsWithYear[] {
+    const groupedEvents: Record<string, Record<string, typeof allEvents>> = {};
     for (const event of events) {
       const year =
         event.dateStart === ""
           ? "0"
-          : new Date(event.dateStart).getFullYear().toString();
+          : String(new Date(event.dateStart).getFullYear());
+      const month =
+        event.dateStart === ""
+          ? "00"
+          : String(new Date(event.dateStart).getMonth());
       if (!groupedEvents[year]) {
-        groupedEvents[year] = [];
+        groupedEvents[year] = {};
       }
-      groupedEvents[year].push(event);
+      if (!groupedEvents[year][month]) {
+        groupedEvents[year][month] = [];
+      }
+      groupedEvents[year][month].push(event);
     }
     const result: EventsWithYear[] = [];
     for (const year in groupedEvents) {
+      const months: EventsWithMonth[] = [];
+      for (const month in groupedEvents[year]) {
+        months.push({
+          month,
+          events: groupedEvents[year][month],
+        });
+      }
       result.push({
         year,
-        events: groupedEvents[year],
+        months,
       });
     }
     return result;
   }
-  const eventsByYear = groupEventsByYear(allEvents);
+  const eventsByYear = groupEventsByYearAndMonth(allEvents);
   const handleFiltering = (form: HTMLFormElement) => {
     const formData = new FormData(form);
     if (formData.get("past") !== "true") {
@@ -338,21 +358,31 @@ export default function Events() {
       </div>
       {allEvents.length > 0 ? (
         <div className="grid gap-8">
-          {eventsByYear.map((group, index) => (
-            <div className="grid gap-4" key={index}>
+          {eventsByYear.map((yearGroup, yearIndex) => (
+            <div className="grid gap-4" key={yearIndex}>
               <h2 className="text-2xl font-bold sm:text-3xl">
-                {group.year === "0" ? "Missing date info" : group.year}
+                {yearGroup.year === "0" ? "Missing date info" : yearGroup.year}
               </h2>
-              {group.events.map((event) => (
-                <EventListCard
-                  key={event.slug}
-                  slug={event.slug}
-                  status={isAuthenticated ? event.status : undefined}
-                  title={event.title}
-                  country={event.country}
-                  dateStart={event.dateStart}
-                  dateEnd={event.dateEnd}
-                />
+              {yearGroup.months.map((monthGroup, monthIndex) => (
+                <div className="grid gap-4" key={`${yearIndex}_${monthIndex}`}>
+                  {monthGroup.month !== "00" && (
+                    <h3 className="text-xl font-bold sm:text-2xl">
+                      {monthNames[Number(monthGroup.month)]}
+                    </h3>
+                  )}
+                  {monthGroup.events.map((event) => (
+                    <EventListCard
+                      eventsIndex
+                      key={event.slug}
+                      slug={event.slug}
+                      status={isAuthenticated ? event.status : undefined}
+                      title={event.title}
+                      country={event.country}
+                      dateStart={event.dateStart}
+                      dateEnd={event.dateEnd}
+                    />
+                  ))}
+                </div>
               ))}
             </div>
           ))}

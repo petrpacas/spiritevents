@@ -84,7 +84,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         .use(rehypeStringify)
         .process(description)
     : "";
-  event.description = parsedDescription.toString();
+  event.description = String(parsedDescription);
   return { event, isAuthenticated: Boolean(user) };
 }
 
