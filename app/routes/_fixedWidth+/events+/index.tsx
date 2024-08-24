@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { CountrySelect, EventListCard } from "~/components";
 import { authenticator, prisma } from "~/services";
-import { countries, getTodayDate, EventStatus, monthNames } from "~/utils";
+import { countries, getTodayDate, EventStatus } from "~/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -41,10 +41,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
     status: EventStatus;
     title: string;
   };
+  type EventsWithMonth = {
+    month: string;
+    events: EventObject[];
+  };
+  type EventsWithYear = {
+    year: string;
+    months: EventsWithMonth[];
+  };
   const allCountries = await prisma.event.groupBy({
     by: ["country"],
     where: {
-      dateEnd: isPast ? { lt: today } : { gte: today },
+      OR: [
+        { dateEnd: isPast ? { lt: today } : { gte: today } },
+        { dateEnd: "" },
+      ],
       status: isAuthenticated ? undefined : EventStatus.PUBLISHED,
     },
   });
@@ -74,49 +85,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
       "dateStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
       "title" ASC
   `;
-  return {
-    allCountryCodes,
-    allEvents,
-    country,
-    isAuthenticated,
-    past,
-    search,
-  };
-}
-
-export default function Events() {
-  const { allCountryCodes, allEvents, country, isAuthenticated, past, search } =
-    useLoaderData<typeof loader>();
-  const navigate = useNavigate();
-  const navigation = useNavigation();
-  const isWorking = navigation.state !== "idle";
-  const submit = useSubmit();
-  const [isFiltering, setIsFiltering] = useState(false);
-  const getCountryObjects = (countryCodes: string[]) => {
-    return countries.filter((c) => countryCodes.includes(c.code));
-  };
-  const countryObjects = getCountryObjects(allCountryCodes);
-  type EventsWithMonth = {
-    month: string;
-    events: typeof allEvents;
-  };
-  type EventsWithYear = {
-    year: string;
-    months: EventsWithMonth[];
-  };
-  function groupEventsByYearAndMonth(
-    events: typeof allEvents,
-  ): EventsWithYear[] {
-    const groupedEvents: Record<string, Record<string, typeof allEvents>> = {};
-    for (const event of events) {
-      const year =
-        event.dateStart === ""
-          ? "0"
-          : String(new Date(event.dateStart).getFullYear());
+  function groupEvents(events: EventObject[]): EventsWithYear[] {
+    const groupedEvents: Record<string, Record<string, EventObject[]>> = {};
+    events.forEach((event) => {
+      const date = new Date(event.dateStart);
+      const year = event.dateStart === "" ? "0" : date.getFullYear().toString();
       const month =
         event.dateStart === ""
-          ? "00"
-          : String(new Date(event.dateStart).getMonth());
+          ? "0"
+          : (date.getMonth() + 1).toString().padStart(2, "0");
       if (!groupedEvents[year]) {
         groupedEvents[year] = {};
       }
@@ -124,24 +101,45 @@ export default function Events() {
         groupedEvents[year][month] = [];
       }
       groupedEvents[year][month].push(event);
-    }
-    const result: EventsWithYear[] = [];
-    for (const year in groupedEvents) {
-      const months: EventsWithMonth[] = [];
-      for (const month in groupedEvents[year]) {
-        months.push({
-          month,
-          events: groupedEvents[year][month],
-        });
-      }
-      result.push({
-        year,
-        months,
-      });
-    }
-    return result;
+    });
+    return Object.entries(groupedEvents).map(([year, months]) => ({
+      year,
+      months: Object.entries(months).map(([month, events]) => ({
+        month,
+        events,
+      })),
+    }));
   }
-  const eventsByYear = groupEventsByYearAndMonth(allEvents);
+  const groupedEvents = groupEvents(allEvents);
+  return {
+    allCountryCodes,
+    country,
+    groupedEvents,
+    isAuthenticated,
+    past,
+    search,
+  };
+}
+
+export default function Events() {
+  const {
+    allCountryCodes,
+    country,
+    groupedEvents,
+    isAuthenticated,
+    past,
+    search,
+  } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isWorking = navigation.state !== "idle";
+  const submit = useSubmit();
+  const [isFiltering, setIsFiltering] = useState(false);
+  const hasGroupedEvents = groupedEvents.length > 0;
+  const getCountryObjects = (countryCodes: string[]) => {
+    return countries.filter((c) => countryCodes.includes(c.code));
+  };
+  const countryObjects = getCountryObjects(allCountryCodes);
   const handleFiltering = (form: HTMLFormElement) => {
     const formData = new FormData(form);
     if (formData.get("past") !== "true") {
@@ -263,7 +261,7 @@ export default function Events() {
             !
           </p>
         )}
-        {(past || search || allEvents.length > 0) && (
+        {(past || search || hasGroupedEvents) && (
           <Form
             onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
@@ -356,21 +354,23 @@ export default function Events() {
           </Form>
         )}
       </div>
-      {allEvents.length > 0 ? (
+      {hasGroupedEvents ? (
         <div className="grid gap-8">
-          {eventsByYear.map((yearGroup, yearIndex) => (
-            <div className="grid gap-4" key={yearIndex}>
+          {groupedEvents.map(({ year, months }) => (
+            <div className="grid gap-4" key={year}>
               <h2 className="text-2xl font-bold sm:text-3xl">
-                {yearGroup.year === "0" ? "Missing date info" : yearGroup.year}
+                {year === "0" ? "Missing date info" : year}
               </h2>
-              {yearGroup.months.map((monthGroup, monthIndex) => (
-                <div className="grid gap-4" key={`${yearIndex}_${monthIndex}`}>
-                  {monthGroup.month !== "00" && (
+              {months.map(({ month, events }) => (
+                <div className="grid gap-4" key={`${year}_${month}`}>
+                  {month !== "0" && (
                     <h3 className="text-xl font-bold sm:text-2xl">
-                      {monthNames[Number(monthGroup.month)]}
+                      {new Date(month).toLocaleString("en", {
+                        month: "long",
+                      })}
                     </h3>
                   )}
-                  {monthGroup.events.map((event) => (
+                  {events.map((event) => (
                     <EventListCard
                       eventsIndex
                       key={event.slug}
@@ -393,7 +393,7 @@ export default function Events() {
         </p>
       )}
       {isAuthenticated ? (
-        allEvents.length > 0 && (
+        hasGroupedEvents && (
           <div className="flex items-center justify-center gap-2 max-[399px]:flex-col sm:gap-4 sm:text-lg">
             <div className="rounded bg-emerald-100 p-2 sm:px-4">
               <span className="text-amber-600">(S)</span> Suggested
