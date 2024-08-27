@@ -23,7 +23,10 @@ export async function loader() {
       country: true,
       dateEnd: true,
       dateStart: true,
+      location: true,
       slug: true,
+      timeEnd: true,
+      timeStart: true,
       title: true,
     },
     take: 3,
@@ -81,11 +84,11 @@ export default function Landing() {
                   that indeed <strong>we are all related</strong>.
                 </p>
                 <p className="text-lg sm:text-xl">
-                  If you were to{" "}
-                  <strong>search for your next opportunity</strong> to{" "}
-                  <em>enter the vortex</em> again, where would you look? The
-                  informations are scattered and hard to come by without having
-                  the right connections in real life or on social media.
+                  If you were to <em>search for your next opportunity</em> to{" "}
+                  <strong>gather with your tribe again</strong>, where would you
+                  look? The informations are scattered and hard to come by
+                  without having the right connections in real life or on social
+                  media.
                 </p>
                 <p className="text-lg sm:text-xl">
                   It&apos;s not easy to <strong>stay informed</strong> about{" "}
@@ -105,29 +108,32 @@ export default function Landing() {
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
             <h2 className="text-2xl sm:text-3xl">
               📅 Choose from the myriad of nourishing{" "}
-              <strong>festivals and gatherings</strong>
+              <strong>events and festivals</strong>
             </h2>
             <div className="grid gap-4">
               {events.map((event) => (
                 <EventListCard
                   key={event.slug}
-                  slug={event.slug}
-                  title={event.title}
                   country={event.country}
+                  location={event.location}
                   dateStart={event.dateStart}
                   dateEnd={event.dateEnd}
+                  slug={event.slug}
+                  timeStart={event.timeStart}
+                  timeEnd={event.timeEnd}
+                  title={event.title}
                 />
               ))}
             </div>
             <div className="grid items-center gap-8 sm:max-xl:flex sm:max-xl:justify-between xl:grid-cols-3 xl:gap-16">
-              <p className="text-xl md:text-2xl xl:col-span-2">
+              <p className="text-2xl md:text-3xl xl:col-span-2">
                 and many more&hellip;
               </p>
               <Link
                 to="/events"
                 className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
               >
-                Discover conscious events
+                Discover uplifting events
                 <svg
                   className="h-6 w-6 max-[339px]:hidden"
                   width="16px"

@@ -62,10 +62,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
+  const isAuthenticated = Boolean(user);
   const event = await prisma.event.findUnique({
     where: {
       slug: params.slug,
-      status: user ? undefined : EventStatus.PUBLISHED,
+      status: isAuthenticated ? undefined : EventStatus.PUBLISHED,
     },
   });
   if (!event) {
@@ -85,7 +86,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         .process(description)
     : "";
   event.description = String(parsedDescription);
-  return { event, isAuthenticated: Boolean(user) };
+  return { event, isAuthenticated };
 }
 
 export default function Event() {
@@ -150,7 +151,8 @@ export default function Event() {
                 )}
               </div>
               <div className="grid gap-4">
-                <p className="text-2xl font-semibold leading-relaxed sm:text-3xl sm:leading-relaxed">
+                <p className="text-2xl font-semibold leading-normal sm:text-3xl sm:leading-normal">
+                  {event.location && `${event.location}, `}
                   {getCountryNameByCode(event.country)}{" "}
                   <span className="text-amber-600">({event.country})</span>
                 </p>
@@ -167,17 +169,26 @@ export default function Event() {
                   </div>
                 )}
               </div>
-              <div className="grid gap-4 text-2xl font-semibold leading-relaxed sm:text-3xl sm:leading-relaxed lg:flex lg:justify-center">
+              <div
+                className={`grid text-2xl font-semibold leading-snug sm:text-3xl sm:leading-snug lg:gap-4 ${event.dateEnd !== event.dateStart ? "" : "lg:flex lg:justify-center"}`}
+              >
                 {event.dateStart ? (
                   <>
-                    <span>{new Date(event.dateStart).toDateString()}</span>
-                    {event.dateEnd !== event.dateStart && (
-                      <>
-                        <span className="font-normal text-amber-600">
-                          &gt;&gt;
-                        </span>
-                        <span>{new Date(event.dateEnd).toDateString()}</span>
-                      </>
+                    <div className="grid lg:flex lg:justify-center lg:gap-4">
+                      <span>{new Date(event.dateStart).toDateString()}</span>
+                      {event.dateEnd !== event.dateStart && (
+                        <>
+                          <span className="text-amber-600">&lt;&gt;</span>
+                          <span>{new Date(event.dateEnd).toDateString()}</span>
+                        </>
+                      )}
+                    </div>
+                    {event.timeStart && (
+                      <div className="grid lg:flex lg:justify-center lg:gap-4">
+                        <span className="text-amber-600">&gt;&lt;</span>
+                        {event.timeStart}
+                        {event.timeEnd && ` - ${event.timeEnd}`}
+                      </div>
                     )}
                   </>
                 ) : (

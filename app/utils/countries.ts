@@ -1,5 +1,14 @@
 export const countries = [
   {
+    name: "Czech Republic",
+    code: "CZ",
+  },
+  {
+    name: "—",
+    code: "",
+    disabled: true,
+  },
+  {
     name: "Afghanistan",
     code: "AF",
   },
@@ -226,10 +235,6 @@ export const countries = [
   {
     name: "Cyprus",
     code: "CY",
-  },
-  {
-    name: "Czech Republic",
-    code: "CZ",
   },
   {
     name: "Denmark",

@@ -6,10 +6,10 @@ import { useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import slugify from "slugify";
 import { z } from "zod";
-import { CountrySelect } from "./CountrySelect";
-import { DescriptionEditor } from "./DescriptionEditor";
-import { EventStatus } from "~/utils";
+import { countries, EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
+import { DescriptionEditor } from "./DescriptionEditor";
+import { Select } from "./Select";
 
 type Props = {
   errors?: z.inferFlattenedErrors<typeof eventFormSchema>;
@@ -74,12 +74,13 @@ export const EventFormFields = ({
     handleSlugBlur();
   };
   return (
-    <div className="grid gap-4 md:grid-cols-6 md:items-start">
-      <label className="grid gap-2 md:col-span-3">
+    <div className="grid gap-4 md:grid-cols-2 md:items-start">
+      <label className={`grid gap-2 ${isSuggesting ? "md:col-span-2" : ""}`}>
         <div>
           Title <span className="text-amber-600">(required)</span>
         </div>
         <input
+          required
           autoComplete="off"
           type="text"
           name="title"
@@ -93,21 +94,18 @@ export const EventFormFields = ({
         )}
       </label>
       {!isSuggesting && (
-        <label className="grid gap-2 md:col-span-3">
+        <label className="grid gap-2">
           <div>
             URL slug{" "}
             <span className="text-amber-600">
-              ~{" "}
+              (required) ~{" "}
               {isSlugFreelyModifiable
                 ? "should be permament"
                 : "change with caution"}
-              <span className="max-xl:hidden">
-                {" "}
-                (and have year [-yyyy] at the end)
-              </span>
             </span>
           </div>
           <input
+            required
             autoComplete="off"
             type="text"
             name="slug"
@@ -123,15 +121,17 @@ export const EventFormFields = ({
           )}
         </label>
       )}
-      <label
-        className={`${isSuggesting ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
-      >
+      <label className="grid gap-2 md:col-span-1">
         <div>
           Country <span className="text-amber-600">(required)</span>
         </div>
-        <CountrySelect
+        <Select
+          required
+          options={countries}
+          emptyOption={event?.country ? undefined : "— select a country"}
           defaultValue={event?.country}
-          className="w-full cursor-pointer rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          name="country"
+          className="w-full cursor-pointer rounded border-stone-200 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.country && (
           <p className="text-red-600">
@@ -139,9 +139,53 @@ export const EventFormFields = ({
           </p>
         )}
       </label>
-      <label
-        className={`${isSuggesting ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
-      >
+      <label className="grid gap-2">
+        Location hint{" "}
+        <input
+          autoComplete="off"
+          type="text"
+          name="location"
+          defaultValue={event?.location}
+          placeholder="eg. city, venue, or area"
+          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.location && (
+          <p className="text-red-600">
+            {errors.fieldErrors.location.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2">
+        Location link
+        <input
+          autoComplete="off"
+          type="text"
+          name="linkLocation"
+          defaultValue={event?.linkLocation}
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.linkLocation && (
+          <p className="text-red-600">
+            {errors.fieldErrors.linkLocation.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2">
+        Website link
+        <input
+          autoComplete="off"
+          type="text"
+          name="linkWebsite"
+          defaultValue={event?.linkWebsite}
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.linkWebsite && (
+          <p className="text-red-600">
+            {errors.fieldErrors.linkWebsite.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2 md:col-span-1">
         Start date
         <input
           autoComplete="off"
@@ -163,9 +207,7 @@ export const EventFormFields = ({
           </p>
         )}
       </label>
-      <label
-        className={`${isSuggesting ? "md:col-span-3" : "md:col-span-2"} grid gap-2`}
-      >
+      <label className="grid gap-2 md:col-span-1">
         End date
         <input
           autoComplete="off"
@@ -187,41 +229,43 @@ export const EventFormFields = ({
           </p>
         )}
       </label>
-      <label className="grid gap-2 md:col-span-3">
-        Website link
+      <label className="grid gap-2">
+        Start time
         <input
           autoComplete="off"
-          type="text"
-          name="linkWebsite"
-          defaultValue={event?.linkWebsite}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          type="time"
+          name="timeStart"
+          placeholder="hh:mm"
+          defaultValue={event?.timeStart}
+          className="pshadow-sm rounded border-stone-200 placeholder-stone-400 transition-shadow hover:shadow-md active:shadow"
         />
-        {errors?.fieldErrors.linkWebsite && (
+        {errors?.fieldErrors.timeStart && (
           <p className="text-red-600">
-            {errors.fieldErrors.linkWebsite.join(", ")}
+            {errors.fieldErrors.timeStart.join(", ")}
           </p>
         )}
       </label>
-      <label className="grid gap-2 md:col-span-3">
-        Location link
+      <label className="grid gap-2">
+        End time
         <input
           autoComplete="off"
-          type="text"
-          name="linkLocation"
-          defaultValue={event?.linkLocation}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          type="time"
+          name="timeEnd"
+          placeholder="hh:mm"
+          defaultValue={event?.timeEnd}
+          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
-        {errors?.fieldErrors.linkLocation && (
+        {errors?.fieldErrors.timeEnd && (
           <p className="text-red-600">
-            {errors.fieldErrors.linkLocation.join(", ")}
+            {errors.fieldErrors.timeEnd.join(", ")}
           </p>
         )}
       </label>
       <ClientOnly
         fallback={
-          <label className="grid gap-2 md:col-span-6">
+          <label className="grid gap-2 md:col-span-2">
             <div>
-              Description {isSuggesting && "or your personal message"}{" "}
+              Description{" "}
               <span className="text-amber-600">~ loading editor&hellip;</span>
             </div>
             <textarea
@@ -239,8 +283,8 @@ export const EventFormFields = ({
         }
       >
         {() => (
-          <div className="grid gap-2 md:col-span-6">
-            Description {isSuggesting && "or your personal message"}
+          <div className="grid gap-2 md:col-span-2">
+            Description
             <DescriptionEditor
               ref={mdxEditorRef}
               className="overflow-x-auto rounded border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow"

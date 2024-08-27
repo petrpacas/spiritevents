@@ -6,8 +6,13 @@ type Props = {
   dateEnd: string;
   dateStart: string;
   eventsIndex?: boolean;
+  eventsIndexFiltersCountry?: boolean;
+  eventsIndexFiltersStatus?: boolean;
+  location?: string;
   slug: string;
   status?: keyof typeof EventStatus;
+  timeStart?: string;
+  timeEnd?: string;
   title: string;
 };
 
@@ -16,19 +21,25 @@ export const EventListCard = ({
   dateEnd,
   dateStart,
   eventsIndex,
+  eventsIndexFiltersCountry,
+  eventsIndexFiltersStatus,
+  location,
   slug,
   status,
+  timeStart,
+  timeEnd,
   title,
 }: Props) => {
   const [statusLetter, statusBg] = getStatusColors(status);
   const headingContent = (
     <>
-      {statusLetter && (
-        <>
-          <span className="text-amber-600">{statusLetter}</span>{" "}
-        </>
+      {!eventsIndexFiltersStatus && statusLetter && (
+        <span className="text-amber-600">{statusLetter} </span>
       )}
-      {title} <span className="text-amber-600">({country})</span>
+      {!eventsIndexFiltersCountry && (
+        <span className="text-amber-600">({country}) </span>
+      )}
+      {title}
     </>
   );
   return (
@@ -41,20 +52,35 @@ export const EventListCard = ({
       ) : (
         <h3 className="text-xl sm:text-2xl">{headingContent}</h3>
       )}
-      <div className="flex gap-2 text-sm sm:text-base md:items-center md:justify-end md:text-center">
-        {dateStart ? (
-          <>
-            <span>{new Date(dateStart).toDateString()}</span>
-            {dateEnd !== dateStart && (
-              <>
-                <span className="text-amber-600">&gt;&gt;</span>
-                <span>{new Date(dateEnd).toDateString()}</span>
-              </>
-            )}
-          </>
-        ) : (
-          <span className="text-red-600">Missing date info</span>
+      <div className="grid max-md:gap-1 md:items-center md:justify-items-end">
+        {location && (
+          <div className="text-lg leading-snug text-amber-600 sm:text-xl sm:leading-snug">
+            {location}
+          </div>
         )}
+        <div className="flex gap-2 leading-snug sm:text-lg sm:leading-snug md:items-center md:justify-center md:text-center">
+          {dateStart ? (
+            <>
+              <span>{new Date(dateStart).toDateString()}</span>
+              {dateEnd !== dateStart ? (
+                <>
+                  <span className="text-amber-600">&lt;&gt;</span>
+                  <span>{new Date(dateEnd).toDateString()}</span>
+                </>
+              ) : (
+                timeStart && (
+                  <>
+                    <span className="text-amber-600">&gt;&lt;</span>
+                    {timeStart}
+                    {timeEnd && ` - ${timeEnd}`}
+                  </>
+                )
+              )}
+            </>
+          ) : (
+            <span className="text-red-600">Missing date info</span>
+          )}
+        </div>
       </div>
     </Link>
   );

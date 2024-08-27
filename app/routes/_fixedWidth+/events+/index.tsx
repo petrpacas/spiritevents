@@ -10,7 +10,7 @@ import {
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { CountrySelect, EventListCard } from "~/components";
+import { EventListCard, Select } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { countries, getTodayDate, EventStatus } from "~/utils";
 
@@ -27,9 +27,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const requestUrl = new URL(request.url);
   const user = await authenticator.isAuthenticated(request);
-  const past = requestUrl.searchParams.get("past");
   const country = requestUrl.searchParams.get("country");
+  const past = requestUrl.searchParams.get("past");
   const search = requestUrl.searchParams.get("search");
+  const status = requestUrl.searchParams.get("status");
   const isAuthenticated = Boolean(user);
   const isPast = past === "true";
   const today = getTodayDate();
@@ -37,8 +38,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     country: string;
     dateEnd: string;
     dateStart: string;
+    location: string;
     slug: string;
     status: EventStatus;
+    timeEnd: string;
+    timeStart: string;
     title: string;
   };
   type EventsWithMonth = {
@@ -49,17 +53,41 @@ export async function loader({ request }: LoaderFunctionArgs) {
     year: string;
     months: EventsWithMonth[];
   };
+  let eventStatusEnumMatch = undefined;
+  switch (status) {
+    case "suggested":
+      eventStatusEnumMatch = EventStatus.SUGGESTED;
+      break;
+    case "draft":
+      eventStatusEnumMatch = EventStatus.DRAFT;
+      break;
+    case "published":
+      eventStatusEnumMatch = EventStatus.PUBLISHED;
+      break;
+    default:
+      break;
+  }
   const allCountries = await prisma.event.groupBy({
     by: ["country"],
     where: {
       OR: [
-        { dateEnd: isPast ? { lt: today } : { gte: today } },
-        { dateEnd: "" },
+        { dateEnd: isPast ? { lt: today, not: "" } : { gte: today } },
+        { dateEnd: isAuthenticated ? "" : undefined },
       ],
-      status: isAuthenticated ? undefined : EventStatus.PUBLISHED,
+      status: isAuthenticated
+        ? status && eventStatusEnumMatch
+          ? eventStatusEnumMatch
+          : undefined
+        : EventStatus.PUBLISHED,
     },
   });
-  const allCountryCodes = allCountries.map((c) => c.country);
+  const allCountryCodes = allCountries
+    .map((c) => c.country)
+    .sort((a, b) => {
+      if (a === "CZ") return -1;
+      if (b === "CZ") return 1;
+      return a.localeCompare(b);
+    });
   const searchConditions =
     search
       ?.trim()
@@ -71,16 +99,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
           Prisma.sql`unaccent(LOWER(title)) LIKE unaccent(LOWER(${`%${term}%`}))`,
       ) || [];
   const allEvents: EventObject[] = await prisma.$queryRaw`
-    SELECT "country", "dateEnd", "dateStart", "slug", "status", "title"
+    SELECT "country", "dateEnd", "dateStart", "location", "slug", "status", "timeEnd", "timeStart", "title"
     FROM "Event"
     WHERE
       ${country ? Prisma.sql`country = ${country}` : Prisma.sql`TRUE`}
+      AND (${isAuthenticated ? (status && eventStatusEnumMatch ? Prisma.sql`"status" = ${Prisma.raw(`'${eventStatusEnumMatch}'`)} ` : Prisma.sql`TRUE`) : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'`)} `})
       AND (
-        ${isPast ? Prisma.sql`"dateEnd" < ${today}` : Prisma.sql`"dateEnd" >= ${today}`}
+        ${isPast ? Prisma.sql`"dateEnd" < ${today} AND "dateEnd" != ''` : Prisma.sql`"dateEnd" >= ${today}`}
         ${isAuthenticated ? Prisma.sql`OR "dateEnd" = ''` : Prisma.sql``}
       )
       ${searchConditions.length > 0 ? Prisma.sql`AND (${Prisma.join(searchConditions, " AND ")})` : Prisma.sql``}
-      AND (${isAuthenticated ? Prisma.sql`TRUE` : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'::"EventStatus"`)} `})
     ORDER BY
       "dateStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
       "title" ASC
@@ -89,7 +117,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const groupedEvents: Record<string, Record<string, EventObject[]>> = {};
     events.forEach((event) => {
       const date = new Date(event.dateStart);
-      const year = event.dateStart === "" ? "0" : date.getFullYear().toString();
+      const year =
+        event.dateStart === ""
+          ? "0"
+          : date.getFullYear().toString().padStart(4, "0");
       const month =
         event.dateStart === ""
           ? "0"
@@ -118,6 +149,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     isAuthenticated,
     past,
     search,
+    status,
   };
 }
 
@@ -129,6 +161,7 @@ export default function Events() {
     isAuthenticated,
     past,
     search,
+    status,
   } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
@@ -140,42 +173,37 @@ export default function Events() {
     return countries.filter((c) => countryCodes.includes(c.code));
   };
   const countryObjects = getCountryObjects(allCountryCodes);
-  const handleFiltering = (form: HTMLFormElement) => {
+  const handleFiltering = (
+    form: HTMLFormElement,
+    preserveCountry?: boolean,
+  ) => {
     const formData = new FormData(form);
-    if (formData.get("past") !== "true") {
+    if (formData.get("status") === "") {
+      formData.delete("status");
+    }
+    if (formData.get("past") === "") {
       formData.delete("past");
+    }
+    if (formData.get("country") === "" || !preserveCountry) {
+      formData.delete("country");
     }
     if (formData.get("search") === "") {
       formData.delete("search");
     }
-    if (formData.get("country") === "") {
-      formData.delete("country");
-    }
     submit(formData, { preventScrollReset: true });
   };
-  const handlePastChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    preserveCountry?: boolean,
+  ) => {
     if (e.currentTarget.form) {
       debouncedHandleSearchChange.cancel();
-      const formData = new FormData(e.currentTarget.form);
-      if (formData.get("past") === "") {
-        formData.delete("past");
-      }
-      formData.delete("country");
-      if (formData.get("search") === "") {
-        formData.delete("search");
-      }
-      submit(formData, { preventScrollReset: true });
-    }
-  };
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.currentTarget.form) {
-      debouncedHandleSearchChange.cancel();
-      handleFiltering(e.currentTarget.form);
+      handleFiltering(e.currentTarget.form, preserveCountry);
     }
   };
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.form) {
-      handleFiltering(e.target.form);
+      handleFiltering(e.target.form, true);
     }
   };
   const debouncedHandleSearchChange = useDebouncedCallback(
@@ -185,7 +213,7 @@ export default function Events() {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     debouncedHandleSearchChange.cancel();
-    handleFiltering(e.currentTarget);
+    handleFiltering(e.currentTarget, true);
   };
   const handleClearSearch = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -212,9 +240,13 @@ export default function Events() {
     }
   }, [isWorking]);
   useEffect(() => {
+    const statusEl = document.getElementById("status");
     const pastEl = document.getElementById("past");
     const countryEl = document.getElementById("country");
     const searchEl = document.getElementById("search");
+    if (statusEl instanceof HTMLSelectElement) {
+      statusEl.value = status || "";
+    }
     if (pastEl instanceof HTMLSelectElement) {
       pastEl.value = past || "";
     }
@@ -224,7 +256,7 @@ export default function Events() {
     if (searchEl instanceof HTMLInputElement) {
       searchEl.value = search || "";
     }
-  }, [past, country, search]);
+  }, [status, past, country, search]);
   return (
     <div className="grid gap-8">
       <div className="grid items-center gap-8">
@@ -246,56 +278,70 @@ export default function Events() {
             />
           </svg>
           <span>
-            {isAuthenticated ? "All events" : "Discover conscious events"}
+            {isAuthenticated ? "All events" : "Discover uplifting events"}
           </span>
         </h1>
-        {!(isAuthenticated || country || search) && (
+        {!(country || isAuthenticated || past || search) && (
           <p className="text-lg sm:text-xl">
-            Browse through the myriad of nourishing festivals and gatherings so
-            you can get informed and inspired. And if you don&apos;t see the one
-            you know and love - or perhaps the one you wish to attend for the
-            first time - send me a{" "}
+            Browse through the myriad of nourishing events and festivals to get
+            informed and inspired. And if you know of a gathering that&apos;s
+            missing here - send me a{" "}
             <Link to="/events/suggest" className="text-amber-600 underline">
               suggestion
             </Link>
             !
           </p>
         )}
-        {(past || search || hasGroupedEvents) && (
+        {(country || hasGroupedEvents || past || search || status) && (
           <Form
             onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
-            className="grid gap-8 rounded-lg bg-stone-50 px-4 py-4 sm:gap-4 xl:flex xl:items-center"
+            className="grid gap-8 rounded-lg bg-stone-50 px-4 py-4 sm:gap-4 lg:flex lg:items-center"
           >
-            <div className="grid gap-4 sm:max-xl:grid-cols-2 xl:flex">
-              <label className="grid items-center gap-2 xl:flex" htmlFor="past">
-                Showing
+            <div
+              className={`grid gap-4 lg:gap-2 ${isAuthenticated ? "sm:max-lg:grid-cols-3" : "sm:max-lg:grid-cols-2"} lg:flex`}
+            >
+              {isAuthenticated && (
                 <select
-                  onChange={handlePastChange}
+                  onChange={handleSelectChange}
                   autoComplete="off"
-                  name="past"
-                  id="past"
-                  defaultValue={past || ""}
+                  name="status"
+                  id="status"
+                  defaultValue={status || ""}
                   className="cursor-pointer rounded border border-stone-300 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
                 >
-                  <option value="">upcoming events</option>
-                  <option value="true">past events</option>
+                  <option value="">Any status</option>
+                  <option value="suggested">Suggested</option>
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
                 </select>
-              </label>
-              <label
-                className="grid items-center gap-2 xl:flex"
-                htmlFor="country"
+              )}
+              <select
+                onChange={handleSelectChange}
+                autoComplete="off"
+                name="past"
+                id="past"
+                defaultValue={past || ""}
+                className="cursor-pointer rounded border border-stone-300 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
               >
-                happening in
-                <CountrySelect
-                  onChange={handleCountryChange}
-                  countries={countryObjects}
-                  defaultValue={country || ""}
-                  className="cursor-pointer rounded border border-stone-300 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
-                />
-              </label>
+                <option value="">
+                  Upcoming{!isAuthenticated && " events"}
+                </option>
+                <option value="true">
+                  Past{!isAuthenticated && " events"}
+                </option>
+              </select>
+              <Select
+                onChange={(e) => handleSelectChange(e, true)}
+                name="country"
+                id="country"
+                options={countryObjects}
+                defaultValue={country || ""}
+                emptyOption="All countries"
+                className="cursor-pointer rounded border border-stone-300 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2"
+              />
             </div>
-            <div className="border-stone-200 max-xl:hidden xl:h-6 xl:border-l-2" />
+            <div className="border-stone-200 max-lg:hidden lg:h-6 lg:border-l-2" />
             <div className="flex flex-grow gap-2">
               <label className="grid flex-grow gap-2 sm:flex sm:items-center">
                 <span className="flex-shrink">Title search</span>
@@ -373,13 +419,18 @@ export default function Events() {
                   {events.map((event) => (
                     <EventListCard
                       eventsIndex
+                      eventsIndexFiltersCountry={Boolean(country)}
+                      eventsIndexFiltersStatus={Boolean(status)}
                       key={event.slug}
                       slug={event.slug}
                       status={isAuthenticated ? event.status : undefined}
                       title={event.title}
                       country={event.country}
+                      location={event.location}
                       dateStart={event.dateStart}
                       dateEnd={event.dateEnd}
+                      timeStart={event.timeStart}
+                      timeEnd={event.timeEnd}
                     />
                   ))}
                 </div>

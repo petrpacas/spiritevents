@@ -41,8 +41,11 @@ model Event {
   description  String
   linkLocation String
   linkWebsite  String
+  location     String
   slug         String      @unique
   status       EventStatus @default(PUBLISHED)
+  timeEnd      String
+  timeStart    String
   title        String
 }
 

@@ -29,6 +29,11 @@ export const eventFormSchema = z
     description: z.string().trim().or(z.literal("")),
     linkLocation: z.string().trim().or(z.literal("")),
     linkWebsite: z.string().trim().or(z.literal("")),
+    location: z
+      .string()
+      .trim()
+      .transform((value) => value.replace(/\s+/g, " "))
+      .or(z.literal("")),
     slug: z
       .string()
       .trim()
@@ -52,6 +57,14 @@ export const eventFormSchema = z
           });
         }
       }),
+    timeEnd: z
+      .string()
+      .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time")
+      .or(z.literal("")),
+    timeStart: z
+      .string()
+      .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time")
+      .or(z.literal("")),
     title: z
       .string()
       .trim()
