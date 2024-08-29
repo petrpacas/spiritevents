@@ -100,16 +100,41 @@ export async function loader({ request }: LoaderFunctionArgs) {
           Prisma.sql`unaccent(LOWER(title)) LIKE unaccent(LOWER(${`%${term}%`}))`,
       ) || [];
   const allEvents: EventObject[] = await prisma.$queryRaw`
-    SELECT "country", "dateEnd", "dateStart", "id", "location", "slug", "status", "timeEnd", "timeStart", "title"
+    SELECT
+      "country",
+      "dateEnd",
+      "dateStart",
+      "id",
+      "location",
+      "slug",
+      "status",
+      "timeEnd",
+      "timeStart",
+      "title"
     FROM "Event"
     WHERE
       ${country ? Prisma.sql`country = ${country}` : Prisma.sql`TRUE`}
-      AND (${isAuthenticated ? (status && eventStatusEnumMatch ? Prisma.sql`"status" = ${Prisma.raw(`'${eventStatusEnumMatch}'`)} ` : Prisma.sql`TRUE`) : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'`)} `})
       AND (
-        ${isPast ? Prisma.sql`"dateEnd" < ${today} AND "dateEnd" != ''` : Prisma.sql`"dateEnd" >= ${today}`}
+        ${
+          isAuthenticated
+            ? status && eventStatusEnumMatch
+              ? Prisma.sql`"status" = ${Prisma.raw(`'${eventStatusEnumMatch}'`)} `
+              : Prisma.sql`TRUE`
+            : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'`)} `
+        })
+      AND (
+        ${
+          isPast
+            ? Prisma.sql`"dateEnd" < ${today} AND "dateEnd" != ''`
+            : Prisma.sql`"dateEnd" >= ${today}`
+        }
         ${isAuthenticated ? Prisma.sql`OR "dateEnd" = ''` : Prisma.sql``}
       )
-      ${searchConditions.length > 0 ? Prisma.sql`AND (${Prisma.join(searchConditions, " AND ")})` : Prisma.sql``}
+      ${
+        searchConditions.length > 0
+          ? Prisma.sql`AND (${Prisma.join(searchConditions, " AND ")})`
+          : Prisma.sql``
+      }
     ORDER BY
       "dateStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
       "title" ASC

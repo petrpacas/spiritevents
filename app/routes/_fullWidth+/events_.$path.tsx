@@ -146,16 +146,37 @@ export default function Event() {
                   )}
                   {event.title}
                 </h1>
-                {event.linkWebsite && (
-                  <div>
-                    <a
-                      href={event.linkWebsite}
-                      className="text-lg font-medium text-amber-600 underline sm:text-xl"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Event website
-                    </a>
+                {(event.linkFbEvent ||
+                  event.linkTickets ||
+                  event.linkWebsite) && (
+                  <div className="flex justify-center gap-8 text-lg font-semibold text-amber-600 underline max-[319px]:grid sm:text-xl">
+                    {event.linkWebsite && (
+                      <a
+                        href={event.linkWebsite}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Website
+                      </a>
+                    )}
+                    {event.linkFbEvent && (
+                      <a
+                        href={event.linkFbEvent}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        FB Event
+                      </a>
+                    )}
+                    {event.linkTickets && (
+                      <a
+                        href={event.linkTickets}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Tickets
+                      </a>
+                    )}
                   </div>
                 )}
               </div>
@@ -169,7 +190,7 @@ export default function Event() {
                   <div>
                     <a
                       href={event.linkLocation}
-                      className="text-lg font-medium text-amber-600 underline sm:text-xl"
+                      className="text-lg font-semibold text-amber-600 underline sm:text-xl"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
