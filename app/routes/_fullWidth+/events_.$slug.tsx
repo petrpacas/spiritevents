@@ -13,6 +13,7 @@ import {
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeStringify from "rehype-stringify";
 import rehypeSanitize from "rehype-sanitize";
+import remarkBreaks from "remark-breaks";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import {
@@ -76,6 +77,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const parsedDescription = description
     ? await unified()
         .use(remarkParse)
+        .use(remarkBreaks)
         .use(remarkRehype)
         .use(rehypeSanitize)
         .use(rehypeExternalLinks, {
