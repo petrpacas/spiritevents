@@ -411,7 +411,7 @@ export default function Events() {
                 <div className="grid gap-4" key={`${year}_${month}`}>
                   {month !== "0" && (
                     <h3 className="text-xl font-bold sm:text-2xl">
-                      {new Date(month).toLocaleString("en", {
+                      {new Date(`${year}-${month}`).toLocaleString("en", {
                         month: "long",
                       })}
                     </h3>
