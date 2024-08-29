@@ -1,7 +1,6 @@
 type Options = {
   name: string;
   code: string;
-  disabled?: boolean;
 }[];
 
 type Props = {
@@ -13,7 +12,6 @@ type Props = {
   id?: string;
   name?: string;
   required?: boolean;
-  value?: string;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 };
 
@@ -26,7 +24,6 @@ export const Select = ({
   id,
   name,
   required,
-  value,
   onChange,
 }: Props) => {
   return (
@@ -36,26 +33,17 @@ export const Select = ({
       name={name}
       id={id}
       defaultValue={defaultValue}
-      value={value}
       className={className}
       onChange={onChange}
       disabled={disabled}
     >
       {emptyOption && (
-        <option
-          value=""
-          selected={required && !defaultValue}
-          disabled={required}
-        >
+        <option value="" disabled={required}>
           {emptyOption}
         </option>
       )}
       {options.map((option, idx) => (
-        <option
-          key={`${option.code}-${idx}`}
-          value={option.code}
-          disabled={option.disabled}
-        >
+        <option key={`${option.code}-${idx}`} value={option.code}>
           {option.name}
         </option>
       ))}

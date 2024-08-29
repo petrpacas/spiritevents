@@ -128,8 +128,8 @@ export const EventFormFields = ({
         <Select
           required
           options={countries}
-          emptyOption={event?.country ? undefined : "— select a country"}
-          defaultValue={event?.country}
+          emptyOption={event?.country ? undefined : "— select a country —"}
+          defaultValue={event?.country || ""}
           name="country"
           className="w-full cursor-pointer rounded border-stone-200 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow"
         />

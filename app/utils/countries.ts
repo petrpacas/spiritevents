@@ -4,11 +4,6 @@ export const countries = [
     code: "CZ",
   },
   {
-    name: "—",
-    code: "",
-    disabled: true,
-  },
-  {
     name: "Afghanistan",
     code: "AF",
   },

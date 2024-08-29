@@ -6,7 +6,7 @@ generator client {
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
-  extensions = [unaccent]
+  extensions = [pgcrypto, unaccent]
 }
 
 enum UserRole {
@@ -15,7 +15,7 @@ enum UserRole {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("nanoid()"))
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -31,7 +31,7 @@ enum EventStatus {
 }
 
 model Event {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("nanoid()"))
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -50,7 +50,7 @@ model Event {
 }
 
 model Subscriber {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("nanoid()"))
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -59,7 +59,7 @@ model Subscriber {
 }
 
 model Feedback {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("nanoid()"))
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
