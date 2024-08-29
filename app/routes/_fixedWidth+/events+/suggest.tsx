@@ -5,7 +5,6 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { createId } from "@paralleldrive/cuid2";
 import {
   Form,
   useActionData,
@@ -16,6 +15,7 @@ import {
 import { Bot } from "grammy";
 import { useRef } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
+import slugify from "slugify";
 import { descriptionEditorStyles, EventFormFields } from "~/components";
 import { authenticator, prisma } from "~/services";
 import { EventStatus } from "~/utils";
@@ -66,6 +66,7 @@ export default function EventSuggest() {
     const formData = new FormData($form);
     const dateEnd = formData.get("dateEnd");
     const dateStart = formData.get("dateStart");
+    const title = formData.get("title");
     const description = mdxEditorRef.current?.getMarkdown();
     if (dateStart !== null && dateStart !== "" && dateEnd === "") {
       formData.set("dateEnd", dateStart);
@@ -74,7 +75,10 @@ export default function EventSuggest() {
       formData.set("dateStart", dateEnd);
     }
     formData.set("description", description ?? "");
-    formData.set("slug", createId());
+    formData.set(
+      "slug",
+      slugify(String(title), { lower: true, strict: true, trim: false }),
+    );
     submit(formData, { method: "POST" });
   };
   return (
