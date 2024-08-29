@@ -9,6 +9,7 @@ import {
   useNavigate,
   useNavigation,
 } from "@remix-run/react";
+import { Bot } from "grammy";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
 import { authenticator, prisma } from "~/services";
 import { feedbackFormSchema } from "~/validations";
@@ -25,6 +26,13 @@ export async function action({ request }: ActionFunctionArgs) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
   await prisma.feedback.create({ data: result.data });
+  if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+    const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
+    await bot.api.sendMessage(
+      process.env.TELEGRAM_CHAT_ID,
+      `New feedback: ${result.data.content}`,
+    );
+  }
   return redirectWithSuccess("/", "Noted!");
 }
 

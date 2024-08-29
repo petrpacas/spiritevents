@@ -13,6 +13,7 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
+import { Bot } from "grammy";
 import { useRef } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
 import { descriptionEditorStyles, EventFormFields } from "~/components";
@@ -36,6 +37,13 @@ export async function action({ request }: ActionFunctionArgs) {
   await prisma.event.create({
     data: { ...result.data, status: EventStatus.SUGGESTED },
   });
+  if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+    const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
+    await bot.api.sendMessage(
+      process.env.TELEGRAM_CHAT_ID,
+      `New event suggestion: (${result.data.country}) ${result.data.title}`,
+    );
+  }
   return redirectWithSuccess("/events", "Much appreciated!");
 }
 
