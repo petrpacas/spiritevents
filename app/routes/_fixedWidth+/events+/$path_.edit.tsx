@@ -37,7 +37,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
-  delete result.data.originSlug;
   delete result.data.originStatus;
   const event = await prisma.event.update({
     data:
@@ -87,7 +86,6 @@ export default function EventEdit() {
       formData.set("dateStart", dateEnd);
     }
     formData.set("description", description ?? "");
-    formData.set("originSlug", event.slug);
     formData.set("originStatus", event.status);
     submit(formData, { method: "POST", replace: true });
   };

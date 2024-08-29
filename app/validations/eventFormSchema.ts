@@ -1,9 +1,6 @@
 import slugify from "slugify";
 import { z } from "zod";
-import { prisma } from "~/services";
 import { countries, EventStatus } from "~/utils";
-
-const restrictedSlugs = ["new", "suggest"];
 
 export const eventFormSchema = z
   .object({
@@ -27,8 +24,10 @@ export const eventFormSchema = z
     dateEnd: z.string().date().or(z.literal("")),
     dateStart: z.string().date().or(z.literal("")),
     description: z.string().trim().or(z.literal("")),
-    linkLocation: z.string().trim().or(z.literal("")),
-    linkWebsite: z.string().trim().or(z.literal("")),
+    linkFbEvent: z.string().url().or(z.literal("")),
+    linkLocation: z.string().url().or(z.literal("")),
+    linkTickets: z.string().url().or(z.literal("")),
+    linkWebsite: z.string().url().or(z.literal("")),
     location: z
       .string()
       .trim()
@@ -48,12 +47,6 @@ export const eventFormSchema = z
           return ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "URL slug must contain at least 2 characters",
-          });
-        }
-        if (restrictedSlugs.includes(value)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "URL slug can't be a restricted word",
           });
         }
       }),
@@ -77,25 +70,10 @@ export const eventFormSchema = z
           });
         }
       }),
-    originSlug: z.string().optional(),
     originStatus: z.nativeEnum(EventStatus).optional(),
   })
   .superRefine(async (data, ctx) => {
-    const { dateEnd, dateStart, slug, originSlug, originStatus } = data;
-    if (
-      slug !== originSlug &&
-      slug.length > 2 &&
-      !restrictedSlugs.includes(slug)
-    ) {
-      const count = await prisma.event.count({ where: { slug } });
-      if (count >= 1) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "URL slug is already taken",
-          path: ["slug"],
-        });
-      }
-    }
+    const { dateEnd, dateStart, originStatus } = data;
     if (dateEnd < dateStart) {
       ctx.addIssue({
         code: z.ZodIssueCode.invalid_date,

@@ -155,36 +155,6 @@ export const EventFormFields = ({
           </p>
         )}
       </label>
-      <label className="grid gap-2">
-        Location link
-        <input
-          autoComplete="off"
-          type="text"
-          name="linkLocation"
-          defaultValue={event?.linkLocation}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-        />
-        {errors?.fieldErrors.linkLocation && (
-          <p className="text-red-600">
-            {errors.fieldErrors.linkLocation.join(", ")}
-          </p>
-        )}
-      </label>
-      <label className="grid gap-2">
-        Website link
-        <input
-          autoComplete="off"
-          type="text"
-          name="linkWebsite"
-          defaultValue={event?.linkWebsite}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
-        />
-        {errors?.fieldErrors.linkWebsite && (
-          <p className="text-red-600">
-            {errors.fieldErrors.linkWebsite.join(", ")}
-          </p>
-        )}
-      </label>
       <label className="grid gap-2 md:col-span-1">
         Start date
         <input
@@ -258,6 +228,66 @@ export const EventFormFields = ({
         {errors?.fieldErrors.timeEnd && (
           <p className="text-red-600">
             {errors.fieldErrors.timeEnd.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2">
+        Website link
+        <input
+          autoComplete="off"
+          type="text"
+          name="linkWebsite"
+          defaultValue={event?.linkWebsite}
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.linkWebsite && (
+          <p className="text-red-600">
+            {errors.fieldErrors.linkWebsite.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2">
+        Tickets link
+        <input
+          autoComplete="off"
+          type="text"
+          name="linkTickets"
+          defaultValue={event?.linkTickets}
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.linkTickets && (
+          <p className="text-red-600">
+            {errors.fieldErrors.linkTickets.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2">
+        FB event link
+        <input
+          autoComplete="off"
+          type="text"
+          name="linkFbEvent"
+          defaultValue={event?.linkFbEvent}
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.linkFbEvent && (
+          <p className="text-red-600">
+            {errors.fieldErrors.linkFbEvent.join(", ")}
+          </p>
+        )}
+      </label>
+      <label className="grid gap-2">
+        Location link
+        <input
+          autoComplete="off"
+          type="text"
+          name="linkLocation"
+          defaultValue={event?.linkLocation}
+          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+        />
+        {errors?.fieldErrors.linkLocation && (
+          <p className="text-red-600">
+            {errors.fieldErrors.linkLocation.join(", ")}
           </p>
         )}
       </label>

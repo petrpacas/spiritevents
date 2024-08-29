@@ -39,10 +39,12 @@ model Event {
   dateEnd      String
   dateStart    String
   description  String
+  linkFbEvent  String
   linkLocation String
+  linkTickets  String
   linkWebsite  String
   location     String
-  slug         String      @unique
+  slug         String
   status       EventStatus @default(PUBLISHED)
   timeEnd      String
   timeStart    String
