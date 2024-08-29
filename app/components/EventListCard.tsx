@@ -8,6 +8,7 @@ type Props = {
   eventsIndex?: boolean;
   eventsIndexFiltersCountry?: boolean;
   eventsIndexFiltersStatus?: boolean;
+  id: string;
   location?: string;
   slug: string;
   status?: keyof typeof EventStatus;
@@ -23,6 +24,7 @@ export const EventListCard = ({
   eventsIndex,
   eventsIndexFiltersCountry,
   eventsIndexFiltersStatus,
+  id,
   location,
   slug,
   status,
@@ -44,7 +46,7 @@ export const EventListCard = ({
   );
   return (
     <Link
-      to={`/events/${slug}`}
+      to={`/events/${slug}-${id}`}
       className={`${statusBg} grid gap-2 rounded-lg border border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow sm:gap-4 sm:p-4 md:flex md:items-center md:justify-between`}
     >
       {eventsIndex ? (

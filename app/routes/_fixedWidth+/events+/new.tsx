@@ -33,11 +33,11 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
-  await prisma.event.create({
+  const event = await prisma.event.create({
     data: { ...result.data, status: EventStatus.DRAFT },
   });
   return redirectWithSuccess(
-    `/events/${result.data.slug}`,
+    `/events/${event.slug}-${event.id}`,
     "Event saved as a draft",
   );
 }

@@ -5,6 +5,7 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
@@ -28,6 +29,7 @@ export const links: LinksFunction = () => [...descriptionEditorStyles()];
 
 export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
+  const id = params.path?.slice(-8);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
   const status = data.originStatus;
@@ -37,23 +39,29 @@ export async function action({ params, request }: ActionFunctionArgs) {
   }
   delete result.data.originSlug;
   delete result.data.originStatus;
-  await prisma.event.update({
+  const event = await prisma.event.update({
     data:
       status === EventStatus.SUGGESTED
         ? { ...result.data, status: EventStatus.DRAFT }
         : result.data,
-    where: { slug: params.slug },
+    where: { id },
   });
-  return redirectWithSuccess(`/events/${result.data.slug}`, "Event saved");
+  return redirectWithSuccess(
+    `/events/${event.slug}-${event.id}`,
+    "Event saved",
+  );
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   await requireUserSession(request);
-  const event = await prisma.event.findUnique({
-    where: { slug: params.slug },
-  });
+  const id = params.path?.slice(-8);
+  const slugAndDash = params.path?.slice(0, -8);
+  const event = await prisma.event.findUnique({ where: { id } });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
+  }
+  if (`${event.slug}-` !== slugAndDash) {
+    throw redirect(`/events/${event.slug}-${id}/edit`, 301);
   }
   return { event };
 }

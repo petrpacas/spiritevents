@@ -38,6 +38,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     country: string;
     dateEnd: string;
     dateStart: string;
+    id: string;
     location: string;
     slug: string;
     status: EventStatus;
@@ -99,7 +100,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           Prisma.sql`unaccent(LOWER(title)) LIKE unaccent(LOWER(${`%${term}%`}))`,
       ) || [];
   const allEvents: EventObject[] = await prisma.$queryRaw`
-    SELECT "country", "dateEnd", "dateStart", "location", "slug", "status", "timeEnd", "timeStart", "title"
+    SELECT "country", "dateEnd", "dateStart", "id", "location", "slug", "status", "timeEnd", "timeStart", "title"
     FROM "Event"
     WHERE
       ${country ? Prisma.sql`country = ${country}` : Prisma.sql`TRUE`}
@@ -421,7 +422,8 @@ export default function Events() {
                       eventsIndex
                       eventsIndexFiltersCountry={Boolean(country)}
                       eventsIndexFiltersStatus={Boolean(status)}
-                      key={event.slug}
+                      key={event.id}
+                      id={event.id}
                       slug={event.slug}
                       status={isAuthenticated ? event.status : undefined}
                       title={event.title}

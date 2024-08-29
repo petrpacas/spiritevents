@@ -23,6 +23,7 @@ export async function loader() {
       country: true,
       dateEnd: true,
       dateStart: true,
+      id: true,
       location: true,
       slug: true,
       timeEnd: true,
@@ -113,11 +114,12 @@ export default function Landing() {
             <div className="grid gap-4">
               {events.map((event) => (
                 <EventListCard
-                  key={event.slug}
+                  key={event.id}
                   country={event.country}
                   location={event.location}
                   dateStart={event.dateStart}
                   dateEnd={event.dateEnd}
+                  id={event.id}
                   slug={event.slug}
                   timeStart={event.timeStart}
                   timeEnd={event.timeEnd}

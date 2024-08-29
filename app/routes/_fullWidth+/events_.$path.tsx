@@ -3,6 +3,7 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Form,
   useFetcher,
@@ -32,17 +33,18 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function action({ request, params }: ActionFunctionArgs) {
   await requireUserSession(request);
+  const id = params.path?.slice(-8);
   const formData = await request.formData();
   const dateStart = formData.get("dateStart");
   const intent = formData.get("intent");
   switch (intent) {
     case "delete":
-      await prisma.event.delete({ where: { slug: params.slug } });
+      await prisma.event.delete({ where: { id } });
       return redirectWithSuccess("/events", "Event deleted");
     case "draft":
       await prisma.event.update({
         data: { status: EventStatus.DRAFT },
-        where: { slug: params.slug },
+        where: { id },
       });
       return jsonWithSuccess(null, "Event set as a draft");
     case "publish":
@@ -51,7 +53,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       } else {
         await prisma.event.update({
           data: { status: EventStatus.PUBLISHED },
-          where: { slug: params.slug },
+          where: { id },
         });
         return jsonWithSuccess(null, "Event published");
       }
@@ -64,14 +66,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
   const isAuthenticated = Boolean(user);
+  const id = params.path?.slice(-8);
+  const slugAndDash = params.path?.slice(0, -8);
   const event = await prisma.event.findUnique({
     where: {
-      slug: params.slug,
+      id,
       status: isAuthenticated ? undefined : EventStatus.PUBLISHED,
     },
   });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
+  }
+  if (`${event.slug}-` !== slugAndDash) {
+    throw redirect(`/events/${event.slug}-${id}`, 301);
   }
   const description = event.description;
   const parsedDescription = description
