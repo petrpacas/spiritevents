@@ -228,11 +228,13 @@ export default function Event() {
                     {event.timeStart && (
                       <div className="flex justify-center gap-2">
                         {event.timeStart}
-                        {event.timeEnd && (
+                        {event.timeEnd ? (
                           <>
                             <span className="text-amber-600">&gt;&lt;</span>
                             <span>{event.timeEnd}</span>
                           </>
+                        ) : (
+                          <span className="text-amber-600">&gt;&gt;</span>
                         )}
                       </div>
                     )}
