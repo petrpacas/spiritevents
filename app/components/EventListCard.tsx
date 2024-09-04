@@ -59,7 +59,7 @@ export const EventListCard = ({
         <h3 className="text-xl font-medium sm:text-2xl">{headingContent}</h3>
       )}
       {categories.length > 0 && (
-        <div className="flex flex-wrap gap-2 leading-snug text-emerald-600 sm:text-lg sm:leading-snug">
+        <div className="flex flex-wrap gap-x-2 leading-snug text-emerald-600 sm:text-lg sm:leading-snug">
           {categories.map((category, idx) => (
             <React.Fragment key={category.id}>
               {idx !== 0 && <span className="text-amber-600">~</span>}
@@ -69,7 +69,7 @@ export const EventListCard = ({
         </div>
       )}
       <div className="grid gap-2 lg:flex lg:items-end lg:justify-between lg:gap-4">
-        <div className="grid leading-snug min-[414px]:flex min-[414px]:gap-2 sm:text-lg sm:leading-snug">
+        <div className="grid leading-snug min-[375px]:flex min-[375px]:gap-2 sm:text-lg sm:leading-snug">
           {dateStart ? (
             <>
               <span>{new Date(dateStart).toDateString()}</span>
@@ -80,7 +80,7 @@ export const EventListCard = ({
                 </>
               ) : (
                 timeStart && (
-                  <>
+                  <div className="flex gap-2">
                     <span className="text-amber-600">&gt;&gt;</span>
                     <span>{timeStart}</span>
                     {timeEnd && (
@@ -89,7 +89,7 @@ export const EventListCard = ({
                         <span>{timeEnd}</span>
                       </>
                     )}
-                  </>
+                  </div>
                 )
               )}
             </>
