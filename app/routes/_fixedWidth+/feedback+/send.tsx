@@ -21,7 +21,7 @@ export const meta: MetaFunction = () => {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const result = await feedbackFormSchema.safeParseAsync(data);
+  const result = feedbackFormSchema.safeParse(data);
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }

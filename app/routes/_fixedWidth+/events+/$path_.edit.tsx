@@ -33,16 +33,29 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
   const status = data.originStatus;
-  const result = await eventFormSchema.safeParseAsync(data);
+  const result = eventFormSchema.safeParse(data);
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
+  const categoryIds: string[] = result.data.categories;
+  delete result.data.categories;
   delete result.data.originStatus;
   const event = await prisma.event.update({
     data:
       status === EventStatus.SUGGESTED
-        ? { ...result.data, status: EventStatus.DRAFT }
-        : result.data,
+        ? {
+            ...result.data,
+            categories: {
+              set: categoryIds.map((id) => ({ id })),
+            },
+            status: EventStatus.DRAFT,
+          }
+        : {
+            ...result.data,
+            categories: {
+              set: categoryIds.map((id) => ({ id })),
+            },
+          },
     where: { id },
   });
   return redirectWithSuccess(
@@ -55,19 +68,25 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   await requireUserSession(request);
   const id = params.path?.slice(-8);
   const slugAndDash = params.path?.slice(0, -8);
-  const event = await prisma.event.findUnique({ where: { id } });
+  const categories = await prisma.category.findMany({
+    orderBy: { slug: "asc" },
+  });
+  const event = await prisma.event.findUnique({
+    where: { id },
+    include: { categories: true },
+  });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
   }
   if (`${event.slug}-` !== slugAndDash) {
     throw redirect(`/events/${event.slug}-${id}/edit`, 301);
   }
-  return { event };
+  return { categories, event };
 }
 
 export default function EventEdit() {
   const errors = useActionData<typeof action>();
-  const { event } = useLoaderData<typeof loader>();
+  const { categories, event } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
@@ -79,6 +98,9 @@ export default function EventEdit() {
     const dateEnd = formData.get("dateEnd");
     const dateStart = formData.get("dateStart");
     const description = mdxEditorRef.current?.getMarkdown();
+    const categories = formData.getAll("category");
+    formData.delete("category");
+    formData.set("categories", JSON.stringify(categories));
     if (dateStart !== null && dateStart !== "" && dateEnd === "") {
       formData.set("dateEnd", dateStart);
     }
@@ -112,6 +134,7 @@ export default function EventEdit() {
           <span>Editing {event.title}</span>
         </h1>
         <EventFormFields
+          categories={categories}
           event={event}
           errors={errors}
           mdxEditorRef={mdxEditorRef}

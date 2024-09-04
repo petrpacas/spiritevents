@@ -4,6 +4,7 @@ import { countries, EventStatus } from "~/utils";
 
 export const eventFormSchema = z
   .object({
+    categories: z.string().transform((value) => JSON.parse(value)),
     country: z.string().superRefine((value, ctx) => {
       if (value === "" || value.length !== 2) {
         return ctx.addIssue({
@@ -72,7 +73,7 @@ export const eventFormSchema = z
       }),
     originStatus: z.nativeEnum(EventStatus).optional(),
   })
-  .superRefine(async (data, ctx) => {
+  .superRefine((data, ctx) => {
     const { dateEnd, dateStart, originStatus } = data;
     if (dateEnd < dateStart) {
       ctx.addIssue({

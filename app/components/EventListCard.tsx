@@ -1,7 +1,10 @@
+import { Category } from "@prisma/client";
 import { Link } from "@remix-run/react";
+import React from "react";
 import { EventStatus, getStatusColors } from "~/utils";
 
 type Props = {
+  categories: Category[];
   country: string;
   dateEnd: string;
   dateStart: string;
@@ -18,6 +21,7 @@ type Props = {
 };
 
 export const EventListCard = ({
+  categories,
   country,
   dateEnd,
   dateStart,
@@ -47,20 +51,32 @@ export const EventListCard = ({
   return (
     <Link
       to={`/events/${slug}-${id}`}
-      className={`${statusBg} grid gap-2 rounded-lg border border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow sm:gap-4 sm:p-4 md:flex md:items-center md:justify-between`}
+      className={`${statusBg} grid gap-2 rounded-lg border border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-4`}
     >
-      {eventsIndex ? (
-        <h4 className="text-xl sm:text-2xl">{headingContent}</h4>
-      ) : (
-        <h3 className="text-xl sm:text-2xl">{headingContent}</h3>
-      )}
-      <div className="grid max-md:gap-1 md:items-center md:justify-items-end">
+      <div className="grid gap-2 lg:flex lg:items-start lg:justify-between lg:gap-4">
+        {eventsIndex ? (
+          <h4 className="text-xl font-medium sm:text-2xl">{headingContent}</h4>
+        ) : (
+          <h3 className="text-xl font-medium sm:text-2xl">{headingContent}</h3>
+        )}
+        {categories.length > 0 && (
+          <div className="flex flex-wrap gap-2 leading-snug text-emerald-600 sm:text-lg sm:leading-snug">
+            {categories.map((category, idx) => (
+              <React.Fragment key={category.id}>
+                {idx !== 0 && <span className="text-amber-600">~</span>}
+                <span>{category.name}</span>
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="grid gap-2 lg:flex lg:items-end lg:justify-between lg:gap-4">
         {location && (
           <div className="text-lg leading-snug text-amber-600 sm:text-xl sm:leading-snug">
             {location}
           </div>
         )}
-        <div className="flex gap-2 leading-snug sm:text-lg sm:leading-snug md:items-center md:justify-center md:text-center">
+        <div className="grid leading-snug min-[414px]:flex min-[414px]:gap-2 sm:text-lg sm:leading-snug">
           {dateStart ? (
             <>
               <span>{new Date(dateStart).toDateString()}</span>

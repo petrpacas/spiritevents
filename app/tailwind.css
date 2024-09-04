@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* DESCRIPTION PROSE */
+
+#description a {
+  overflow-wrap: anywhere;
+}
+
 /* MDX EDITOR */
 
 .mdxeditor-toolbar {

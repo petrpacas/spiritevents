@@ -26,7 +26,12 @@ export async function action({ request }: ActionFunctionArgs) {
       "Please fix the errors",
     );
   }
-  await prisma.subscriber.create({ data: result.data });
+  const { email, name } = result.data;
+  await prisma.subscriber.upsert({
+    create: { email, name },
+    update: { name },
+    where: { email },
+  });
   return jsonWithSuccess({ success: true }, "Welcome on board!");
 }
 

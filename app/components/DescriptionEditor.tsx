@@ -12,6 +12,7 @@ import {
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
+  ListsToggle,
   MDXEditor,
   Separator,
   toolbarPlugin,
@@ -52,6 +53,8 @@ export const DescriptionEditor = forwardRef<MDXEditorMethods, Props>(
                 <BoldItalicUnderlineToggles />
                 <Separator />
                 <BlockTypeSelect />
+                <Separator />
+                <ListsToggle />
                 <Separator />
               </DiffSourceToggleWrapper>
             ),

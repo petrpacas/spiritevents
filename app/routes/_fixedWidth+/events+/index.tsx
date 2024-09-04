@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Prisma } from "@prisma/client";
+import { Category, Prisma } from "@prisma/client";
 import {
   Form,
   Link,
@@ -35,6 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const isPast = past === "true";
   const today = getTodayDate();
   type EventObject = {
+    categories: Category[];
     country: string;
     dateEnd: string;
     dateStart: string;
@@ -101,43 +102,60 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ) || [];
   const allEvents: EventObject[] = await prisma.$queryRaw`
     SELECT
-      "country",
-      "dateEnd",
-      "dateStart",
-      "id",
-      "location",
-      "slug",
-      "status",
-      "timeEnd",
-      "timeStart",
-      "title"
-    FROM "Event"
+      e."country",
+      e."dateEnd",
+      e."dateStart",
+      e."id",
+      e."location",
+      e."slug",
+      e."status",
+      e."timeEnd",
+      e."timeStart",
+      e."title",
+      COALESCE(
+        json_agg(
+          CASE
+            WHEN c."id" IS NOT NULL THEN
+              json_build_object(
+                'id', c."id",
+                'name', c."name",
+                'slug', c."slug"
+              )
+          END
+        ) FILTER (WHERE c."id" IS NOT NULL), '[]'
+      ) AS "categories"
+    FROM "Event" e
+    LEFT JOIN "_CategoryToEvent" ce ON e."id" = ce."B"
+    LEFT JOIN "Category" c ON ce."A" = c."id"
     WHERE
-      ${country ? Prisma.sql`country = ${country}` : Prisma.sql`TRUE`}
+      ${country ? Prisma.sql`e."country" = ${country}` : Prisma.sql`TRUE`}
       AND (
         ${
           isAuthenticated
             ? status && eventStatusEnumMatch
-              ? Prisma.sql`"status" = ${Prisma.raw(`'${eventStatusEnumMatch}'`)} `
+              ? Prisma.sql`e."status" = ${Prisma.raw(`'${eventStatusEnumMatch}'`)}`
               : Prisma.sql`TRUE`
-            : Prisma.sql`"status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'`)} `
-        })
+            : Prisma.sql`e."status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'`)}`
+        }
+      )
       AND (
         ${
           isPast
-            ? Prisma.sql`"dateEnd" < ${today} AND "dateEnd" != ''`
-            : Prisma.sql`"dateEnd" >= ${today}`
+            ? Prisma.sql`e."dateEnd" < ${today} AND e."dateEnd" != ''`
+            : Prisma.sql`e."dateEnd" >= ${today}`
         }
-        ${isAuthenticated ? Prisma.sql`OR "dateEnd" = ''` : Prisma.sql``}
+        ${isAuthenticated ? Prisma.sql`OR e."dateEnd" = ''` : Prisma.sql``}
       )
       ${
         searchConditions.length > 0
           ? Prisma.sql`AND (${Prisma.join(searchConditions, " AND ")})`
           : Prisma.sql``
       }
+    GROUP BY
+      e."id"
     ORDER BY
-      "dateStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
-      "title" ASC
+      e."dateStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
+      e."title" ASC
   `;
   function groupEvents(events: EventObject[]): EventsWithYear[] {
     const groupedEvents: Record<string, Record<string, EventObject[]>> = {};
@@ -322,7 +340,7 @@ export default function Events() {
           <Form
             onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
-            className="grid gap-8 rounded-lg bg-stone-50 px-4 py-4 sm:gap-4 lg:flex lg:items-center"
+            className="grid gap-4 rounded-lg bg-stone-50 p-2 sm:p-4 lg:flex lg:items-center"
           >
             <div
               className={`grid gap-4 lg:gap-2 ${isAuthenticated ? "sm:max-lg:grid-cols-3" : "sm:max-lg:grid-cols-2"} lg:flex`}
@@ -448,6 +466,7 @@ export default function Events() {
                       eventsIndexFiltersCountry={Boolean(country)}
                       eventsIndexFiltersStatus={Boolean(status)}
                       key={event.id}
+                      categories={event.categories}
                       id={event.id}
                       slug={event.slug}
                       status={isAuthenticated ? event.status : undefined}
@@ -473,13 +492,15 @@ export default function Events() {
       {isAuthenticated ? (
         hasGroupedEvents && (
           <div className="flex items-center justify-center gap-2 max-[399px]:flex-col sm:gap-4 sm:text-lg">
-            <div className="rounded bg-emerald-100 p-2 sm:px-4">
+            <div className="rounded border border-stone-300 bg-emerald-100 p-2 sm:px-4">
               <span className="text-amber-600">(S)</span> Suggested
             </div>
-            <div className="rounded bg-sky-100 p-2 sm:px-4">
+            <div className="rounded border border-stone-300 bg-sky-100 p-2 sm:px-4">
               <span className="text-amber-600">(D)</span> Draft
             </div>
-            <div className="rounded bg-white p-2 sm:px-4">Published</div>
+            <div className="rounded border border-stone-300 bg-white p-2 sm:px-4">
+              Published
+            </div>
           </div>
         )
       ) : (

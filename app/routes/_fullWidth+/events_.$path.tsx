@@ -11,6 +11,7 @@ import {
   useNavigate,
   useNavigation,
 } from "@remix-run/react";
+import { Fragment } from "react/jsx-runtime";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeStringify from "rehype-stringify";
 import rehypeSanitize from "rehype-sanitize";
@@ -73,6 +74,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       id,
       status: isAuthenticated ? undefined : EventStatus.PUBLISHED,
     },
+    include: { categories: true },
   });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
@@ -136,9 +138,19 @@ export default function Event() {
           <div
             className={`max-w-7xl px-4 py-[6.625rem] ${statusGlow} sm:px-8 ${statusGlowMd}`}
           >
-            <div className="grid gap-16 text-center">
+            <div className="grid gap-8 text-center lg:gap-16">
               <div className="grid gap-4">
-                <h1 className="text-4xl font-bold leading-relaxed sm:text-5xl sm:leading-relaxed">
+                {event.categories.length > 0 && (
+                  <div className="flex flex-wrap justify-center gap-2 text-lg font-semibold leading-snug text-emerald-600 sm:text-xl sm:leading-snug lg:text-2xl lg:leading-snug">
+                    {event.categories.map((category, idx) => (
+                      <Fragment key={category.id}>
+                        {idx !== 0 && <span className="text-amber-600">~</span>}
+                        <span>{category.name}</span>
+                      </Fragment>
+                    ))}
+                  </div>
+                )}
+                <h1 className="text-3xl font-bold leading-snug sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-snug">
                   {statusLetter && (
                     <>
                       <span className="text-amber-600">{statusLetter}</span>{" "}
@@ -149,7 +161,7 @@ export default function Event() {
                 {(event.linkFbEvent ||
                   event.linkTickets ||
                   event.linkWebsite) && (
-                  <div className="flex justify-center gap-8 text-lg font-semibold text-amber-600 underline max-[319px]:grid sm:text-xl">
+                  <div className="flex justify-center gap-4 text-lg font-semibold leading-snug text-amber-600 underline max-[319px]:grid sm:text-xl sm:leading-snug">
                     {event.linkWebsite && (
                       <a
                         href={event.linkWebsite}
@@ -181,7 +193,7 @@ export default function Event() {
                 )}
               </div>
               <div className="grid gap-4">
-                <p className="text-2xl font-semibold leading-normal sm:text-3xl sm:leading-normal">
+                <p className="text-xl font-semibold leading-snug sm:text-2xl sm:leading-snug lg:text-3xl lg:leading-snug">
                   {event.location && `${event.location}, `}
                   {getCountryNameByCode(event.country)}{" "}
                   <span className="text-amber-600">({event.country})</span>
@@ -190,7 +202,7 @@ export default function Event() {
                   <div>
                     <a
                       href={event.linkLocation}
-                      className="text-lg font-semibold text-amber-600 underline sm:text-xl"
+                      className="text-lg font-semibold leading-snug text-amber-600 underline sm:text-xl sm:leading-snug"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -200,11 +212,11 @@ export default function Event() {
                 )}
               </div>
               <div
-                className={`grid text-2xl font-semibold leading-snug sm:text-3xl sm:leading-snug lg:gap-4 ${event.dateEnd !== event.dateStart ? "" : "lg:flex lg:justify-center"}`}
+                className={`grid text-xl font-semibold leading-tight sm:text-2xl sm:leading-tight lg:gap-4 lg:text-3xl lg:leading-tight ${event.dateEnd !== event.dateStart ? "" : "lg:flex lg:justify-center"}`}
               >
                 {event.dateStart ? (
-                  <>
-                    <div className="grid lg:flex lg:justify-center lg:gap-4">
+                  <div className="grid gap-4">
+                    <div className="grid sm:flex sm:justify-center sm:gap-2">
                       <span>{new Date(event.dateStart).toDateString()}</span>
                       {event.dateEnd !== event.dateStart && (
                         <>
@@ -214,13 +226,17 @@ export default function Event() {
                       )}
                     </div>
                     {event.timeStart && (
-                      <div className="grid lg:flex lg:justify-center lg:gap-4">
-                        <span className="text-amber-600">&gt;&lt;</span>
+                      <div className="flex justify-center gap-2">
                         {event.timeStart}
-                        {event.timeEnd && ` - ${event.timeEnd}`}
+                        {event.timeEnd && (
+                          <>
+                            <span className="text-amber-600">&gt;&lt;</span>
+                            <span>{event.timeEnd}</span>
+                          </>
+                        )}
                       </div>
                     )}
-                  </>
+                  </div>
                 ) : (
                   <span className="text-red-600">Missing date info</span>
                 )}
@@ -234,7 +250,7 @@ export default function Event() {
           <div className="grid gap-8">
             {event.description && (
               <div
-                className="prose prose-lg prose-amber-basic mx-auto w-full max-w-4xl text-center sm:prose-xl"
+                className="prose prose-amber-basic mx-auto w-full max-w-4xl sm:prose-lg xl:prose-xl"
                 id="description"
                 dangerouslySetInnerHTML={{
                   __html: event.description,

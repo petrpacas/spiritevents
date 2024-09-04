@@ -1,10 +1,9 @@
-import type { MDXEditorMethods } from "@mdxeditor/editor";
 import type {
   ActionFunctionArgs,
-  LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
@@ -13,75 +12,60 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import { useRef } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
-import { descriptionEditorStyles, EventFormFields } from "~/components";
+import { CategoryFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
-import { EventStatus } from "~/utils";
-import { eventFormSchema } from "~/validations";
+import { categoryFormSchema } from "~/validations";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "New event ~ SeekGathering" }];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: `Editing ${data?.category?.name} ~ SeekGathering` }];
 };
 
-export const links: LinksFunction = () => [...descriptionEditorStyles()];
-
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   await requireUserSession(request);
+  const id = params.path?.slice(-8);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const result = eventFormSchema.safeParse(data);
+  const result = await categoryFormSchema.safeParseAsync(data);
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
-  const categoryIds: string[] = result.data.categories;
-  delete result.data.categories;
-  const event = await prisma.event.create({
-    data: {
-      ...result.data,
-      categories: { connect: categoryIds.map((id) => ({ id })) },
-      status: EventStatus.DRAFT,
-    },
+  delete result.data.originName;
+  delete result.data.originSlug;
+  await prisma.category.update({
+    data: result.data,
+    where: { id },
   });
-  return redirectWithSuccess(
-    `/events/${event.slug}-${event.id}`,
-    "Event saved as a draft",
-  );
+  return redirectWithSuccess("/categories", "Category saved");
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   await requireUserSession(request);
-  const categories = await prisma.category.findMany({
-    orderBy: { slug: "asc" },
-  });
-  return { categories };
+  const id = params.path?.slice(-8);
+  const slugAndDash = params.path?.slice(0, -8);
+  const category = await prisma.category.findUnique({ where: { id } });
+  if (!category) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  if (`${category.slug}-` !== slugAndDash) {
+    throw redirect(`/categories/${category.slug}-${id}/edit`, 301);
+  }
+  return { category };
 }
 
-export default function EventNew() {
+export default function CategoryEdit() {
   const errors = useActionData<typeof action>();
-  const { categories } = useLoaderData<typeof loader>();
+  const { category } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const mdxEditorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const $form = e.currentTarget;
     const formData = new FormData($form);
-    const dateEnd = formData.get("dateEnd");
-    const dateStart = formData.get("dateStart");
-    const description = mdxEditorRef.current?.getMarkdown();
-    const categories = formData.getAll("category");
-    formData.delete("category");
-    formData.set("categories", JSON.stringify(categories));
-    if (dateStart !== null && dateStart !== "" && dateEnd === "") {
-      formData.set("dateEnd", dateStart);
-    }
-    if (dateEnd !== null && dateEnd !== "" && dateStart === "") {
-      formData.set("dateStart", dateEnd);
-    }
-    formData.set("description", description ?? "");
-    submit(formData, { method: "POST" });
+    formData.set("originName", category.name);
+    formData.set("originSlug", category.slug);
+    submit(formData, { method: "POST", replace: true });
   };
   return (
     <Form onSubmit={handleSubmit}>
@@ -100,22 +84,18 @@ export default function EventNew() {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+              d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
             />
           </svg>
-          <span>New event</span>
+          <span>Editing {category.name}</span>
         </h1>
-        <EventFormFields
-          categories={categories}
-          errors={errors}
-          mdxEditorRef={mdxEditorRef}
-        />
+        <CategoryFormFields category={category} errors={errors} />
         <div className="flex justify-end gap-4">
           <button
             type="submit"
             className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
           >
-            Save as draft
+            Save
           </button>
           <button
             type="button"

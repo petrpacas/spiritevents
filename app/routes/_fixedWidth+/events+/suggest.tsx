@@ -8,6 +8,7 @@ import type {
 import {
   Form,
   useActionData,
+  useLoaderData,
   useNavigate,
   useNavigation,
   useSubmit,
@@ -30,12 +31,18 @@ export const links: LinksFunction = () => [...descriptionEditorStyles()];
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const result = await eventFormSchema.safeParseAsync(data);
+  const result = eventFormSchema.safeParse(data);
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
+  const categoryIds: string[] = result.data.categories;
+  delete result.data.categories;
   await prisma.event.create({
-    data: { ...result.data, status: EventStatus.SUGGESTED },
+    data: {
+      ...result.data,
+      categories: { connect: categoryIds.map((id) => ({ id })) },
+      status: EventStatus.SUGGESTED,
+    },
   });
   if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
     const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
@@ -51,11 +58,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
   await authenticator.isAuthenticated(request, {
     successRedirect: "/events/new",
   });
-  return null;
+  const categories = await prisma.category.findMany({
+    orderBy: { slug: "asc" },
+  });
+  return { categories };
 }
 
 export default function EventSuggest() {
   const errors = useActionData<typeof action>();
+  const { categories } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
@@ -68,6 +79,9 @@ export default function EventSuggest() {
     const dateStart = formData.get("dateStart");
     const title = formData.get("title");
     const description = mdxEditorRef.current?.getMarkdown();
+    const categories = formData.getAll("category");
+    formData.delete("category");
+    formData.set("categories", JSON.stringify(categories));
     if (dateStart !== null && dateStart !== "" && dateEnd === "") {
       formData.set("dateEnd", dateStart);
     }
@@ -75,10 +89,7 @@ export default function EventSuggest() {
       formData.set("dateStart", dateEnd);
     }
     formData.set("description", description ?? "");
-    formData.set(
-      "slug",
-      slugify(String(title), { lower: true, strict: true, trim: false }),
-    );
+    formData.set("slug", slugify(String(title), { lower: true, strict: true }));
     submit(formData, { method: "POST" });
   };
   return (
@@ -108,7 +119,7 @@ export default function EventSuggest() {
           <em>I&apos;m just one guy and I need your help.</em>
         </p>
         <p className="text-lg sm:text-xl">
-          Do you know of any relevant festival that deserves to be found by
+          Do you know of any relevant event that deserves to be found by
           like-minded people from around the world?
         </p>
         <p className="text-lg text-amber-600 sm:text-xl">
@@ -146,6 +157,7 @@ export default function EventSuggest() {
         </div>
         <EventFormFields
           isSuggesting
+          categories={categories}
           errors={errors}
           mdxEditorRef={mdxEditorRef}
         />

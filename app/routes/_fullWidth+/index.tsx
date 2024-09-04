@@ -29,6 +29,7 @@ export async function loader() {
       timeEnd: true,
       timeStart: true,
       title: true,
+      categories: true,
     },
     take: 3,
     where: {
@@ -115,6 +116,7 @@ export default function Landing() {
               {events.map((event) => (
                 <EventListCard
                   key={event.id}
+                  categories={event.categories}
                   country={event.country}
                   location={event.location}
                   dateStart={event.dateStart}
@@ -170,8 +172,8 @@ export default function Landing() {
                     <em>I&apos;m just one guy and I need your help.</em>
                   </p>
                   <p>
-                    Do you know of any relevant festival that deserves to be
-                    found by like-minded people from around the world?
+                    Do you know of any relevant event that deserves to be found
+                    by like-minded people from around the world?
                   </p>
                   <p>
                     Suggesting it will not only support the event, but also all

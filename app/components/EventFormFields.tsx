@@ -1,5 +1,5 @@
 import type { MDXEditorMethods } from "@mdxeditor/editor";
-import type { Event } from "@prisma/client";
+import type { Category, Prisma } from "@prisma/client";
 import type { RefObject } from "react";
 import { SerializeFrom } from "@remix-run/node";
 import { useState } from "react";
@@ -11,14 +11,19 @@ import { eventFormSchema } from "~/validations";
 import { DescriptionEditor } from "./DescriptionEditor";
 import { Select } from "./Select";
 
+type EventWithCategories = Prisma.EventGetPayload<{
+  include: { categories: true };
+}>;
 type Props = {
   errors?: z.inferFlattenedErrors<typeof eventFormSchema>;
-  event?: SerializeFrom<Event>;
+  event?: SerializeFrom<EventWithCategories>;
+  categories?: SerializeFrom<Category[]>;
   isSuggesting?: boolean;
   mdxEditorRef: RefObject<MDXEditorMethods>;
 };
 
 export const EventFormFields = ({
+  categories,
   errors,
   event,
   isSuggesting,
@@ -113,7 +118,7 @@ export const EventFormFields = ({
             onChange={handleSlugChange}
             onBlur={handleSlugBlur}
             value={slug}
-            placeholder="e.g. example-event-2024"
+            placeholder="e.g. example-event"
             className={`rounded border-stone-200 placeholder-stone-400 ${isSlugFreelyModifiable ? (event?.status === EventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow`}
           />
           {errors?.fieldErrors.slug && (
@@ -155,6 +160,38 @@ export const EventFormFields = ({
           </p>
         )}
       </label>
+      {categories && categories.length > 0 && (
+        <div className="grid gap-2 md:col-span-2">
+          Categories
+          <div className="flex flex-wrap gap-4 rounded-lg border border-stone-200 p-4">
+            {categories.map((category) => (
+              <label
+                className="flex cursor-pointer items-center gap-2 rounded border border-stone-200 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                key={category.id}
+              >
+                <input
+                  autoComplete="off"
+                  type="checkbox"
+                  name="category"
+                  value={category.id}
+                  defaultChecked={Boolean(
+                    event?.categories.find(
+                      (eventCategory) => eventCategory.id === category.id,
+                    ),
+                  )}
+                  className="rounded border border-stone-200 checked:bg-amber-600 hover:checked:bg-amber-600 focus:checked:bg-amber-600"
+                />
+                {category.name}
+              </label>
+            ))}
+          </div>
+          {errors?.fieldErrors.categories && (
+            <p className="text-red-600">
+              {errors.fieldErrors.categories.join(", ")}
+            </p>
+          )}
+        </div>
+      )}
       <label className="grid gap-2 md:col-span-1">
         Start date
         <input
@@ -207,7 +244,7 @@ export const EventFormFields = ({
           name="timeStart"
           placeholder="hh:mm"
           defaultValue={event?.timeStart}
-          className="pshadow-sm rounded border-stone-200 placeholder-stone-400 transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.timeStart && (
           <p className="text-red-600">

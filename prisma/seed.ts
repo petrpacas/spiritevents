@@ -12,6 +12,25 @@ async function main() {
     },
   });
 
+  const category1 = await prisma.category.create({
+    data: {
+      name: "Category 1",
+      slug: "category-1",
+    },
+  });
+  const category2 = await prisma.category.create({
+    data: {
+      name: "Category 2",
+      slug: "category-2",
+    },
+  });
+  const category3 = await prisma.category.create({
+    data: {
+      name: "Category 3",
+      slug: "category-3",
+    },
+  });
+
   await prisma.event.create({
     data: {
       country: "CZ",
@@ -27,6 +46,9 @@ async function main() {
       timeEnd: "22:00",
       timeStart: "20:00",
       title: "Dummy Event 1",
+      categories: {
+        connect: [{ id: category1.id }, { id: category2.id }],
+      },
     },
   });
   await prisma.event.create({
@@ -44,6 +66,9 @@ async function main() {
       timeEnd: "",
       timeStart: "15:00",
       title: "Dummy Event 2",
+      categories: {
+        connect: [{ id: category2.id }, { id: category3.id }],
+      },
     },
   });
   await prisma.event.create({
@@ -61,6 +86,9 @@ async function main() {
       timeEnd: "",
       timeStart: "",
       title: "Dummy Event 3",
+      categories: {
+        connect: [{ id: category3.id }, { id: category1.id }],
+      },
     },
   });
   await prisma.event.create({
@@ -78,6 +106,9 @@ async function main() {
       timeEnd: "22:00",
       timeStart: "20:00",
       title: "Dummy Event 4",
+      categories: {
+        connect: [{ id: category1.id }, { id: category2.id }],
+      },
     },
   });
   await prisma.event.create({
@@ -95,6 +126,9 @@ async function main() {
       timeEnd: "",
       timeStart: "15:00",
       title: "Dummy Event 5",
+      categories: {
+        connect: [{ id: category2.id }, { id: category3.id }],
+      },
     },
   });
   await prisma.event.create({
@@ -112,6 +146,9 @@ async function main() {
       timeEnd: "",
       timeStart: "",
       title: "Dummy Event 6",
+      categories: {
+        connect: [{ id: category3.id }, { id: category1.id }],
+      },
     },
   });
   await prisma.event.create({
@@ -129,6 +166,9 @@ async function main() {
       timeEnd: "22:00",
       timeStart: "20:00",
       title: "Dummy Event 7",
+      categories: {
+        connect: [{ id: category1.id }, { id: category2.id }],
+      },
     },
   });
   await prisma.event.create({
@@ -146,6 +186,9 @@ async function main() {
       timeEnd: "",
       timeStart: "15:00",
       title: "Dummy Event 8",
+      categories: {
+        connect: [{ id: category2.id }, { id: category3.id }],
+      },
     },
   });
   await prisma.event.create({
@@ -163,6 +206,9 @@ async function main() {
       timeEnd: "",
       timeStart: "",
       title: "Dummy Event 9",
+      categories: {
+        connect: [{ id: category3.id }, { id: category1.id }],
+      },
     },
   });
 }

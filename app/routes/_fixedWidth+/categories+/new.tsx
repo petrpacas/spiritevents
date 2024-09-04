@@ -1,86 +1,52 @@
-import type { MDXEditorMethods } from "@mdxeditor/editor";
 import type {
   ActionFunctionArgs,
-  LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
 import {
   Form,
   useActionData,
-  useLoaderData,
   useNavigate,
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import { useRef } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
-import { descriptionEditorStyles, EventFormFields } from "~/components";
+import { CategoryFormFields } from "~/components";
 import { prisma, requireUserSession } from "~/services";
-import { EventStatus } from "~/utils";
-import { eventFormSchema } from "~/validations";
+import { categoryFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "New event ~ SeekGathering" }];
+  return [{ title: "New category ~ SeekGathering" }];
 };
-
-export const links: LinksFunction = () => [...descriptionEditorStyles()];
 
 export async function action({ request }: ActionFunctionArgs) {
   await requireUserSession(request);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const result = eventFormSchema.safeParse(data);
+  const result = await categoryFormSchema.safeParseAsync(data);
   if (!result.success) {
     return jsonWithError(result.error.flatten(), "Please fix the errors");
   }
-  const categoryIds: string[] = result.data.categories;
-  delete result.data.categories;
-  const event = await prisma.event.create({
-    data: {
-      ...result.data,
-      categories: { connect: categoryIds.map((id) => ({ id })) },
-      status: EventStatus.DRAFT,
-    },
+  await prisma.category.create({
+    data: result.data,
   });
-  return redirectWithSuccess(
-    `/events/${event.slug}-${event.id}`,
-    "Event saved as a draft",
-  );
+  return redirectWithSuccess("/categories", "Category saved");
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireUserSession(request);
-  const categories = await prisma.category.findMany({
-    orderBy: { slug: "asc" },
-  });
-  return { categories };
+  return null;
 }
 
-export default function EventNew() {
+export default function CategoryNew() {
   const errors = useActionData<typeof action>();
-  const { categories } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const mdxEditorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const $form = e.currentTarget;
     const formData = new FormData($form);
-    const dateEnd = formData.get("dateEnd");
-    const dateStart = formData.get("dateStart");
-    const description = mdxEditorRef.current?.getMarkdown();
-    const categories = formData.getAll("category");
-    formData.delete("category");
-    formData.set("categories", JSON.stringify(categories));
-    if (dateStart !== null && dateStart !== "" && dateEnd === "") {
-      formData.set("dateEnd", dateStart);
-    }
-    if (dateEnd !== null && dateEnd !== "" && dateStart === "") {
-      formData.set("dateStart", dateEnd);
-    }
-    formData.set("description", description ?? "");
     submit(formData, { method: "POST" });
   };
   return (
@@ -103,19 +69,15 @@ export default function EventNew() {
               d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
             />
           </svg>
-          <span>New event</span>
+          <span>New category</span>
         </h1>
-        <EventFormFields
-          categories={categories}
-          errors={errors}
-          mdxEditorRef={mdxEditorRef}
-        />
+        <CategoryFormFields errors={errors} />
         <div className="flex justify-end gap-4">
           <button
             type="submit"
             className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
           >
-            Save as draft
+            Save
           </button>
           <button
             type="button"
