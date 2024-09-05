@@ -58,11 +58,35 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
           <nav
             className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-30 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:relative lg:z-10 lg:flex lg:gap-4`}
           >
+            {isAuthenticated && (
+              <Link
+                to="/events/new"
+                className="flex items-center gap-2 rounded border border-emerald-600 bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
+              >
+                <span className="lg:sr-only">New event</span>
+                <svg
+                  className="h-6 w-6"
+                  width="16px"
+                  height="16px"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </Link>
+            )}
             <Link
               to="/events?country=CZ"
               className="flex items-center gap-2 rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
             >
-              {isAuthenticated ? "Events" : "Events in Czechia"}
+              {isAuthenticated ? "Events in CZ" : "Events in Czechia"}
               <svg
                 className="h-6 w-6"
                 width="16px"
@@ -71,19 +95,14 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
-                <path d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
-                <path
-                  fillRule="evenodd"
-                  d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
-                  clipRule="evenodd"
-                />
+                <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
               </svg>
             </Link>
             <Link
-              to="/events"
+              to="/events?category=festival"
               className="flex items-center gap-2 rounded border border-amber-600 bg-transparent px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
             >
-              {isAuthenticated ? "Events" : "Healing festivals"}
+              {isAuthenticated ? "All festivals" : "All the festivals"}
               <svg
                 className="h-6 w-6"
                 width="16px"
@@ -104,32 +123,10 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             {isAuthenticated ? (
               <>
                 <Link
-                  to="/events/new"
-                  className="flex items-center gap-2 rounded border border-emerald-600 bg-transparent px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
-                >
-                  New
-                  <svg
-                    className="h-6 w-6"
-                    width="16px"
-                    height="16px"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-                    />
-                  </svg>
-                </Link>
-                <Link
                   to="/Categories"
                   className="flex items-center gap-2 rounded border border-stone-600 px-4 py-2 text-stone-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
                 >
-                  Categories
+                  <span className="lg:sr-only">Categories</span>
                   <svg
                     className="h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +151,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                   to="/feedback"
                   className="flex items-center gap-2 rounded border border-sky-600 px-4 py-2 text-sky-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
                 >
-                  Feedback
+                  <span className="lg:sr-only">Feedback</span>
                   <svg
                     className="h-6 w-6"
                     width="16px"

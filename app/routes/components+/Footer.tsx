@@ -111,7 +111,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 )}
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 sm:py-4 sm:max-[839px]:col-span-2 xl:px-8"
+                  className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 sm:py-4 sm:max-[839px]:col-span-2 xl:px-8"
                 >
                   Join the mailing list
                   <svg

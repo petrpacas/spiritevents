@@ -55,7 +55,7 @@ export async function loader() {
     take: 3,
     where: {
       dateEnd: { gte: getTodayDate() },
-      country: { not: "CZ" },
+      categories: { some: { slug: { equals: "festival" } } },
       status: EventStatus.PUBLISHED,
     },
   });
@@ -112,8 +112,8 @@ export default function Landing() {
               and many more&hellip;
             </p>
             <Link
-              to="/events"
-              className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
+              to="/events?country=CZ"
+              className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
             >
               Discover events in Czechia
               <svg
@@ -124,12 +124,7 @@ export default function Landing() {
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
-                <path d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
-                <path
-                  fillRule="evenodd"
-                  d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
-                  clipRule="evenodd"
-                />
+                <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
               </svg>
             </Link>
           </div>
@@ -137,8 +132,8 @@ export default function Landing() {
         <div className="border-t border-amber-600" />
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
           <h2 className="text-2xl sm:text-3xl">
-            ✨ Or, get enchanted at <strong>healing festivals</strong> all over
-            the <strong>world</strong>
+            ✨ Or, get enchanted at <strong>healing festivals</strong> all
+            around the <strong>world</strong>
           </h2>
           <div className="grid gap-4">
             {festivals.map((event) => (
@@ -162,10 +157,10 @@ export default function Landing() {
               and more still&hellip;
             </p>
             <Link
-              to="/events"
-              className="flex items-center justify-center gap-4 rounded-lg border border-amber-600 bg-transparent px-4 py-2 text-lg text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
+              to="/events?category=festival"
+              className="flex items-center justify-center gap-3 rounded-lg border border-amber-600 bg-transparent px-4 py-2 text-lg text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
             >
-              Discover festivals worldwide
+              Discover all the festivals
               <svg
                 className="h-6 w-6 max-[339px]:hidden"
                 width="16px"
@@ -255,7 +250,7 @@ export default function Landing() {
             </div>
             <Link
               to="/events/suggest"
-              className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end xl:self-center"
+              className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end xl:self-center"
             >
               Suggest a new event
               <svg
@@ -297,7 +292,7 @@ export default function Landing() {
             </div>
             <Link
               to="/feedback/send"
-              className="flex items-center justify-center gap-4 rounded-lg border border-transparent bg-sky-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end xl:self-center"
+              className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-sky-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end xl:self-center"
             >
               Send me your feedback
               <svg

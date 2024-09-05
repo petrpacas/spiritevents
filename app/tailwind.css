@@ -4,14 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* DESCRIPTION PROSE */
+/* DESCRIPTION EDITOR */
 
-#description a {
+.description-editor a {
   overflow-wrap: anywhere;
 }
-
-/* MDX EDITOR */
-
 .mdxeditor-toolbar {
   @apply rounded-b-none rounded-tl-sm rounded-tr-sm !important;
 }

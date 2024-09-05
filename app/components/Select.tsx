@@ -9,7 +9,6 @@ type Props = {
   defaultValue?: string;
   disabled?: boolean;
   emptyOption?: string;
-  id?: string;
   name?: string;
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
@@ -21,7 +20,6 @@ export const Select = ({
   defaultValue,
   disabled,
   emptyOption,
-  id,
   name,
   required,
   onChange,
@@ -31,7 +29,6 @@ export const Select = ({
       required={required}
       autoComplete="off"
       name={name}
-      id={id}
       defaultValue={defaultValue}
       className={className}
       onChange={onChange}

@@ -15,7 +15,7 @@ import { authenticator, prisma } from "~/services";
 import { feedbackFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Send feedback ~ SeekGathering" }];
+  return [{ title: "Send me your feedback ~ SeekGathering" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {

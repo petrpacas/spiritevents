@@ -23,7 +23,7 @@ import { EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Suggest event ~ SeekGathering" }];
+  return [{ title: "Suggest a new event ~ SeekGathering" }];
 };
 
 export const links: LinksFunction = () => [...descriptionEditorStyles()];

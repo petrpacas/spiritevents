@@ -252,8 +252,7 @@ export default function Event() {
           <div className="grid gap-8">
             {event.description && (
               <div
-                className="prose prose-amber-basic mx-auto w-full max-w-4xl sm:prose-lg xl:prose-xl"
-                id="description"
+                className="description-editor prose prose-amber-basic mx-auto w-full max-w-4xl sm:prose-lg xl:prose-xl"
                 dangerouslySetInnerHTML={{
                   __html: event.description,
                 }}

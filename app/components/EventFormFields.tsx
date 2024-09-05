@@ -92,7 +92,7 @@ export const EventFormFields = ({
           onChange={handleTitleChange}
           onBlur={handleTitleBlur}
           value={title}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.title && (
           <p className="text-red-600">{errors.fieldErrors.title.join(", ")}</p>
@@ -119,7 +119,7 @@ export const EventFormFields = ({
             onBlur={handleSlugBlur}
             value={slug}
             placeholder="e.g. example-event"
-            className={`rounded border-stone-200 placeholder-stone-400 ${isSlugFreelyModifiable ? (event?.status === EventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow`}
+            className={`rounded border-stone-300 placeholder-stone-400 ${isSlugFreelyModifiable ? (event?.status === EventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow`}
           />
           {errors?.fieldErrors.slug && (
             <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
@@ -136,7 +136,7 @@ export const EventFormFields = ({
           emptyOption={event?.country ? undefined : "— select a country —"}
           defaultValue={event?.country || ""}
           name="country"
-          className="w-full cursor-pointer rounded border-stone-200 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow"
+          className="w-full cursor-pointer rounded border-stone-300 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.country && (
           <p className="text-red-600">
@@ -152,7 +152,7 @@ export const EventFormFields = ({
           name="location"
           defaultValue={event?.location}
           placeholder="eg. city, venue, or area"
-          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.location && (
           <p className="text-red-600">
@@ -163,10 +163,10 @@ export const EventFormFields = ({
       {categories && categories.length > 0 && (
         <div className="grid gap-2 md:col-span-2">
           Categories
-          <div className="flex flex-wrap gap-4 rounded-lg border border-stone-200 p-4">
+          <div className="flex flex-wrap gap-4 rounded-lg border border-stone-300 p-4">
             {categories.map((category) => (
               <label
-                className="flex cursor-pointer items-center gap-2 rounded border border-stone-200 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                className="flex cursor-pointer items-center gap-2 rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
                 key={category.id}
               >
                 <input
@@ -179,7 +179,7 @@ export const EventFormFields = ({
                       (eventCategory) => eventCategory.id === category.id,
                     ),
                   )}
-                  className="rounded border border-stone-200 checked:bg-amber-600 hover:checked:bg-amber-600 focus:checked:bg-amber-600"
+                  className="rounded border border-stone-300 checked:bg-amber-600 hover:checked:bg-amber-600 focus:checked:bg-amber-600"
                 />
                 {category.name}
               </label>
@@ -199,7 +199,7 @@ export const EventFormFields = ({
           type="date"
           name="dateStart"
           placeholder="yyyy-mm-dd"
-          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
           value={dateStartState}
           onChange={(e) => setDateStart(e.target.value)}
           onBlur={(e) => {
@@ -221,7 +221,7 @@ export const EventFormFields = ({
           type="date"
           name="dateEnd"
           placeholder="yyyy-mm-dd"
-          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
           value={dateEndState}
           onChange={(e) => setDateEnd(e.target.value)}
           onBlur={(e) => {
@@ -244,7 +244,7 @@ export const EventFormFields = ({
           name="timeStart"
           placeholder="hh:mm"
           defaultValue={event?.timeStart}
-          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.timeStart && (
           <p className="text-red-600">
@@ -260,7 +260,7 @@ export const EventFormFields = ({
           name="timeEnd"
           placeholder="hh:mm"
           defaultValue={event?.timeEnd}
-          className="rounded border-stone-200 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.timeEnd && (
           <p className="text-red-600">
@@ -275,7 +275,7 @@ export const EventFormFields = ({
           type="text"
           name="linkWebsite"
           defaultValue={event?.linkWebsite}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.linkWebsite && (
           <p className="text-red-600">
@@ -290,7 +290,7 @@ export const EventFormFields = ({
           type="text"
           name="linkTickets"
           defaultValue={event?.linkTickets}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.linkTickets && (
           <p className="text-red-600">
@@ -305,7 +305,7 @@ export const EventFormFields = ({
           type="text"
           name="linkFbEvent"
           defaultValue={event?.linkFbEvent}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.linkFbEvent && (
           <p className="text-red-600">
@@ -320,7 +320,7 @@ export const EventFormFields = ({
           type="text"
           name="linkLocation"
           defaultValue={event?.linkLocation}
-          className="rounded border-stone-200 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
         />
         {errors?.fieldErrors.linkLocation && (
           <p className="text-red-600">
@@ -339,7 +339,7 @@ export const EventFormFields = ({
               name="description"
               readOnly
               defaultValue={event?.description}
-              className="min-h-20 rounded border-stone-200 shadow-sm transition-shadow read-only:bg-stone-200 hover:shadow-md active:shadow"
+              className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow read-only:bg-stone-300 hover:shadow-md active:shadow"
             />
             {errors?.fieldErrors.description && (
               <p className="text-red-600">
@@ -354,7 +354,7 @@ export const EventFormFields = ({
             Description
             <DescriptionEditor
               ref={mdxEditorRef}
-              className="overflow-x-auto rounded border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="overflow-x-auto rounded border border-stone-300 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow"
               markdown={event?.description}
             />
             {errors?.fieldErrors.description && (
