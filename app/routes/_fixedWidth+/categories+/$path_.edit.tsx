@@ -70,9 +70,9 @@ export default function CategoryEdit() {
   return (
     <Form onSubmit={handleSubmit}>
       <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
-        <h1 className="flex items-center gap-2 text-3xl font-bold leading-relaxed sm:text-4xl sm:leading-relaxed">
+        <h1 className="flex items-center gap-2 text-3xl font-bold leading-snug sm:text-4xl sm:leading-snug">
           <svg
-            className="h-8 w-8 text-amber-600 max-[452px]:hidden sm:h-10 sm:w-10"
+            className="h-8 w-8 shrink-0 text-amber-600 max-xl:hidden sm:h-10 sm:w-10"
             width="16px"
             height="16px"
             xmlns="http://www.w3.org/2000/svg"
