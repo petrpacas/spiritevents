@@ -122,6 +122,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
                 'slug', c."slug"
               )
           END
+          ORDER BY c."name" ASC
         ) FILTER (WHERE c."id" IS NOT NULL), '[]'
       ) AS "categories"
     FROM "Event" e

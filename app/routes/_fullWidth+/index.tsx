@@ -29,7 +29,7 @@ export async function loader() {
       timeEnd: true,
       timeStart: true,
       title: true,
-      categories: true,
+      categories: { orderBy: { name: "asc" } },
     },
     take: 3,
     where: {

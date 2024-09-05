@@ -74,7 +74,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       id,
       status: isAuthenticated ? undefined : EventStatus.PUBLISHED,
     },
-    include: { categories: true },
+    include: { categories: { orderBy: { name: "asc" } } },
   });
   if (!event) {
     throw new Response("Not Found", { status: 404 });
