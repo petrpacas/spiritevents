@@ -59,10 +59,31 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-30 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:relative lg:z-10 lg:flex lg:gap-4`}
           >
             <Link
-              to="/events"
+              to="/events?country=CZ"
               className="flex items-center gap-2 rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
             >
-              {isAuthenticated ? "Events" : "Discover events"}
+              {isAuthenticated ? "Events" : "Events in Czechia"}
+              <svg
+                className="h-6 w-6"
+                width="16px"
+                height="16px"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
+                <path
+                  fillRule="evenodd"
+                  d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Link>
+            <Link
+              to="/events"
+              className="flex items-center gap-2 rounded border border-amber-600 bg-transparent px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
+            >
+              {isAuthenticated ? "Events" : "Healing festivals"}
               <svg
                 className="h-6 w-6"
                 width="16px"
@@ -173,28 +194,6 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-                    />
-                  </svg>
-                </Link>
-                <Link
-                  to="/feedback/send"
-                  className="flex items-center gap-2 rounded border border-sky-600 px-4 py-2 text-sky-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
-                >
-                  Send feedback
-                  <svg
-                    className="h-6 w-6"
-                    width="16px"
-                    height="16px"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
                     />
                   </svg>
                 </Link>

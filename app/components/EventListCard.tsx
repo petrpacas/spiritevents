@@ -5,7 +5,7 @@ import { EventStatus, getStatusColors } from "~/utils";
 
 type Props = {
   categories: Category[];
-  country: string;
+  country?: string;
   dateEnd: string;
   dateStart: string;
   eventsIndex?: boolean;

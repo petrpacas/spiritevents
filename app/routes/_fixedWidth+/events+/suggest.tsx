@@ -120,7 +120,7 @@ export default function EventSuggest() {
         </p>
         <p className="text-lg sm:text-xl">
           Do you know of any relevant event that deserves to be found by
-          like-minded people from around the world?
+          like-minded people?
         </p>
         <p className="text-lg text-amber-600 sm:text-xl">
           Suggesting it will not only support the event, but also all the other
