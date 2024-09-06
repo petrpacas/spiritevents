@@ -251,7 +251,7 @@ export default function Event() {
           <div className="grid gap-8">
             {event.description && (
               <div
-                className="description-editor prose prose-amber-basic mx-auto w-full max-w-4xl sm:prose-lg xl:prose-xl"
+                className="prose prose-amber-basic mx-auto w-full max-w-4xl sm:prose-lg xl:prose-xl dark:prose-invert"
                 dangerouslySetInnerHTML={{
                   __html: event.description,
                 }}
@@ -350,7 +350,7 @@ export default function Event() {
                 disabled={isWorking}
                 type="button"
                 onClick={() => navigate(-1)}
-                className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
               >
                 Back
               </button>

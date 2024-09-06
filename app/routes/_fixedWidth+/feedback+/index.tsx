@@ -79,7 +79,7 @@ export default function Feedback() {
                 <div>
                   <span className="text-amber-600">Name:</span>{" "}
                   {feedback.name === "" ? (
-                    <span className="text-stone-300">n/a</span>
+                    <span className="text-stone-400">n/a</span>
                   ) : (
                     feedback.name
                   )}
@@ -87,7 +87,7 @@ export default function Feedback() {
                 <div>
                   <span className="text-amber-600">Contact:</span>{" "}
                   {feedback.contact === "" ? (
-                    <span className="text-stone-300">n/a</span>
+                    <span className="text-stone-400">n/a</span>
                   ) : (
                     feedback.contact
                   )}
@@ -115,7 +115,7 @@ export default function Feedback() {
                     type="submit"
                     name="id"
                     value={feedback.id}
-                    className="rounded border border-red-600 bg-white px-2 py-1 text-red-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                    className="rounded border border-red-600 bg-red-50 px-2 py-1 text-red-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:bg-red-950"
                   >
                     Delete
                   </button>
@@ -135,7 +135,7 @@ export default function Feedback() {
           disabled={isWorking}
           type="button"
           onClick={() => navigate(-1)}
-          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
         >
           Back
         </button>

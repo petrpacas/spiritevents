@@ -100,7 +100,7 @@ export default function CategoryEdit() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
           >
             Back
           </button>

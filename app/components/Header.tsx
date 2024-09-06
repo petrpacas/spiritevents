@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export const Header = ({ isAuthenticated, isLanding }: Props) => {
+  const navigation = useNavigation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   useEffect(() => {
     if (isMenuOpen) {
@@ -17,6 +18,11 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
       document.body.classList.remove("overflow-hidden");
     }
   }, [isMenuOpen]);
+  useEffect(() => {
+    if (navigation.state === "idle") {
+      setIsMenuOpen(false);
+    }
+  }, [navigation]);
   const brandName = (
     <div className="relative z-10 font-bold leading-none max-[319px]:grid max-[319px]:text-[1.3125rem] min-[320px]:text-[1.75rem] min-[374px]:text-[2.1815rem] min-[428px]:text-[2.625rem]">
       <span className="text-amber-600">Seek</span>Gathering
@@ -25,14 +31,18 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
   return (
     <>
       <header
-        className={isLanding ? "absolute left-0 top-0 w-full" : "bg-amber-50"}
+        className={
+          isLanding
+            ? "absolute left-0 top-0 w-full"
+            : "bg-amber-50 dark:bg-amber-950"
+        }
       >
         <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between p-4 sm:px-8">
           <Link to="/">{isLanding ? <h1>{brandName}</h1> : brandName}</Link>
           <button
             type="button"
             onClick={() => setIsMenuOpen((value) => !value)}
-            className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-40 flex items-center rounded border px-4 py-2 lg:hidden`}
+            className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600 dark:bg-stone-800" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-40 flex items-center rounded border px-4 py-2 lg:hidden`}
           >
             <span className="sr-only">Menu</span>
             <svg
@@ -52,11 +62,11 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               />
             </svg>
             <div
-              className={`${isMenuOpen ? "" : "hidden"} absolute -bottom-[2px] left-0 right-0 h-[2px] bg-white`}
+              className={`${isMenuOpen ? "" : "hidden"} absolute -bottom-[2px] left-0 right-0 h-[2px] bg-white dark:bg-stone-800`}
             />
           </button>
           <nav
-            className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-30 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:relative lg:z-10 lg:flex lg:gap-4`}
+            className={`${isMenuOpen ? "max-lg:grid" : "max-lg:hidden"} items-center max-lg:absolute max-lg:top-[3.625rem] max-lg:z-30 max-lg:gap-2 max-lg:rounded-md max-lg:rounded-tr-none max-lg:border max-lg:border-amber-600 max-lg:bg-white max-lg:p-4 max-sm:right-4 sm:max-lg:right-8 lg:relative lg:z-10 lg:flex lg:gap-4 dark:max-lg:bg-stone-800`}
           >
             {isAuthenticated && (
               <Link
@@ -100,7 +110,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             </Link>
             <Link
               to="/events?category=festival"
-              className="flex items-center gap-2 rounded border border-amber-600 bg-transparent px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
+              className="flex items-center gap-2 rounded border border-amber-600 bg-transparent px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
             >
               {isAuthenticated ? "All festivals" : "All the festivals"}
               <svg
@@ -124,7 +134,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               <>
                 <Link
                   to="/Categories"
-                  className="flex items-center gap-2 rounded border border-stone-600 px-4 py-2 text-stone-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
+                  className="flex items-center gap-2 rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
                 >
                   <span className="lg:sr-only">Categories</span>
                   <svg
@@ -149,7 +159,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                 </Link>
                 <Link
                   to="/feedback"
-                  className="flex items-center gap-2 rounded border border-sky-600 px-4 py-2 text-sky-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
+                  className="flex items-center gap-2 rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
                 >
                   <span className="lg:sr-only">Feedback</span>
                   <svg
@@ -174,7 +184,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               <>
                 <Link
                   to="/events/suggest"
-                  className="flex items-center gap-2 rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
+                  className="flex items-center gap-2 rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
                 >
                   Suggest event
                   <svg
@@ -204,7 +214,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
           createPortal(
             <button
               type="button"
-              className={`${isMenuOpen ? "absolute" : "hidden"} bottom-0 left-0 right-0 top-0 z-20 bg-black/50 lg:hidden`}
+              className={`${isMenuOpen ? "absolute" : "hidden"} bottom-0 left-0 right-0 top-0 z-20 bg-black/50 lg:hidden dark:bg-white/50`}
               onClick={() => setIsMenuOpen(false)}
             />,
             document.body,

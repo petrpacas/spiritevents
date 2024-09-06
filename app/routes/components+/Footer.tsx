@@ -57,7 +57,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
     signInUrl = "/sign-in?ogRoute=" + pathname + search;
   }
   return (
-    <footer className="bg-stone-100">
+    <footer className="bg-stone-100 dark:bg-stone-900">
       <div className="mx-auto grid w-full max-w-7xl gap-16 px-4 py-8 sm:px-8 sm:py-16">
         <div className="grid items-start gap-16 xl:grid-cols-3">
           <div className="grid items-start gap-8 xl:col-span-2 xl:grid-cols-2 xl:gap-x-16">
@@ -89,7 +89,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   autoComplete="on"
                   type="text"
                   name="name"
-                  className="w-full rounded-lg border-stone-300 py-2 text-lg placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
+                  className="w-full rounded-lg border-stone-300 py-2 text-lg placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4 dark:bg-stone-800"
                 />
                 <input
                   required
@@ -97,7 +97,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   autoComplete="on"
                   type="email"
                   name="email"
-                  className="w-full rounded-lg border-stone-300 py-2 text-lg placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4"
+                  className="w-full rounded-lg border-stone-300 py-2 text-lg placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-4 dark:bg-stone-800"
                 />
                 {actionData?.errors?.fieldErrors.name && (
                   <p className="text-center text-red-600 sm:max-[839px]:col-span-2 min-[840px]:max-xl:order-4 min-[840px]:max-xl:col-span-3">

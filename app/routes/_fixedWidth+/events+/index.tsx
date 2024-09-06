@@ -381,7 +381,7 @@ export default function Events() {
           <Form
             onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
-            className="grid gap-4 rounded-lg bg-stone-50 p-2 sm:p-4"
+            className="grid gap-4 rounded-lg border border-stone-300 bg-stone-50 p-2 sm:p-4 dark:bg-transparent"
           >
             <div className="grid gap-4 lg:flex lg:items-center">
               <div
@@ -393,7 +393,7 @@ export default function Events() {
                     autoComplete="off"
                     name="status"
                     defaultValue={status || ""}
-                    className="cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3"
+                    className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-800"
                   >
                     <option value="">Any status</option>
                     <option value="suggested">Suggested</option>
@@ -406,7 +406,7 @@ export default function Events() {
                   autoComplete="off"
                   name="past"
                   defaultValue={past || ""}
-                  className="cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3"
+                  className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-800"
                 >
                   <option value="">
                     Upcoming{!isAuthenticated && " events"}
@@ -421,7 +421,7 @@ export default function Events() {
                   options={[{ name: "Czech Republic", code: "CZ" }]}
                   defaultValue={country || ""}
                   emptyOption="All countries"
-                  className="cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3"
+                  className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-800"
                 />
               </div>
               <div className="border-stone-300 max-lg:hidden lg:h-6 lg:border-l-2" />
@@ -434,7 +434,7 @@ export default function Events() {
                     type="text"
                     name="search"
                     defaultValue={search || ""}
-                    className="flex-grow rounded border border-stone-300 px-2 py-1 font-semibold placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:w-full sm:px-3 sm:py-2"
+                    className="flex-grow rounded border border-stone-300 px-2 py-1 font-semibold placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:w-full sm:px-3 sm:py-2 dark:bg-stone-800"
                   />
                 </label>
                 {isFiltering ? (
@@ -445,7 +445,7 @@ export default function Events() {
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth="1.5"
-                      stroke="#5b7280"
+                      stroke="currentColor"
                     >
                       <path
                         strokeLinecap="round"
@@ -457,7 +457,7 @@ export default function Events() {
                 ) : (
                   search && (
                     <button
-                      className="flex-shrink self-end rounded border border-stone-300 bg-white p-1 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-2"
+                      className="flex-shrink self-end rounded border border-stone-300 bg-white p-1 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-2 dark:bg-stone-800"
                       type="button"
                       onClick={handleClearSearch}
                     >
@@ -467,7 +467,7 @@ export default function Events() {
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
-                        stroke="#5b7280"
+                        stroke="currentColor"
                       >
                         <path
                           strokeLinecap="round"
@@ -487,7 +487,7 @@ export default function Events() {
                   <span className="max-sm:hidden">Categories</span>
                   {allCategories.map((category) => (
                     <label
-                      className="flex cursor-pointer items-center gap-2 rounded border border-stone-300 bg-white px-2 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                      className="flex cursor-pointer items-center gap-2 rounded border border-stone-300 bg-white px-2 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
                       key={category.id}
                     >
                       <input
@@ -501,7 +501,7 @@ export default function Events() {
                             (categorySlug) => categorySlug === category.slug,
                           ),
                         )}
-                        className="rounded border border-stone-300 checked:bg-amber-600 hover:checked:bg-amber-600 focus:checked:bg-amber-600"
+                        className="rounded border border-stone-300 checked:bg-amber-600 hover:checked:bg-amber-600 focus:checked:bg-amber-600 dark:bg-stone-800"
                       />
                       {category.name}
                     </label>
@@ -562,13 +562,13 @@ export default function Events() {
       {isAuthenticated ? (
         hasGroupedEvents && (
           <div className="flex items-center justify-center gap-2 max-[399px]:flex-col sm:gap-4 sm:text-lg">
-            <div className="rounded border border-stone-300 bg-emerald-100 p-2 sm:px-4">
+            <div className="rounded border border-stone-300 bg-emerald-100 p-2 sm:px-4 dark:bg-emerald-950">
               <span className="text-amber-600">(S)</span> Suggested
             </div>
-            <div className="rounded border border-stone-300 bg-sky-100 p-2 sm:px-4">
+            <div className="rounded border border-stone-300 bg-sky-100 p-2 sm:px-4 dark:bg-sky-950">
               <span className="text-amber-600">(D)</span> Draft
             </div>
-            <div className="rounded border border-stone-300 bg-white p-2 sm:px-4">
+            <div className="rounded border border-stone-300 bg-white p-2 sm:px-4 dark:bg-stone-800">
               Published
             </div>
           </div>
@@ -577,7 +577,7 @@ export default function Events() {
         <div className="grid gap-8 xl:grid-cols-3 xl:gap-16">
           <Link
             to="/events/suggest"
-            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
+            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3 dark:text-white"
           >
             Suggest a new event
             <svg
@@ -603,7 +603,7 @@ export default function Events() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow dark:text-white"
         >
           Back
         </button>

@@ -92,7 +92,7 @@ export default function FeedbackSend() {
               autoComplete="on"
               type="text"
               name="name"
-              className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
             />
             {errors?.fieldErrors.name && (
               <p className="text-red-600">
@@ -108,7 +108,7 @@ export default function FeedbackSend() {
               autoComplete="off"
               type="text"
               name="contact"
-              className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
             />
             {errors?.fieldErrors.contact && (
               <p className="text-red-600">
@@ -121,7 +121,7 @@ export default function FeedbackSend() {
             <textarea
               autoComplete="off"
               name="content"
-              className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow"
+              className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
             />
             {errors?.fieldErrors.content && (
               <p className="text-red-600">
@@ -140,7 +140,7 @@ export default function FeedbackSend() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
           >
             Back
           </button>

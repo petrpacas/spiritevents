@@ -72,8 +72,8 @@ export default function Landing() {
           alt="Elizabeth Anura - Medicine Festival 2023"
           className="absolute left-0 top-0 h-full w-full object-cover"
         />
-        <div className="relative grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))]">
-          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)]">
+        <div className="relative grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))] dark:bg-[linear-gradient(rgba(69,26,3,1),rgba(69,26,3,.8),rgba(69,26,3,1))]">
+          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)] dark:drop-shadow-[0_0_1.875rem_rgb(120,53,15)] dark:min-[375px]:drop-shadow-[0_0_2rem_rgb(120,53,15)] dark:min-[414px]:drop-shadow-[0_0_2.25rem_rgb(120,53,15)] dark:md:drop-shadow-[0_0_3rem_rgb(120,53,15)]">
             Reunite with your <strong className="text-amber-600">tribe</strong>{" "}
             <br className="max-lg:hidden" /> and discover{" "}
             <strong className="text-amber-600">events and festivals</strong>{" "}
@@ -190,7 +190,7 @@ export default function Landing() {
         </div>
       )}
       <div className="grid gap-8 pb-8 sm:gap-16 sm:pb-16">
-        <div className="bg-amber-100">
+        <div className="bg-amber-100 dark:bg-amber-900">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:gap-16 sm:px-8 sm:py-16 xl:grid-cols-2">
             <div className="grid gap-8 text-center">
               <div className="text-4xl">🧿</div>
@@ -248,7 +248,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="bg-emerald-100">
+        <div className="bg-emerald-100 dark:bg-emerald-900">
           <div className="mx-auto grid w-full max-w-7xl px-4 py-8 max-xl:gap-8 sm:px-8 sm:py-16 xl:grid-cols-3 xl:gap-16">
             <div className="grid gap-8 xl:col-span-2">
               <h3 className="text-2xl leading-snug sm:text-3xl sm:leading-snug">
@@ -294,7 +294,7 @@ export default function Landing() {
             </Link>
           </div>
         </div>
-        <div className="bg-sky-100">
+        <div className="bg-sky-100 dark:bg-sky-900">
           <div className="mx-auto grid w-full max-w-7xl px-4 py-8 max-xl:gap-8 sm:px-8 sm:py-16 xl:grid-cols-3 xl:gap-16">
             <div className="grid gap-8 xl:col-span-2">
               <h3 className="text-2xl leading-snug sm:text-3xl sm:leading-snug">

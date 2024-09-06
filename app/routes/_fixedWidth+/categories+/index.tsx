@@ -67,7 +67,7 @@ export default function Feedback() {
             <div key={category.id} className="flex">
               <Link
                 to={`/categories/${category.slug}-${category.id}/edit`}
-                className="flex flex-grow rounded-l border border-r-0 border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
+                className="flex flex-grow rounded-l border border-r-0 border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
               >
                 <div className="grid gap-2 sm:flex sm:flex-grow">
                   {category.slug}
@@ -92,7 +92,7 @@ export default function Feedback() {
                   type="submit"
                   name="id"
                   value={category.id}
-                  className="rounded-r border border-red-600 bg-white px-2 text-red-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                  className="rounded-r border border-red-600 bg-red-50 px-2 text-red-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:bg-red-950"
                 >
                   <svg
                     className="h-6 w-6"
@@ -129,7 +129,7 @@ export default function Feedback() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
         >
           Back
         </button>

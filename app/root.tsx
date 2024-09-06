@@ -123,11 +123,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <Links />
       </head>
-      <body className="relative text-amber-950">
+      <body className="relative bg-white text-amber-950 dark:bg-stone-700 dark:text-white">
         {children}
         <Toaster
           toastOptions={{
-            className: "!text-amber-950",
+            className:
+              "!bg-stone-800 !text-white dark:!bg-white dark:!text-amber-950",
             duration: 3333,
             position: "bottom-center",
           }}
