@@ -164,7 +164,7 @@ export default function Landing() {
                 </p>
                 <Link
                   to="/events?category=festival"
-                  className="flex items-center justify-center gap-3 rounded-lg border border-amber-600 bg-transparent px-4 py-2 text-lg text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
+                  className="flex items-center justify-center gap-3 rounded-lg border border-amber-600 bg-transparent px-4 py-2 text-lg text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center dark:text-white"
                 >
                   Discover all the festivals
                   <svg
