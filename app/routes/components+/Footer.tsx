@@ -58,10 +58,10 @@ export const Footer = ({ isAuthenticated }: Props) => {
   }
   return (
     <footer className="bg-stone-100">
-      <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:pt-16 xl:gap-16">
+      <div className="mx-auto grid w-full max-w-7xl gap-16 px-4 py-8 sm:px-8 sm:py-16">
         <div className="grid items-start gap-16 xl:grid-cols-3">
           <div className="grid items-start gap-8 xl:col-span-2 xl:grid-cols-2 xl:gap-x-16">
-            <h3 className="text-2xl sm:text-3xl xl:col-span-2">
+            <h3 className="text-2xl leading-snug sm:text-3xl sm:leading-snug xl:col-span-2">
               🔄 Stay in the <strong>loop</strong>
             </h3>
             <div className="grid gap-4">
@@ -135,40 +135,40 @@ export const Footer = ({ isAuthenticated }: Props) => {
             </fetcher.Form>
           </div>
           <div className="grid gap-8 text-center xl:text-left" id="contacts">
-            <h3 className="text-2xl font-bold sm:text-3xl">
+            <h3 className="text-2xl font-bold leading-snug sm:text-3xl sm:leading-snug">
               👋 <span className="text-amber-600">Seek</span>Gathering
             </h3>
-            <div className="grid gap-2 text-lg sm:text-xl">
-              <div>
-                <a
-                  href="mailto:info@seekgathering.com"
-                  className="break-all text-amber-600 underline"
-                >
-                  info@seekgathering.com
-                </a>
+            <div className="grid gap-4">
+              <div className="grid gap-2">
+                <div>
+                  <a
+                    href="mailto:info@seekgathering.com"
+                    className="break-all text-lg leading-snug text-amber-600 underline sm:text-xl sm:leading-snug"
+                  >
+                    info@seekgathering.com
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="https://instagram.com/seekgathering"
+                    className="text-lg leading-snug text-amber-600 underline sm:text-xl sm:leading-snug"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    instagram
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="https://facebook.com/seekgatheringcom"
+                    className="text-lg leading-snug text-amber-600 underline sm:text-xl sm:leading-snug"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    facebook
+                  </a>
+                </div>
               </div>
-              <div>
-                <a
-                  href="https://instagram.com/seekgathering"
-                  className="text-amber-600 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  instagram
-                </a>
-              </div>
-              <div>
-                <a
-                  href="https://facebook.com/seekgatheringcom"
-                  className="text-amber-600 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  facebook
-                </a>
-              </div>
-            </div>
-            <div className="grid gap-2">
               <div className="max-[399px]:grid">
                 Cover photo by{" "}
                 <a
@@ -180,77 +180,66 @@ export const Footer = ({ isAuthenticated }: Props) => {
                   Elizabeth Gottwald
                 </a>
               </div>
-              {/* <div className="max-[399px]:grid">
-                Event cover photo by{" "}
-                <a
-                  href="https://www.soulfocus.media/"
-                  className="text-amber-600 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
+              {isAuthenticated ? (
+                <Form action="/sign-out" method="post">
+                  <button
+                    disabled={navigation.state !== "idle"}
+                    type="submit"
+                    className="inline-flex items-center gap-3 justify-self-center rounded border border-stone-300 px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 xl:justify-self-start"
+                  >
+                    Admin sign out
+                    <svg
+                      className="h-5 w-5"
+                      width="16px"
+                      height="16px"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                      />
+                    </svg>
+                  </button>
+                </Form>
+              ) : (
+                <Link
+                  to={signInUrl}
+                  className="inline-flex items-center gap-3 justify-self-center rounded border border-stone-300 px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md active:shadow xl:justify-self-start"
                 >
-                  Phoebe Montague
-                </a>
-              </div> */}
+                  Admin sign in
+                  <svg
+                    className="h-5 w-5"
+                    width="16px"
+                    height="16px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+                    ></path>
+                  </svg>
+                </Link>
+              )}
             </div>
           </div>
         </div>
         <div className="grid items-center justify-center gap-8 text-center">
           <div className="max-[399px]:grid">
             Made with 💛 by{" "}
-            <a href="mailto:petr@pacas.cz" className="text-amber-600 underline">
-              petr@pacas.cz
+            <a href="https://pacas.cz/" className="text-amber-600 underline">
+              Petr Pacas
             </a>
           </div>
-          {isAuthenticated ? (
-            <Form action="/sign-out" method="post">
-              <button
-                disabled={navigation.state !== "idle"}
-                type="submit"
-                className="inline-flex items-center gap-2 rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-              >
-                Admin sign out
-                <svg
-                  className="h-6 w-6"
-                  width="16px"
-                  height="16px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                  />
-                </svg>
-              </button>
-            </Form>
-          ) : (
-            <Link
-              to={signInUrl}
-              className="inline-flex items-center gap-2 justify-self-center rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow"
-            >
-              Admin sign in
-              <svg
-                className="h-6 w-6"
-                width="16px"
-                height="16px"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
-                />
-              </svg>
-            </Link>
-          )}
         </div>
       </div>
     </footer>

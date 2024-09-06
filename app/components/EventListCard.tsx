@@ -54,9 +54,13 @@ export const EventListCard = ({
       className={`${statusBg} grid gap-2 rounded-lg border border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-4`}
     >
       {eventsIndex ? (
-        <h4 className="text-xl font-medium sm:text-2xl">{headingContent}</h4>
+        <h4 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
+          {headingContent}
+        </h4>
       ) : (
-        <h3 className="text-xl font-medium sm:text-2xl">{headingContent}</h3>
+        <h3 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
+          {headingContent}
+        </h3>
       )}
       {categories.length > 0 && (
         <div className="flex flex-wrap gap-x-2 leading-snug text-emerald-600 sm:text-lg sm:leading-snug">

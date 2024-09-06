@@ -87,7 +87,7 @@ export default function Landing() {
         <div className="bg-transparent">
           {events.length > 0 && (
             <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
-              <h2 className="text-2xl sm:text-3xl">
+              <h2 className="text-2xl leading-snug sm:text-3xl">
                 🔎 Discover <strong>soulful events</strong> taking place in{" "}
                 <strong>Czech Republic</strong>
               </h2>
@@ -137,7 +137,7 @@ export default function Landing() {
           )}
           {festivals.length > 0 && (
             <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-8 sm:py-16">
-              <h2 className="text-2xl sm:text-3xl">
+              <h2 className="text-2xl leading-snug sm:text-3xl">
                 ✨ Or, get enchanted at <strong>healing festivals</strong> all
                 around the <strong>world</strong>
               </h2>
@@ -192,20 +192,34 @@ export default function Landing() {
       <div className="grid gap-8 pb-8 sm:gap-16 sm:pb-16">
         <div className="bg-amber-100">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:gap-16 sm:px-8 sm:py-16 xl:grid-cols-2">
-            <div className="grid gap-4 text-center sm:gap-8">
+            <div className="grid gap-8 text-center">
               <div className="text-4xl">🧿</div>
-              <h2 className="text-3xl sm:text-4xl">
+              <h2 className="text-3xl leading-snug sm:text-4xl sm:leading-snug">
                 All the <strong>magic</strong>,
                 <br className="min-[490px]:hidden" /> all in{" "}
                 <strong>one place</strong>
               </h2>
-              <div className="grid text-lg italic leading-loose max-[499px]:gap-4 sm:text-xl sm:leading-loose">
-                <p>The community, the connections, the people.</p>
-                <p>The arts, the movement, the experiences.</p>
-                <p>The wisdom, the insights, the growth.</p>
+              <div className="grid gap-4 text-lg italic leading-snug sm:text-xl sm:leading-snug">
+                <p>
+                  The community, <br className="min-[490px]:hidden" />
+                  the connections, <br className="min-[490px]:hidden" />
+                  the people.
+                </p>
+                <p>
+                  The arts, <br className="min-[490px]:hidden" />
+                  the movement, <br className="min-[490px]:hidden" />
+                  the experiences.
+                </p>
+                <p>
+                  The wisdom, <br className="min-[490px]:hidden" />
+                  the insights, <br className="min-[490px]:hidden" />
+                  the growth.
+                </p>
               </div>
-              <div className="self-end border-y border-amber-600 py-4 text-lg italic max-xl:-mx-8 sm:px-4 sm:py-8 sm:text-xl">
-                The ancient. The indigenous. The modern.
+              <div className="-mx-4 self-end border-y border-amber-600 px-4 py-4 text-lg italic leading-snug sm:-mx-8 sm:px-8 sm:py-8 sm:text-xl sm:leading-snug xl:-mx-0 xl:px-0">
+                The ancient. <br className="min-[490px]:hidden" />
+                The indigenous. <br className="min-[490px]:hidden" />
+                The modern.
               </div>
             </div>
             <div className="grid gap-4 text-lg sm:gap-8 sm:text-xl">
@@ -237,7 +251,7 @@ export default function Landing() {
         <div className="bg-emerald-100">
           <div className="mx-auto grid w-full max-w-7xl px-4 py-8 max-xl:gap-8 sm:px-8 sm:py-16 xl:grid-cols-3 xl:gap-16">
             <div className="grid gap-8 xl:col-span-2">
-              <h3 className="text-2xl sm:text-3xl">
+              <h3 className="text-2xl leading-snug sm:text-3xl sm:leading-snug">
                 🌀 Let&apos;s make this place a true portal{" "}
                 <strong>together</strong>
               </h3>
@@ -283,7 +297,7 @@ export default function Landing() {
         <div className="bg-sky-100">
           <div className="mx-auto grid w-full max-w-7xl px-4 py-8 max-xl:gap-8 sm:px-8 sm:py-16 xl:grid-cols-3 xl:gap-16">
             <div className="grid gap-8 xl:col-span-2">
-              <h3 className="text-2xl sm:text-3xl">
+              <h3 className="text-2xl leading-snug sm:text-3xl sm:leading-snug">
                 🚧 Share your <strong>thoughts</strong>
               </h3>
               <div className="grid gap-4 text-lg sm:text-xl">

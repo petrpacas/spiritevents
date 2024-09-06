@@ -516,13 +516,13 @@ export default function Events() {
         <div className="grid gap-8">
           {groupedEvents.map(({ year, months }) => (
             <div className="grid gap-4" key={year}>
-              <h2 className="text-2xl font-bold sm:text-3xl">
+              <h2 className="text-2xl font-bold leading-snug sm:text-3xl sm:leading-snug">
                 {year === "0" ? "Missing date info" : year}
               </h2>
               {months.map(({ month, events }) => (
                 <div className="grid gap-4" key={`${year}_${month}`}>
                   {month !== "0" && (
-                    <h3 className="text-xl font-bold sm:text-2xl">
+                    <h3 className="text-xl font-bold leading-snug sm:text-2xl sm:leading-snug">
                       {new Date(`${year}-${month}`).toLocaleString("en", {
                         month: "long",
                       })}
@@ -577,7 +577,7 @@ export default function Events() {
         <div className="grid gap-8 xl:grid-cols-3 xl:gap-16">
           <Link
             to="/events/suggest"
-            className="flex items-center justify-center gap-4 rounded-lg border border-emerald-600 px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
+            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
           >
             Suggest a new event
             <svg
