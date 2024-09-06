@@ -195,8 +195,7 @@ export default function Event() {
               <div className="grid gap-4">
                 <p className="text-xl font-semibold leading-snug sm:text-2xl sm:leading-snug lg:text-3xl lg:leading-snug">
                   {event.location && `${event.location}, `}
-                  {getCountryNameByCode(event.country)}{" "}
-                  <span className="text-amber-600">({event.country})</span>
+                  {getCountryNameByCode(event.country)}
                 </p>
                 {event.linkLocation && (
                   <div>
