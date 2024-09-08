@@ -157,6 +157,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       e."id"
     ORDER BY
       e."dateStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
+      e."timeStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
       e."title" ASC
   `;
   function groupEvents(events: EventObject[]): EventsWithYear[] {

@@ -18,7 +18,7 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
   const events = await prisma.event.findMany({
-    orderBy: [{ dateStart: "asc" }, { title: "asc" }],
+    orderBy: [{ dateStart: "asc" }, { timeStart: "asc" }, { title: "asc" }],
     select: {
       country: true,
       dateEnd: true,
@@ -39,7 +39,7 @@ export async function loader() {
     },
   });
   const festivals = await prisma.event.findMany({
-    orderBy: [{ dateStart: "asc" }, { title: "asc" }],
+    orderBy: [{ dateStart: "asc" }, { timeStart: "asc" }, { title: "asc" }],
     select: {
       country: true,
       dateEnd: true,
