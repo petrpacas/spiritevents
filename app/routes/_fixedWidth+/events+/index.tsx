@@ -559,21 +559,7 @@ export default function Events() {
             : "No events yet…"}
         </p>
       )}
-      {isAuthenticated ? (
-        hasGroupedEvents && (
-          <div className="flex items-center justify-center gap-2 max-[399px]:flex-col sm:gap-4 sm:text-lg">
-            <div className="rounded border border-stone-300 bg-emerald-100 p-2 sm:px-4 dark:bg-emerald-950">
-              <span className="text-amber-600">(S)</span> Suggested
-            </div>
-            <div className="rounded border border-stone-300 bg-sky-100 p-2 sm:px-4 dark:bg-sky-950">
-              <span className="text-amber-600">(D)</span> Draft
-            </div>
-            <div className="rounded border border-stone-300 bg-white p-2 sm:px-4 dark:bg-stone-800">
-              Published
-            </div>
-          </div>
-        )
-      ) : (
+      {!isAuthenticated && (
         <div className="grid gap-8 xl:grid-cols-3 xl:gap-16">
           <Link
             to="/events/suggest"

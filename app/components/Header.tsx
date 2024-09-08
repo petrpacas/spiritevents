@@ -134,7 +134,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               <>
                 <Link
                   to="/Categories"
-                  className="flex items-center gap-2 rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
+                  className="flex items-center gap-2 rounded border border-stone-600 px-4 py-2 text-stone-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:border-white dark:text-white"
                 >
                   <span className="lg:sr-only">Categories</span>
                   <svg
@@ -159,7 +159,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                 </Link>
                 <Link
                   to="/feedback"
-                  className="flex items-center gap-2 rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
+                  className="flex items-center gap-2 rounded border border-stone-600 px-4 py-2 text-stone-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:border-white dark:text-white"
                 >
                   <span className="lg:sr-only">Feedback</span>
                   <svg

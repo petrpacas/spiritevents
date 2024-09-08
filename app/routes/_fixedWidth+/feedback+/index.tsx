@@ -115,7 +115,7 @@ export default function Feedback() {
                     type="submit"
                     name="id"
                     value={feedback.id}
-                    className="rounded border border-red-600 bg-red-50 px-2 py-1 text-red-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:bg-red-950"
+                    className="rounded border border-red-600 bg-red-600 px-2 py-1 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
                   >
                     Delete
                   </button>

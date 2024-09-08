@@ -92,7 +92,7 @@ export default function Feedback() {
                   type="submit"
                   name="id"
                   value={category.id}
-                  className="rounded-r border border-red-600 bg-red-50 px-2 text-red-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:bg-red-950"
+                  className="rounded-r border border-red-600 bg-red-600 px-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
                 >
                   <svg
                     className="h-6 w-6"
