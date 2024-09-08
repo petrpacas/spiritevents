@@ -179,13 +179,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
       }
       groupedEvents[year][month].push(event);
     });
-    return Object.entries(groupedEvents).map(([year, months]) => ({
-      year,
-      months: Object.entries(months).map(([month, events]) => ({
-        month,
-        events,
-      })),
-    }));
+    const sortedEvents = Object.entries(groupedEvents)
+      .map(([year, months]) => ({
+        year,
+        months: Object.entries(months)
+          .map(([month, events]) => ({
+            month,
+            events,
+          }))
+          .sort((a, b) => {
+            const monthA = parseInt(a.month);
+            const monthB = parseInt(b.month);
+            return isPast ? monthB - monthA : monthA - monthB;
+          }),
+      }))
+      .sort((a, b) => {
+        const yearA = parseInt(a.year);
+        const yearB = parseInt(b.year);
+        return isPast ? yearB - yearA : yearA - yearB;
+      });
+    return sortedEvents;
   }
   const groupedEvents = groupEvents(allEvents);
   return {
