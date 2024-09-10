@@ -75,11 +75,13 @@ export default function EventSuggest() {
     e.preventDefault();
     const $form = e.currentTarget;
     const formData = new FormData($form);
+    const categories = formData.getAll("category");
     const dateEnd = formData.get("dateEnd");
     const dateStart = formData.get("dateStart");
-    const title = formData.get("title");
     const description = mdxEditorRef.current?.getMarkdown();
-    const categories = formData.getAll("category");
+    const timeEnd = formData.get("timeEnd");
+    const timeStart = formData.get("timeStart");
+    const title = formData.get("title");
     formData.delete("category");
     formData.set("categories", JSON.stringify(categories));
     if (dateStart !== null && dateStart !== "" && dateEnd === "") {
@@ -90,6 +92,9 @@ export default function EventSuggest() {
     }
     formData.set("description", description ?? "");
     formData.set("slug", slugify(String(title), { lower: true, strict: true }));
+    if (timeEnd !== null && timeStart === "" && timeEnd !== "") {
+      formData.set("timeEnd", "");
+    }
     submit(formData, { method: "POST" });
   };
   return (

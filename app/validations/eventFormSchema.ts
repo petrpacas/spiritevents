@@ -74,7 +74,7 @@ export const eventFormSchema = z
     originStatus: z.nativeEnum(EventStatus).optional(),
   })
   .superRefine((data, ctx) => {
-    const { dateEnd, dateStart, originStatus } = data;
+    const { dateEnd, dateStart, originStatus, timeEnd, timeStart } = data;
     if (dateEnd < dateStart) {
       ctx.addIssue({
         code: z.ZodIssueCode.invalid_date,
@@ -101,6 +101,18 @@ export const eventFormSchema = z
         code: z.ZodIssueCode.invalid_date,
         message: "Published events must have a date",
         path: ["dateEnd"],
+      });
+    }
+    if (dateEnd === dateStart && timeEnd !== "" && timeEnd < timeStart) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_date,
+        message: "End time can't be earlier than start time for one-day events",
+        path: ["timeStart"],
+      });
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_date,
+        message: "End time can't be earlier than start time for one-day events",
+        path: ["timeEnd"],
       });
     }
   });

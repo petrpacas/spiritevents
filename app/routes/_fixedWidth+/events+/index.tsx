@@ -448,13 +448,15 @@ export default function Events() {
                     type="text"
                     name="search"
                     defaultValue={search || ""}
-                    className="flex-grow rounded border border-stone-300 px-2 py-1 font-semibold placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:w-full sm:px-3 sm:py-2 dark:bg-stone-800"
+                    className="flex-grow rounded border border-stone-300 px-2 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:w-full sm:px-3 sm:py-2 dark:bg-stone-800"
                   />
                 </label>
                 {isFiltering ? (
                   <div className="flex-shrink self-end rounded border border-stone-300 p-1 shadow-sm sm:p-2">
                     <svg
                       className="h-6 w-6 animate-spin"
+                      width="16px"
+                      height="16px"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -477,6 +479,8 @@ export default function Events() {
                     >
                       <svg
                         className="h-6 w-6"
+                        width="16px"
+                        height="16px"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"

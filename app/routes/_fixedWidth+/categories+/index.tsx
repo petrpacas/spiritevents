@@ -42,6 +42,8 @@ export default function Feedback() {
       <h1 className="flex items-center gap-2 text-3xl font-bold leading-snug sm:text-4xl sm:leading-snug">
         <svg
           className="h-8 w-8 shrink-0 text-amber-600 max-xl:hidden sm:h-10 sm:w-10"
+          width="16px"
+          height="16px"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -96,6 +98,8 @@ export default function Feedback() {
                 >
                   <svg
                     className="h-6 w-6"
+                    width="16px"
+                    height="16px"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"

@@ -32,6 +32,8 @@ export const EventFormFields = ({
   const [slugModified, setSlugModified] = useState(false);
   const [dateStartState, setDateStart] = useState(event?.dateStart ?? "");
   const [dateEndState, setDateEnd] = useState(event?.dateEnd ?? "");
+  const [timeStartState, setTimeStart] = useState(event?.timeStart ?? "");
+  const [timeEndState, setTimeEnd] = useState(event?.timeEnd ?? "");
   const [slug, setSlug] = useState(event?.slug ?? "");
   const [title, setTitle] = useState(event?.title ?? "");
   const isSlugFreelyModifiable =
@@ -119,7 +121,7 @@ export const EventFormFields = ({
             onBlur={handleSlugBlur}
             value={slug}
             placeholder="e.g. example-event"
-            className={`rounded border-stone-300 placeholder-stone-400 ${isSlugFreelyModifiable ? (event?.status === EventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800`}
+            className={`rounded border-stone-300 placeholder-stone-400 dark:placeholder-stone-500 ${isSlugFreelyModifiable ? (event?.status === EventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800`}
           />
           {errors?.fieldErrors.slug && (
             <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
@@ -136,7 +138,7 @@ export const EventFormFields = ({
           emptyOption={event?.country ? undefined : "— select a country —"}
           defaultValue={event?.country || ""}
           name="country"
-          className="custom-caret-color w-full cursor-pointer rounded border-stone-300 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow dark:bg-stone-800"
+          className="custom-caret-color w-full cursor-pointer rounded border-stone-300 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow dark:bg-stone-800 dark:invalid:text-stone-500"
         />
         {errors?.fieldErrors.country && (
           <p className="text-red-600">
@@ -152,7 +154,7 @@ export const EventFormFields = ({
           name="location"
           defaultValue={event?.location}
           placeholder="eg. city, venue, or area"
-          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500"
         />
         {errors?.fieldErrors.location && (
           <p className="text-red-600">
@@ -194,20 +196,52 @@ export const EventFormFields = ({
       )}
       <label className="grid gap-2 md:col-span-1">
         Start date
-        <input
-          autoComplete="off"
-          type="date"
-          name="dateStart"
-          placeholder="yyyy-mm-dd"
-          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
-          value={dateStartState}
-          onChange={(e) => setDateStart(e.target.value)}
-          onBlur={(e) => {
-            if (dateStartState > dateEndState || dateEndState === "") {
-              setDateEnd(e.target.value);
-            }
-          }}
-        />
+        <div className="flex">
+          <input
+            autoComplete="off"
+            type="date"
+            name="dateStart"
+            placeholder="yyyy-mm-dd"
+            className={`flex-grow ${dateStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500`}
+            value={dateStartState}
+            onChange={(e) => setDateStart(e.target.value)}
+            onBlur={(e) => {
+              if (
+                dateStartState !== "" &&
+                (dateStartState > dateEndState || dateEndState === "")
+              ) {
+                setDateEnd(e.target.value);
+              }
+            }}
+          />
+          {dateStartState && (
+            <button
+              type="button"
+              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-800"
+              onClick={(e) => {
+                e.preventDefault();
+                setDateStart("");
+              }}
+            >
+              <svg
+                className="h-6 w-6"
+                width="16px"
+                height="16px"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
         {errors?.fieldErrors.dateStart && (
           <p className="text-red-600">
             {errors.fieldErrors.dateStart.join(", ")}
@@ -216,20 +250,52 @@ export const EventFormFields = ({
       </label>
       <label className="grid gap-2 md:col-span-1">
         End date
-        <input
-          autoComplete="off"
-          type="date"
-          name="dateEnd"
-          placeholder="yyyy-mm-dd"
-          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
-          value={dateEndState}
-          onChange={(e) => setDateEnd(e.target.value)}
-          onBlur={(e) => {
-            if (dateEndState < dateStartState || dateStartState === "") {
-              setDateStart(e.target.value);
-            }
-          }}
-        />
+        <div className="flex">
+          <input
+            autoComplete="off"
+            type="date"
+            name="dateEnd"
+            placeholder="yyyy-mm-dd"
+            className={`flex-grow ${dateEndState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500`}
+            value={dateEndState}
+            onChange={(e) => setDateEnd(e.target.value)}
+            onBlur={(e) => {
+              if (
+                dateEndState !== "" &&
+                (dateStartState > dateEndState || dateStartState === "")
+              ) {
+                setDateStart(e.target.value);
+              }
+            }}
+          />
+          {dateEndState && (
+            <button
+              type="button"
+              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-800"
+              onClick={(e) => {
+                e.preventDefault();
+                setDateEnd("");
+              }}
+            >
+              <svg
+                className="h-6 w-6"
+                width="16px"
+                height="16px"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
         {errors?.fieldErrors.dateEnd && (
           <p className="text-red-600">
             {errors.fieldErrors.dateEnd.join(", ")}
@@ -238,14 +304,61 @@ export const EventFormFields = ({
       </label>
       <label className="grid gap-2">
         Start time
-        <input
-          autoComplete="off"
-          type="time"
-          name="timeStart"
-          placeholder="hh:mm"
-          defaultValue={event?.timeStart}
-          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
-        />
+        <div className="flex">
+          <input
+            autoComplete="off"
+            type="time"
+            name="timeStart"
+            placeholder="hh:mm"
+            className={`flex-grow ${timeStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500`}
+            value={timeStartState}
+            onChange={(e) => setTimeStart(e.target.value)}
+            onFocus={() => {
+              if (timeStartState === "" && timeEndState !== "") {
+                setTimeStart(timeEndState);
+              }
+            }}
+            onBlur={(e) => {
+              if (
+                timeStartState !== "" &&
+                timeEndState !== "" &&
+                (dateStartState === "" ||
+                  dateEndState === "" ||
+                  dateStartState === dateEndState) &&
+                timeStartState > timeEndState
+              ) {
+                setTimeEnd(e.target.value);
+              }
+            }}
+          />
+          {timeStartState && (
+            <button
+              type="button"
+              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-800"
+              onClick={(e) => {
+                e.preventDefault();
+                setTimeStart("");
+              }}
+            >
+              <svg
+                className="h-6 w-6"
+                width="16px"
+                height="16px"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
         {errors?.fieldErrors.timeStart && (
           <p className="text-red-600">
             {errors.fieldErrors.timeStart.join(", ")}
@@ -254,14 +367,61 @@ export const EventFormFields = ({
       </label>
       <label className="grid gap-2">
         End time
-        <input
-          autoComplete="off"
-          type="time"
-          name="timeEnd"
-          placeholder="hh:mm"
-          defaultValue={event?.timeEnd}
-          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
-        />
+        <div className="flex">
+          <input
+            autoComplete="off"
+            type="time"
+            name="timeEnd"
+            placeholder="hh:mm"
+            className={`flex-grow ${timeEndState ? "rounded-l border-r-0" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500`}
+            value={timeEndState}
+            onChange={(e) => setTimeEnd(e.target.value)}
+            onFocus={() => {
+              if (timeEndState === "" && timeStartState !== "") {
+                setTimeEnd(timeStartState);
+              }
+            }}
+            onBlur={(e) => {
+              if (
+                timeStartState !== "" &&
+                timeEndState !== "" &&
+                (dateStartState === "" ||
+                  dateEndState === "" ||
+                  dateStartState === dateEndState) &&
+                timeStartState > timeEndState
+              ) {
+                setTimeStart(e.target.value);
+              }
+            }}
+          />
+          {timeEndState && (
+            <button
+              type="button"
+              className="rounded-r border border-stone-300 px-2 dark:bg-stone-800"
+              onClick={(e) => {
+                e.preventDefault();
+                setTimeEnd("");
+              }}
+            >
+              <svg
+                className="h-6 w-6"
+                width="16px"
+                height="16px"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
         {errors?.fieldErrors.timeEnd && (
           <p className="text-red-600">
             {errors.fieldErrors.timeEnd.join(", ")}

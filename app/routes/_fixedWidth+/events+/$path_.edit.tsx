@@ -95,10 +95,12 @@ export default function EventEdit() {
     e.preventDefault();
     const $form = e.currentTarget;
     const formData = new FormData($form);
+    const categories = formData.getAll("category");
     const dateEnd = formData.get("dateEnd");
     const dateStart = formData.get("dateStart");
     const description = mdxEditorRef.current?.getMarkdown();
-    const categories = formData.getAll("category");
+    const timeEnd = formData.get("timeEnd");
+    const timeStart = formData.get("timeStart");
     formData.delete("category");
     formData.set("categories", JSON.stringify(categories));
     if (dateStart !== null && dateStart !== "" && dateEnd === "") {
@@ -109,6 +111,15 @@ export default function EventEdit() {
     }
     formData.set("description", description ?? "");
     formData.set("originStatus", event.status);
+    const updatedDateEnd = formData.get("dateEnd");
+    const updatedDateStart = formData.get("dateStart");
+    if (
+      timeEnd !== null &&
+      ((timeStart === "" && timeEnd !== "") ||
+        (updatedDateEnd === updatedDateStart && timeEnd === timeStart))
+    ) {
+      formData.set("timeEnd", "");
+    }
     submit(formData, { method: "POST", replace: true });
   };
   return (

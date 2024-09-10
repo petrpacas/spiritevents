@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       });
       return jsonWithSuccess(null, "Event set as a draft");
     case "publish":
-      if (dateStart === "") {
+      if (!dateStart) {
         return jsonWithError(null, "Event is missing date info");
       } else {
         await prisma.event.update({
@@ -177,7 +177,7 @@ export default function Event() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        FB Event
+                        FB event
                       </a>
                     )}
                     {event.linkTickets && (
@@ -210,37 +210,97 @@ export default function Event() {
                   </div>
                 )}
               </div>
-              <div
-                className={`grid text-xl font-semibold leading-tight sm:text-2xl sm:leading-tight lg:gap-4 lg:text-3xl lg:leading-tight ${event.dateEnd !== event.dateStart ? "" : "lg:flex lg:justify-center"}`}
-              >
-                {event.dateStart ? (
-                  <div className="grid gap-4">
-                    <div className="grid sm:flex sm:justify-center sm:gap-2">
-                      <span>{new Date(event.dateStart).toDateString()}</span>
-                      {event.dateEnd !== event.dateStart && (
-                        <>
-                          <span className="text-amber-600">&lt;&gt;</span>
+              <div className="grid text-xl font-semibold leading-tight sm:text-2xl sm:leading-tight lg:text-3xl lg:leading-tight">
+                <div className="grid justify-center gap-2">
+                  {event.dateStart ? (
+                    <div className="grid gap-2 sm:flex">
+                      <div className="flex items-center justify-center gap-2">
+                        <svg
+                          className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                          width="16px"
+                          height="16px"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
+                          />
+                        </svg>
+                        <span>{new Date(event.dateStart).toDateString()}</span>
+                      </div>
+                      {event.dateEnd && event.dateEnd !== event.dateStart && (
+                        <div className="flex items-center justify-center gap-2">
+                          <svg
+                            className="h-6 w-6 rotate-90 opacity-50 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                            width="16px"
+                            height="16px"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                            />
+                          </svg>
                           <span>{new Date(event.dateEnd).toDateString()}</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-red-600">Missing date info</span>
+                  )}
+                  {event.timeStart && (
+                    <div className="flex items-center justify-center gap-2">
+                      <svg
+                        className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                        width="16px"
+                        height="16px"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                      <span>{event.timeStart}</span>
+                      {event.timeEnd && (
+                        <>
+                          <svg
+                            className="h-6 w-6 rotate-90 opacity-50 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                            width="16px"
+                            height="16px"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                            />
+                          </svg>
+                          <span>{event.timeEnd}</span>
                         </>
                       )}
                     </div>
-                    {event.timeStart && (
-                      <div className="flex justify-center gap-2">
-                        {event.timeStart}
-                        {event.timeEnd ? (
-                          <>
-                            <span className="text-amber-600">&gt;&lt;</span>
-                            <span>{event.timeEnd}</span>
-                          </>
-                        ) : (
-                          <span className="text-amber-600">&gt;&gt;</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <span className="text-red-600">Missing date info</span>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -311,7 +371,7 @@ export default function Event() {
                     </fetcher.Form>
                   )}
                   {event.status !== EventStatus.PUBLISHED &&
-                    event.dateStart !== "" && (
+                    event.dateStart && (
                       <fetcher.Form onSubmit={handlePublishSubmit}>
                         <button
                           disabled={isWorking}

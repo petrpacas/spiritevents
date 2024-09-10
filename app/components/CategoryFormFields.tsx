@@ -71,7 +71,7 @@ export const CategoryFormFields = ({ errors, category }: Props) => {
           onBlur={handleSlugBlur}
           value={slug}
           placeholder="e.g. example-category"
-          className="rounded border-stone-300 text-amber-600 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+          className="rounded border-stone-300 text-amber-600 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500"
         />
         {errors?.fieldErrors.slug && (
           <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
