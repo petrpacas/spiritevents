@@ -82,6 +82,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const allCategories = await prisma.category.findMany({
     orderBy: { slug: "asc" },
   });
+  const { join, raw, sql } = Prisma;
   const searchConditions =
     search
       ?.trim()
@@ -90,7 +91,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .filter((term) => term.length > 0)
       .map(
         (term) =>
-          Prisma.sql`unaccent(LOWER(title)) LIKE unaccent(LOWER(${`%${term}%`}))`,
+          sql`unaccent(LOWER(title)) LIKE unaccent(LOWER(${`%${term}%`}))`,
       ) || [];
   const allEvents: EventObject[] = await prisma.$queryRaw`
     SELECT
@@ -121,43 +122,43 @@ export async function loader({ request }: LoaderFunctionArgs) {
     LEFT JOIN "_CategoryToEvent" ce ON e."id" = ce."B"
     LEFT JOIN "Category" c ON ce."A" = c."id"
     WHERE
-      ${country ? Prisma.sql`e."country" = ${country}` : Prisma.sql`TRUE`}
+      ${country ? sql`e."country" = ${country}` : sql`TRUE`}
       AND ${
         isAuthenticated
           ? status && eventStatusEnumMatch
-            ? Prisma.sql`e."status" = ${Prisma.raw(`'${eventStatusEnumMatch}'`)}`
-            : Prisma.sql`TRUE`
-          : Prisma.sql`e."status" = ${Prisma.raw(`'${EventStatus.PUBLISHED}'`)}`
+            ? sql`e."status" = ${raw(`'${eventStatusEnumMatch}'`)}`
+            : sql`TRUE`
+          : sql`e."status" = ${raw(`'${EventStatus.PUBLISHED}'`)}`
       }
       AND (
         ${
           isPast
-            ? Prisma.sql`e."dateEnd" < ${today} AND e."dateEnd" != ''`
-            : Prisma.sql`e."dateEnd" >= ${today}`
+            ? sql`e."dateEnd" < ${today} AND e."dateEnd" != ''`
+            : sql`e."dateEnd" >= ${today}`
         }
-        OR ${isAuthenticated ? Prisma.sql`e."dateEnd" = ''` : Prisma.sql`FALSE`}
+        OR ${isAuthenticated ? sql`e."dateEnd" = ''` : sql`FALSE`}
       )
       AND ${
         searchConditions.length > 0
-          ? Prisma.sql`(${Prisma.join(searchConditions, " AND ")})`
-          : Prisma.sql`TRUE`
+          ? sql`(${join(searchConditions, " AND ")})`
+          : sql`TRUE`
       }
       AND ${
         categorySlugs && categorySlugs.length > 0 && categorySlugs[0] !== ""
-          ? Prisma.sql`EXISTS (
+          ? sql`EXISTS (
             SELECT 1
             FROM "_CategoryToEvent" ce2
             JOIN "Category" c2 ON ce2."A" = c2."id"
             WHERE ce2."B" = e."id"
-            AND c2."slug" IN (${Prisma.join(categorySlugs)})
+            AND c2."slug" IN (${join(categorySlugs)})
           )`
-          : Prisma.sql`TRUE`
+          : sql`TRUE`
       }
     GROUP BY
       e."id"
     ORDER BY
-      e."dateStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
-      e."timeStart" ${isPast ? Prisma.sql`DESC` : Prisma.sql`ASC`},
+      e."dateStart" ${isPast ? sql`DESC` : sql`ASC`},
+      e."timeStart" ${isPast ? sql`DESC` : sql`ASC`},
       e."title" ASC
   `;
   function groupEvents(events: EventObject[]): EventsWithYear[] {
