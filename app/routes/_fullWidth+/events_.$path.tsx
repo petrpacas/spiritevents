@@ -24,7 +24,7 @@ import {
   redirectWithSuccess,
 } from "remix-toast";
 import { unified } from "unified";
-import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
+import bgImage from "~/images/cover.jpg";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, EventStatus, getStatusColors } from "~/utils";
 

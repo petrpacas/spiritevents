@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { EventListCard } from "~/components";
-import bgImage from "~/images/elizabeth-anura_medicine-festival-2023-watermark.jpg";
+import bgImage from "~/images/cover.jpg";
 import { prisma } from "~/services";
 import { getTodayDate, EventStatus } from "~/utils";
 
