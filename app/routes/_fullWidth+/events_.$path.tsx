@@ -24,7 +24,7 @@ import {
   redirectWithSuccess,
 } from "remix-toast";
 import { unified } from "unified";
-import bgImage from "~/images/cover.jpg";
+import bgImage from "~/images/bg.jpg";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { countries, EventStatus, getStatusColors } from "~/utils";
 

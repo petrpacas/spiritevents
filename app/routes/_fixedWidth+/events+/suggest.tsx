@@ -120,10 +120,6 @@ export default function EventSuggest() {
           <span>Suggest a new event</span>
         </h1>
         <p className="text-lg sm:text-xl">
-          Here&apos;s the deal:{" "}
-          <em>I&apos;m just one guy and I need your help.</em>
-        </p>
-        <p className="text-lg sm:text-xl">
           Do you know of any relevant event that deserves to be found by
           like-minded people?
         </p>

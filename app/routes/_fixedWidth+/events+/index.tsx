@@ -149,8 +149,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
             SELECT 1
             FROM "_CategoryToEvent" ce2
             JOIN "Category" c2 ON ce2."A" = c2."id"
-            WHERE ce2."B" = e."id"
-            AND c2."slug" IN (${join(categorySlugs)})
+            WHERE
+              ce2."B" = e."id"
+              AND c2."slug" IN (${join(categorySlugs)})
           )`
           : sql`TRUE`
       }
@@ -396,7 +397,7 @@ export default function Events() {
           <Form
             onChange={() => setIsFiltering(true)}
             onSubmit={handleFormSubmit}
-            className="grid gap-4 rounded-lg border border-stone-300 bg-stone-50 p-2 sm:p-4 dark:bg-transparent"
+            className="grid gap-4 rounded-lg border border-stone-300 bg-white p-2 sm:p-4 dark:bg-transparent"
           >
             <div className="grid gap-4 lg:flex lg:items-center">
               <div

@@ -68,13 +68,3 @@ model Subscriber {
   email String @unique
   name  String
 }
-
-model Feedback {
-  id        String   @id @default(dbgenerated("nanoid()"))
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  contact String
-  content String
-  name    String
-}
