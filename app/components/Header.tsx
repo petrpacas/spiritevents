@@ -42,7 +42,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
           <button
             type="button"
             onClick={() => setIsMenuOpen((value) => !value)}
-            className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600 dark:bg-stone-800" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-40 flex items-center rounded border px-4 py-2 lg:hidden lg:max-xl:px-2`}
+            className={`${isMenuOpen ? "rounded-b-none border-amber-600 bg-white text-amber-600 dark:bg-stone-800" : "border-transparent bg-amber-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-40 flex items-center rounded border px-4 py-2 lg:hidden`}
           >
             <span className="sr-only">Menu</span>
             <svg
@@ -71,7 +71,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             {isAuthenticated && (
               <Link
                 to="/events/new"
-                className="flex items-center gap-2 rounded border border-emerald-600 bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center lg:max-xl:px-2"
+                className="flex items-center gap-2 rounded border border-emerald-600 bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
               >
                 <span className="lg:sr-only">New event</span>
                 <svg
@@ -94,11 +94,11 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             )}
             <Link
               to="/events?country=CZ"
-              className="flex items-center gap-2 rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center lg:max-xl:px-2"
+              className="flex items-center gap-2 rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center"
             >
-              {isAuthenticated ? "Events in CZ" : "Events in Czechia"}
+              Events in Czechia
               <svg
-                className="h-6 w-6"
+                className="h-6 w-6 lg:max-xl:sr-only"
                 width="16px"
                 height="16px"
                 xmlns="http://www.w3.org/2000/svg"
@@ -110,11 +110,11 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             </Link>
             <Link
               to="/events?category=festival"
-              className="flex items-center gap-2 rounded border border-amber-600 bg-transparent px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center lg:max-xl:px-2 dark:text-white"
+              className="flex items-center gap-2 rounded border border-amber-600 bg-transparent px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
             >
-              {isAuthenticated ? "All festivals" : "All the festivals"}
+              All the festivals
               <svg
-                className="h-6 w-6"
+                className="h-6 w-6 lg:max-xl:sr-only"
                 width="16px"
                 height="16px"
                 xmlns="http://www.w3.org/2000/svg"
@@ -133,11 +133,11 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
             {isAuthenticated ? (
               <Link
                 to="/Categories"
-                className="flex items-center gap-2 rounded border border-stone-600 px-4 py-2 text-stone-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center lg:max-xl:px-2 dark:border-white dark:text-white"
+                className="flex items-center gap-2 rounded border border-stone-600 px-4 py-2 text-stone-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:border-white dark:text-white"
               >
                 Categories
                 <svg
-                  className="h-6 w-6"
+                  className="h-6 w-6 lg:max-xl:sr-only"
                   width="16px"
                   height="16px"
                   xmlns="http://www.w3.org/2000/svg"
@@ -162,11 +162,13 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               <>
                 <Link
                   to="/events/suggest"
-                  className="flex items-center gap-2 rounded border border-emerald-600 bg-transparent px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center lg:max-xl:px-2 dark:text-white"
+                  className="flex items-center gap-2 rounded border border-emerald-600 bg-transparent px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
                 >
-                  Suggest event
+                  <span>
+                    Suggest<span className="lg:max-xl:sr-only"> event</span>
+                  </span>
                   <svg
-                    className="h-6 w-6"
+                    className="h-6 w-6 lg:max-xl:sr-only"
                     width="16px"
                     height="16px"
                     xmlns="http://www.w3.org/2000/svg"
@@ -184,11 +186,13 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                 </Link>
                 <Link
                   to="/how-to-support"
-                  className="flex items-center gap-2 rounded border border-sky-600 bg-sky-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center lg:max-xl:px-2"
+                  className="flex items-center gap-2 rounded border border-sky-600 bg-transparent px-4 py-2 text-sky-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-lg:justify-center dark:text-white"
                 >
-                  <span className="lg:max-xl:sr-only">Support project</span>
+                  <span>
+                    Support<span className="lg:max-xl:sr-only"> project</span>
+                  </span>
                   <svg
-                    className="h-6 w-6"
+                    className="h-6 w-6 lg:max-xl:sr-only"
                     width="16px"
                     height="16px"
                     xmlns="http://www.w3.org/2000/svg"
