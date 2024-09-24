@@ -33,9 +33,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     throw redirect(`${pathname.slice(0, -1)}${search}`, 301);
   }
   if (toast && headers) {
-    return json({ toast }, { headers });
+    return json(
+      { ENV: { SENTRY_DSN: process.env.SENTRY_DSN }, toast },
+      { headers },
+    );
   } else {
-    return null;
+    return json({ ENV: { SENTRY_DSN: process.env.SENTRY_DSN }, toast: null });
   }
 };
 
@@ -178,6 +181,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
         <ScrollRestoration />
+        {data && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.process = ${JSON.stringify({
+                env: data.ENV,
+              })}`,
+            }}
+          />
+        )}
         <Scripts />
       </body>
     </html>

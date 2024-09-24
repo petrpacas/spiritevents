@@ -1,16 +1,13 @@
-/**
- * By default, Remix will handle generating the HTTP Response for you.
- * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
- * For more information, see https://remix.run/file-conventions/entry.server
- */
-
 import { PassThrough } from "node:stream";
-
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
+import * as Sentry from "@sentry/remix";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+if (process.env.SENTRY_DSN) {
+  import("~/utils/monitoring.server").then(({ init }) => init());
+}
 
 const ABORT_DELAY = 5_000;
 
@@ -58,16 +55,13 @@ function handleBotRequest(
           shellRendered = true;
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);
-
           responseHeaders.set("Content-Type", "text/html");
-
           resolve(
             new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
             }),
           );
-
           pipe(body);
         },
         onShellError(error: unknown) {
@@ -84,7 +78,6 @@ function handleBotRequest(
         },
       },
     );
-
     setTimeout(abort, ABORT_DELAY);
   });
 }
@@ -108,16 +101,13 @@ function handleBrowserRequest(
           shellRendered = true;
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);
-
           responseHeaders.set("Content-Type", "text/html");
-
           resolve(
             new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
             }),
           );
-
           pipe(body);
         },
         onShellError(error: unknown) {
@@ -134,7 +124,8 @@ function handleBrowserRequest(
         },
       },
     );
-
     setTimeout(abort, ABORT_DELAY);
   });
 }
+
+export const handleError = Sentry.sentryHandleError;

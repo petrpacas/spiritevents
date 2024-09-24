@@ -1,9 +1,13 @@
 import { vitePlugin as remix } from "@remix-run/dev";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { flatRoutes } from "remix-flat-routes";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  build: {
+    sourcemap: true,
+  },
   plugins: [
     remix({
       future: {
@@ -17,5 +21,11 @@ export default defineConfig({
       },
     }),
     tsconfigPaths(),
+    sentryVitePlugin({
+      debug: true,
+      disable: process.env.NODE_ENV != "production",
+      sourcemaps: { filesToDeleteAfterUpload: "./build/**/*.map" },
+      telemetry: false,
+    }),
   ],
 });
