@@ -2,6 +2,13 @@ import slugify from "slugify";
 import { z } from "zod";
 import { prisma } from "~/services";
 
+slugify.extend({
+  "&": "",
+  "|": "",
+  "<": "",
+  ">": "",
+});
+
 export const categoryFormSchema = z
   .object({
     name: z

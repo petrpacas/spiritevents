@@ -2,6 +2,13 @@ import slugify from "slugify";
 import { z } from "zod";
 import { countries, EventStatus } from "~/utils";
 
+slugify.extend({
+  "&": "",
+  "|": "",
+  "<": "",
+  ">": "",
+});
+
 export const eventFormSchema = z
   .object({
     categories: z.string().transform((value) => JSON.parse(value)),

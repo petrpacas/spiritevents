@@ -22,7 +22,6 @@ export default defineConfig({
     }),
     tsconfigPaths(),
     sentryVitePlugin({
-      debug: true,
       disable: process.env.NODE_ENV != "production",
       sourcemaps: { filesToDeleteAfterUpload: "./build/**/*.map" },
       telemetry: false,

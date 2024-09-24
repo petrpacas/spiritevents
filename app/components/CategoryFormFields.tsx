@@ -5,6 +5,13 @@ import slugify from "slugify";
 import { z } from "zod";
 import { categoryFormSchema } from "~/validations";
 
+slugify.extend({
+  "&": "",
+  "|": "",
+  "<": "",
+  ">": "",
+});
+
 type Props = {
   errors?: z.inferFlattenedErrors<typeof categoryFormSchema>;
   category?: SerializeFrom<Category>;

@@ -11,6 +11,13 @@ import { eventFormSchema } from "~/validations";
 import { DescriptionEditor } from "./DescriptionEditor";
 import { Select } from "./Select";
 
+slugify.extend({
+  "&": "",
+  "|": "",
+  "<": "",
+  ">": "",
+});
+
 type EventWithCategories = Prisma.EventGetPayload<{
   include: { categories: true };
 }>;

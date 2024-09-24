@@ -22,6 +22,13 @@ import { authenticator, prisma } from "~/services";
 import { EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
+slugify.extend({
+  "&": "",
+  "|": "",
+  "<": "",
+  ">": "",
+});
+
 export const meta: MetaFunction = () => {
   return [{ title: "Suggest a new event ~ SeekGathering" }];
 };
