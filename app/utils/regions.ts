@@ -1,0 +1,16 @@
+export const regions = [
+  { name: "Hlavní město Praha", code: "PHA" },
+  { name: "Jihočeský kraj", code: "JHC" },
+  { name: "Jihomoravský kraj", code: "JHM" },
+  { name: "Karlovarský kraj", code: "KVK" },
+  { name: "Kraj Vysočina", code: "VYS" },
+  { name: "Královéhradecký kraj", code: "HKK" },
+  { name: "Liberecký kraj", code: "LBK" },
+  { name: "Moravskoslezský kraj", code: "MSK" },
+  { name: "Olomoucký kraj", code: "OLK" },
+  { name: "Pardubický kraj", code: "PAK" },
+  { name: "Plzeňský kraj", code: "PLK" },
+  { name: "Středočeský kraj", code: "STC" },
+  { name: "Ústecký kraj", code: "ULK" },
+  { name: "Zlínský kraj", code: "ZLK" },
+];

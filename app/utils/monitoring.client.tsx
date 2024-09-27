@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export function init() {
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
+    dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [
       Sentry.browserTracingIntegration({
         useEffect,

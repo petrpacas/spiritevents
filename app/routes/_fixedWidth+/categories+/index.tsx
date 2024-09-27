@@ -68,13 +68,15 @@ export default function Feedback() {
           {allCategories.map((category) => (
             <div key={category.id} className="flex">
               <Link
-                to={`/categories/${category.slug}-${category.id}/edit`}
+                to={`/categories/${category.id}-${category.slug}/edit`}
                 className="flex flex-grow rounded-l border border-r-0 border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
               >
                 <div className="grid gap-2 sm:flex sm:flex-grow">
-                  {category.slug}
-                  <span className="text-amber-600">({category.name})</span>(
-                  {category._count.events}x)
+                  <span className="font-semibold">{category.name}</span>
+                  <span className="text-amber-600">[{category.slug}]</span>{" "}
+                  <span className="text-stone-400">
+                    ({category._count.events}x)
+                  </span>
                 </div>
               </Link>
               <fetcher.Form

@@ -5,7 +5,7 @@ import { RemixServer } from "@remix-run/react";
 import * as Sentry from "@sentry/remix";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-if (process.env.SENTRY_DSN) {
+if (process.env.VITE_SENTRY_DSN) {
   import("~/utils/monitoring.server").then(({ init }) => init());
 }
 

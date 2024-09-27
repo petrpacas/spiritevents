@@ -55,7 +55,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN);
     await bot.api.sendMessage(
       process.env.TELEGRAM_CHAT_ID,
-      `New event suggestion: (${result.data.country}) ${result.data.title}`,
+      `New event suggestion: ${result.data.title} | ${result.data.location}`,
     );
   }
   return redirectWithSuccess("/events", "Much appreciated!");
@@ -136,8 +136,8 @@ export default function EventSuggest() {
         </p>
         <p className="text-lg sm:text-xl">
           If you choose to send a suggestion, I&apos;d like to kindly ask you to
-          fill the form below with the event title and the country it&apos;s
-          happening in.
+          fill the form below with at least the event title and the region and
+          location it&apos;s happening in.
         </p>
         <p className="text-lg sm:text-xl">
           If you want to contribute but don&apos;t want to fiddle with the form,

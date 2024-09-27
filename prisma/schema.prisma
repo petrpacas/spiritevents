@@ -36,7 +36,6 @@ model Event {
   updatedAt DateTime @updatedAt
 
   categories   Category[]
-  country      String
   dateEnd      String
   dateStart    String
   description  String
@@ -45,6 +44,7 @@ model Event {
   linkTickets  String
   linkWebsite  String
   location     String
+  region       String
   slug         String
   status       EventStatus @default(PUBLISHED)
   timeEnd      String

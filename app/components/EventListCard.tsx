@@ -5,13 +5,10 @@ import { EventStatus, getStatusColors } from "~/utils";
 
 type Props = {
   categories: Category[];
-  country?: string;
   dateEnd: string;
   dateStart: string;
-  eventsIndex?: boolean;
-  eventsIndexFiltersCountry?: boolean;
-  eventsIndexFiltersStatus?: boolean;
   id: string;
+  isLanding?: boolean;
   location?: string;
   slug: string;
   status?: keyof typeof EventStatus;
@@ -22,13 +19,10 @@ type Props = {
 
 export const EventListCard = ({
   categories,
-  country,
   dateEnd,
   dateStart,
-  eventsIndex,
-  eventsIndexFiltersCountry,
-  eventsIndexFiltersStatus,
   id,
+  isLanding,
   location,
   slug,
   status,
@@ -39,28 +33,27 @@ export const EventListCard = ({
   const [statusLetter, statusBg] = getStatusColors(status);
   const headingContent = (
     <>
-      {!eventsIndexFiltersStatus && statusLetter && (
-        <span className="text-amber-600">{statusLetter} </span>
-      )}
-      {!eventsIndexFiltersCountry && (
-        <span className="text-amber-600">({country}) </span>
+      {statusLetter && (
+        <>
+          <span className="text-amber-600">{statusLetter}</span>{" "}
+        </>
       )}
       {title}
     </>
   );
   return (
     <Link
-      to={`/events/${slug}-${id}`}
+      to={`/events/${id}-${slug}`}
       className={`${statusBg} grid gap-2 rounded-lg border border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-4`}
     >
-      {eventsIndex ? (
-        <h4 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
-          {headingContent}
-        </h4>
-      ) : (
+      {isLanding ? (
         <h3 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
           {headingContent}
         </h3>
+      ) : (
+        <h4 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
+          {headingContent}
+        </h4>
       )}
       {categories.length > 0 && (
         <div className="flex flex-wrap gap-x-2 leading-snug text-emerald-600 sm:text-lg sm:leading-snug">

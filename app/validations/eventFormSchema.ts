@@ -1,6 +1,6 @@
 import slugify from "slugify";
 import { z } from "zod";
-import { countries, EventStatus } from "~/utils";
+import { EventStatus, regions } from "~/utils";
 
 slugify.extend({
   "&": "",
@@ -12,23 +12,6 @@ slugify.extend({
 export const eventFormSchema = z
   .object({
     categories: z.string().transform((value) => JSON.parse(value)),
-    country: z.string().superRefine((value, ctx) => {
-      if (value === "" || value.length !== 2) {
-        return ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Country must be selected",
-        });
-      }
-      const countryCodeFound = countries.some(
-        (country) => country.code === value,
-      );
-      if (!countryCodeFound) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Proper country must be selected",
-        });
-      }
-    }),
     dateEnd: z.string().date().or(z.literal("")),
     dateStart: z.string().date().or(z.literal("")),
     description: z.string().trim().or(z.literal("")),
@@ -40,7 +23,29 @@ export const eventFormSchema = z
       .string()
       .trim()
       .transform((value) => value.replace(/\s+/g, " "))
-      .or(z.literal("")),
+      .superRefine((value, ctx) => {
+        if (value.length < 2) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Location must contain at least 2 characters",
+          });
+        }
+      }),
+    region: z.string().superRefine((value, ctx) => {
+      if (value === "" || value.length !== 3) {
+        return ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Region must be selected",
+        });
+      }
+      const regionCodeFound = regions.some((region) => region.code === value);
+      if (!regionCodeFound) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Proper region must be selected",
+        });
+      }
+    }),
     slug: z
       .string()
       .trim()

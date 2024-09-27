@@ -6,7 +6,7 @@ import { useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import slugify from "slugify";
 import { z } from "zod";
-import { countries, EventStatus } from "~/utils";
+import { EventStatus, regions } from "~/utils";
 import { eventFormSchema } from "~/validations";
 import { DescriptionEditor } from "./DescriptionEditor";
 import { Select } from "./Select";
@@ -90,9 +90,9 @@ export const EventFormFields = ({
   return (
     <div className="grid gap-4 md:grid-cols-2 md:items-start">
       <label className={`grid gap-2 ${isSuggesting ? "md:col-span-2" : ""}`}>
-        <div>
+        <span>
           Title <span className="text-amber-600">(required)</span>
-        </div>
+        </span>
         <input
           required
           autoComplete="off"
@@ -109,7 +109,7 @@ export const EventFormFields = ({
       </label>
       {!isSuggesting && (
         <label className="grid gap-2">
-          <div>
+          <span>
             URL slug{" "}
             <span className="text-amber-600">
               (required) ~{" "}
@@ -117,7 +117,7 @@ export const EventFormFields = ({
                 ? "should be permament"
                 : "change with caution"}
             </span>
-          </div>
+          </span>
           <input
             required
             autoComplete="off"
@@ -136,31 +136,32 @@ export const EventFormFields = ({
         </label>
       )}
       <label className="grid gap-2 md:col-span-1">
-        <div>
-          Country <span className="text-amber-600">(required)</span>
-        </div>
+        <span>
+          Region <span className="text-amber-600">(required)</span>
+        </span>
         <Select
           required
-          options={countries}
-          emptyOption={event?.country ? undefined : "— select a country —"}
-          defaultValue={event?.country || ""}
-          name="country"
+          options={regions}
+          emptyOption={event?.region ? undefined : "— select a region —"}
+          defaultValue={event?.region || ""}
+          name="region"
           className="custom-caret-color w-full cursor-pointer rounded border-stone-300 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow dark:bg-stone-800 dark:invalid:text-stone-500"
         />
-        {errors?.fieldErrors.country && (
-          <p className="text-red-600">
-            {errors.fieldErrors.country.join(", ")}
-          </p>
+        {errors?.fieldErrors.region && (
+          <p className="text-red-600">{errors.fieldErrors.region.join(", ")}</p>
         )}
       </label>
       <label className="grid gap-2">
-        Location hint{" "}
+        <span>
+          Location <span className="text-amber-600">(required)</span>
+        </span>
         <input
+          required
           autoComplete="off"
           type="text"
           name="location"
           defaultValue={event?.location}
-          placeholder="eg. city, venue, or area"
+          placeholder="venue, city, general area, etc."
           className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500"
         />
         {errors?.fieldErrors.location && (

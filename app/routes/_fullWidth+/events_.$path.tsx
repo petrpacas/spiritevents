@@ -26,7 +26,7 @@ import {
 import { unified } from "unified";
 import bgImage from "~/images/bg.jpg";
 import { authenticator, prisma, requireUserSession } from "~/services";
-import { countries, EventStatus, getStatusColors } from "~/utils";
+import { EventStatus, getStatusColors } from "~/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `${data?.event?.title} ~ SeekGathering` }];
@@ -34,7 +34,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function action({ request, params }: ActionFunctionArgs) {
   await requireUserSession(request);
-  const id = params.path?.slice(-8);
+  const id = params.path?.slice(0, 8);
   const formData = await request.formData();
   const dateStart = formData.get("dateStart");
   const intent = formData.get("intent");
@@ -67,8 +67,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
   const isAuthenticated = Boolean(user);
-  const id = params.path?.slice(-8);
-  const slugAndDash = params.path?.slice(0, -8);
+  const id = params.path?.slice(0, 8);
+  const dashAndSlug = params.path?.slice(8);
   const event = await prisma.event.findUnique({
     where: {
       id,
@@ -79,8 +79,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (!event) {
     throw new Response("Not Found", { status: 404 });
   }
-  if (`${event.slug}-` !== slugAndDash) {
-    throw redirect(`/events/${event.slug}-${id}`, 301);
+  if (`-${event.slug}` !== dashAndSlug) {
+    throw redirect(`/events/${id}-${event.slug}`, 301);
   }
   const description = event.description;
   const parsedDescription = description
@@ -106,10 +106,6 @@ export default function Event() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isWorking = navigation.state !== "idle";
-  const getCountryNameByCode = (code: string) => {
-    const country = countries.find((country) => country.code === code);
-    return country ? country.name : code;
-  };
   const [statusLetter, statusBg, statusGradient, statusGlow, statusGlowMd] =
     getStatusColors(event.status);
   const handlePublishSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -195,7 +191,7 @@ export default function Event() {
               <div className="grid gap-4">
                 <p className="text-xl font-semibold leading-snug sm:text-2xl sm:leading-snug lg:text-3xl lg:leading-snug">
                   {event.location && `${event.location}, `}
-                  {getCountryNameByCode(event.country)}
+                  Czech Republic
                 </p>
                 {event.linkLocation && (
                   <div>
@@ -307,8 +303,79 @@ export default function Event() {
         </div>
       </div>
       <div className={`flex justify-center ${statusBg}`}>
-        <div className="grid w-full max-w-7xl px-4 py-16 sm:px-8">
+        <div
+          className={`grid w-full max-w-7xl px-4 ${isAuthenticated ? "pt-8" : "pt-16"} pb-16 sm:px-8`}
+        >
           <div className="grid gap-8">
+            {isAuthenticated && (
+              <div className="flex flex-wrap justify-center gap-4">
+                <Form action="edit">
+                  <button
+                    disabled={isWorking}
+                    type="submit"
+                    className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                  >
+                    Edit
+                  </button>
+                </Form>
+                {event.status === EventStatus.PUBLISHED && (
+                  <fetcher.Form
+                    method="post"
+                    onSubmit={(e) => {
+                      const response = confirm(
+                        "Do you really want to set the event as a draft?",
+                      );
+                      if (!response) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    <button
+                      disabled={isWorking}
+                      type="submit"
+                      name="intent"
+                      value="draft"
+                      className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                    >
+                      Set as draft
+                    </button>
+                  </fetcher.Form>
+                )}
+                {event.status !== EventStatus.PUBLISHED && event.dateStart && (
+                  <fetcher.Form onSubmit={handlePublishSubmit}>
+                    <button
+                      disabled={isWorking}
+                      type="submit"
+                      className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                    >
+                      Publish
+                    </button>
+                  </fetcher.Form>
+                )}
+                <Form
+                  method="post"
+                  replace
+                  onSubmit={(e) => {
+                    const response = confirm(
+                      "Do you really want to delete the event?",
+                    );
+                    if (!response) {
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  <button
+                    disabled={isWorking}
+                    type="submit"
+                    name="intent"
+                    value="delete"
+                    className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                  >
+                    Delete
+                  </button>
+                </Form>
+              </div>
+            )}
             {event.description && (
               <div
                 className="prose prose-amber-basic mx-auto w-full max-w-4xl sm:prose-lg xl:prose-xl dark:prose-invert"
@@ -335,77 +402,7 @@ export default function Event() {
                 </span>
               )}
             </div>
-            <div className="flex flex-wrap justify-center gap-4">
-              {isAuthenticated && (
-                <>
-                  <Form action="edit">
-                    <button
-                      disabled={isWorking}
-                      type="submit"
-                      className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                    >
-                      Edit
-                    </button>
-                  </Form>
-                  {event.status === EventStatus.PUBLISHED && (
-                    <fetcher.Form
-                      method="post"
-                      onSubmit={(e) => {
-                        const response = confirm(
-                          "Do you really want to set the event as a draft?",
-                        );
-                        if (!response) {
-                          e.preventDefault();
-                        }
-                      }}
-                    >
-                      <button
-                        disabled={isWorking}
-                        type="submit"
-                        name="intent"
-                        value="draft"
-                        className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                      >
-                        Set as draft
-                      </button>
-                    </fetcher.Form>
-                  )}
-                  {event.status !== EventStatus.PUBLISHED &&
-                    event.dateStart && (
-                      <fetcher.Form onSubmit={handlePublishSubmit}>
-                        <button
-                          disabled={isWorking}
-                          type="submit"
-                          className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                        >
-                          Publish
-                        </button>
-                      </fetcher.Form>
-                    )}
-                  <Form
-                    method="post"
-                    replace
-                    onSubmit={(e) => {
-                      const response = confirm(
-                        "Do you really want to delete the event?",
-                      );
-                      if (!response) {
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    <button
-                      disabled={isWorking}
-                      type="submit"
-                      name="intent"
-                      value="delete"
-                      className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                    >
-                      Delete
-                    </button>
-                  </Form>
-                </>
-              )}
+            <div className="flex justify-center">
               <button
                 disabled={isWorking}
                 type="button"

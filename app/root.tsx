@@ -33,12 +33,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     throw redirect(`${pathname.slice(0, -1)}${search}`, 301);
   }
   if (toast && headers) {
-    return json(
-      { ENV: { SENTRY_DSN: process.env.SENTRY_DSN }, toast },
-      { headers },
-    );
+    return json({ toast }, { headers });
   } else {
-    return json({ ENV: { SENTRY_DSN: process.env.SENTRY_DSN }, toast: null });
+    return null;
   }
 };
 
@@ -90,7 +87,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <title>
             {`${
               isRouteErrorResponse(error)
-                ? error.statusText
+                ? error.status === 404
+                  ? "Page not found"
+                  : error.statusText
                 : error instanceof Error
                   ? "Error"
                   : "Unknown error"
@@ -181,15 +180,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
         <ScrollRestoration />
-        {data && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.process = ${JSON.stringify({
-                env: data.ENV,
-              })}`,
-            }}
-          />
-        )}
         <Scripts />
       </body>
     </html>
@@ -209,7 +199,7 @@ export function ErrorBoundary() {
     "flex items-center gap-2 text-3xl font-bold leading-snug sm:text-4xl sm:leading-snug";
   const icon = (
     <svg
-      className="h-8 w-8 shrink-0 text-red-600 max-xl:hidden sm:h-10 sm:w-10"
+      className={`h-8 w-8 shrink-0 ${isRouteErrorResponse(error) && error.status === 404 ? "text-orange-600" : "text-red-600"} max-xl:hidden sm:h-10 sm:w-10`}
       width="16px"
       height="16px"
       xmlns="http://www.w3.org/2000/svg"
@@ -228,21 +218,36 @@ export function ErrorBoundary() {
   return (
     <div className="grid min-h-lvh grid-rows-[auto_1fr_auto]">
       <Header isAuthenticated={false} key={pathname} />
-      <main className="flex justify-center bg-red-100 dark:bg-red-900">
+      <main
+        className={`flex justify-center ${isRouteErrorResponse(error) && error.status === 404 ? "" : "bg-red-100 dark:bg-red-900"}`}
+      >
         <div className="grid w-full max-w-7xl px-4 pb-16 pt-8 sm:px-8">
           <div className="grid gap-8">
             {isRouteErrorResponse(error) ? (
-              <>
-                <h1 className={hClassName}>
-                  {icon}
-                  <span>
-                    {error.statusText} ({error.status})
-                  </span>
-                </h1>
-                {error.data && (
-                  <p className="text-lg sm:text-xl">{error.data}</p>
-                )}
-              </>
+              error.status === 404 ? (
+                <>
+                  <h1 className={hClassName}>
+                    {icon}
+                    <span>Requested page was not found</span>
+                  </h1>
+                  <p className="text-lg sm:text-xl">
+                    Not sure what happened there&hellip; Probably a bad link,
+                    eh?
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h1 className={hClassName}>
+                    {icon}
+                    <span>
+                      {error.statusText} ({error.status})
+                    </span>
+                  </h1>
+                  {error.data && (
+                    <p className="text-lg sm:text-xl">{error.data}</p>
+                  )}
+                </>
+              )
             ) : error instanceof Error ? (
               <>
                 <h1 className={hClassName}>
