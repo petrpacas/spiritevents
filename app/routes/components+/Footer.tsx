@@ -54,7 +54,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
   if (pathname === "/" || pathname === "/sign-in") {
     signInUrl = "/sign-in" + search;
   } else {
-    signInUrl = "/sign-in?ogRoute=" + pathname + search;
+    signInUrl = "/sign-in?originRoute=" + pathname + search;
   }
   return (
     <footer className="bg-stone-100 dark:bg-stone-900">

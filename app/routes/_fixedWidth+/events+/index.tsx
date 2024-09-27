@@ -341,9 +341,9 @@ export default function Events() {
         </h1>
         {!isAuthenticated && (
           <p className="text-lg sm:text-xl">
-            Browse through the myriad of nourishing events in Czechia to get
-            informed and inspired. And if you know of a gathering that&apos;s
-            missing here - send me a{" "}
+            Browse through the myriad of nourishing events in Czech Republic to
+            get informed and inspired. And if you know of a gathering
+            that&apos;s missing here - send me a{" "}
             <Link to="/events/suggest" className="text-amber-600 underline">
               suggestion
             </Link>
@@ -541,7 +541,7 @@ export default function Events() {
         {isAuthenticated ? (
           <Link
             to="/events/suggest"
-            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3 dark:text-white"
+            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
           >
             Add a new event
             <svg
@@ -564,7 +564,7 @@ export default function Events() {
         ) : (
           <Link
             to="/events/suggest"
-            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3 dark:text-white"
+            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
           >
             Suggest a new event
             <svg

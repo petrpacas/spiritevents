@@ -57,7 +57,7 @@ export async function requireUserSession(
   const session = await getSession(cookie);
   if (!session.has("user")) {
     const requestUrl = new URL(request.url);
-    throw redirect(`/sign-in?ogRoute=${requestUrl.pathname}`);
+    throw redirect(`/sign-in?originRoute=${requestUrl.pathname}`);
   }
   return session;
 }

@@ -18,10 +18,12 @@ export const meta: MetaFunction = () => {
 
 export async function action({ request }: ActionFunctionArgs) {
   const requestUrl = new URL(request.url);
-  const ogRoute = requestUrl.searchParams.get("ogRoute");
+  const originRoute = requestUrl.searchParams.get("originRoute");
   return await authenticator.authenticate("FormStrategy", request, {
-    failureRedirect: ogRoute ? `/sign-in?ogRoute=${ogRoute}` : "/sign-in",
-    successRedirect: ogRoute || "/events",
+    failureRedirect: originRoute
+      ? `/sign-in?originRoute=${originRoute}`
+      : "/sign-in",
+    successRedirect: originRoute || "/events",
   });
 }
 
