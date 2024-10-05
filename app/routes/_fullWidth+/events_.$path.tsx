@@ -124,7 +124,7 @@ export default function Event() {
     fetcher.submit(formData, { method: "POST" });
   };
   const imageUrl = event.coverImageKey
-    ? `${import.meta.env.VITE_B2_SERVER_ENDPOINT}/${import.meta.env.VITE_B2_BUCKET_NAME}/live/${event.coverImageKey}`
+    ? `${import.meta.env.VITE_B2_CDN_ALIAS}/live/${event.coverImageKey}`
     : bgImage;
   return (
     <>

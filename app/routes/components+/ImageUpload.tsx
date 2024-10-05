@@ -87,16 +87,17 @@ export const ImageUpload = ({
     }
   }, [fetcher.data, onKeyChange]);
   const imageUrl = keyState
-    ? `${import.meta.env.VITE_B2_SERVER_ENDPOINT}/${import.meta.env.VITE_B2_BUCKET_NAME}/${folderState}/${keyState}`
+    ? `${import.meta.env.VITE_B2_CDN_ALIAS}/${folderState}/${keyState}`
     : "";
   return (
     <div className="grid gap-2">
+      Cover image
       <fetcher.Form
         action="/components/ImageUpload"
         encType="multipart/form-data"
         method="post"
         ref={formRef}
-        className="grid gap-4 rounded-lg border border-stone-300 p-4"
+        className="grid gap-4 rounded-lg border border-amber-600 p-4"
         onSubmit={
           keyState
             ? (e) => {
@@ -119,7 +120,7 @@ export const ImageUpload = ({
               <img
                 src={imageUrl}
                 alt="Uploaded result"
-                className="mx-auto max-h-96 max-w-96 rounded border border-stone-300"
+                className="mx-auto max-h-96 w-full max-w-96 rounded border border-stone-300"
               />
               <button
                 type="submit"
