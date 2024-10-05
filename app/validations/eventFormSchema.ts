@@ -12,6 +12,7 @@ slugify.extend({
 export const eventFormSchema = z
   .object({
     categories: z.string().transform((value) => JSON.parse(value)),
+    coverImageKey: z.string().trim().or(z.literal("")),
     dateEnd: z.string().date().or(z.literal("")),
     dateStart: z.string().date().or(z.literal("")),
     description: z.string().trim().or(z.literal("")),

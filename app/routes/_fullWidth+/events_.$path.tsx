@@ -27,6 +27,7 @@ import { unified } from "unified";
 import bgImage from "~/images/bg.jpg";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { EventStatus, getStatusColors } from "~/utils";
+import { deleteFileFromB2 } from "~/utils/b2s3Functions.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `${data?.event?.title} ~ SeekGathering` }];
@@ -38,9 +39,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const dateStart = formData.get("dateStart");
   const intent = formData.get("intent");
+  const coverImageKey = formData.get("coverImageKey");
   switch (intent) {
     case "delete":
       await prisma.event.delete({ where: { id } });
+      await deleteFileFromB2(`live/${coverImageKey}`);
       return redirectWithSuccess("/events", "Event deleted");
     case "draft":
       await prisma.event.update({
@@ -120,12 +123,15 @@ export default function Event() {
     formData.set("intent", "publish");
     fetcher.submit(formData, { method: "POST" });
   };
+  const imageUrl = event.coverImageKey
+    ? `${import.meta.env.VITE_B2_SERVER_ENDPOINT}/${import.meta.env.VITE_B2_BUCKET_NAME}/live/${event.coverImageKey}`
+    : bgImage;
   return (
     <>
       <div className="relative grid min-h-lvh bg-cover bg-center">
         <img
-          src={bgImage}
-          alt="Elizabeth Anura - Medicine Festival 2023"
+          src={imageUrl}
+          alt="Event cover background"
           className="absolute left-0 top-0 h-full w-full object-cover"
         />
         <div
@@ -364,6 +370,11 @@ export default function Event() {
                     }
                   }}
                 >
+                  <input
+                    type="hidden"
+                    name="coverImageKey"
+                    value={event.coverImageKey}
+                  />
                   <button
                     disabled={isWorking}
                     type="submit"

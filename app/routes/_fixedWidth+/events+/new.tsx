@@ -13,11 +13,16 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { jsonWithError, redirectWithSuccess } from "remix-toast";
-import { descriptionEditorStyles, EventFormFields } from "~/components";
+import {
+  descriptionEditorStyles,
+  EventFormFields,
+  ImageUpload,
+} from "~/components";
 import { prisma, requireUserSession } from "~/services";
 import { EventStatus } from "~/utils";
+import { moveFileInB2 } from "~/utils/b2s3Functions.server";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
@@ -43,6 +48,12 @@ export async function action({ request }: ActionFunctionArgs) {
       status: EventStatus.DRAFT,
     },
   });
+  if (result.data.coverImageKey && result.data.coverImageKey !== "") {
+    await moveFileInB2(
+      `temp/${result.data.coverImageKey}`,
+      `live/${result.data.coverImageKey}`,
+    );
+  }
   return redirectWithSuccess(
     `/events/${event.id}-${event.slug}`,
     "Event saved as a draft",
@@ -63,6 +74,7 @@ export default function EventNew() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
+  const [key, setKey] = useState("");
   const submit = useSubmit();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,48 +101,52 @@ export default function EventNew() {
     submit(formData, { method: "POST" });
   };
   return (
-    <Form onSubmit={handleSubmit}>
-      <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
-        <h1 className="flex items-center gap-2 text-3xl font-bold leading-snug sm:text-4xl sm:leading-snug">
-          <svg
-            className="h-8 w-8 shrink-0 text-amber-600 max-xl:hidden sm:h-10 sm:w-10"
-            width="16px"
-            height="16px"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
-          <span>Add a new event</span>
-        </h1>
-        <EventFormFields
-          categories={categories}
-          errors={errors}
-          mdxEditorRef={mdxEditorRef}
-        />
-        <div className="flex justify-end gap-4">
-          <button
-            type="submit"
-            className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-          >
-            Save as draft
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
-          >
-            Back
-          </button>
-        </div>
-      </fieldset>
-    </Form>
+    <div className="grid gap-8">
+      <h1 className="flex items-center gap-2 text-3xl font-bold leading-snug sm:text-4xl sm:leading-snug">
+        <svg
+          className="h-8 w-8 shrink-0 text-amber-600 max-xl:hidden sm:h-10 sm:w-10"
+          width="16px"
+          height="16px"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 4.5v15m7.5-7.5h-15"
+          />
+        </svg>
+        <span>Add a new event</span>
+      </h1>
+      <ImageUpload folder="temp" onKeyChange={setKey} />
+      <Form onSubmit={handleSubmit}>
+        <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
+          <input type="hidden" name="coverImageKey" value={key} />
+          <EventFormFields
+            categories={categories}
+            errors={errors}
+            mdxEditorRef={mdxEditorRef}
+          />
+          <div className="flex justify-end gap-4">
+            <button
+              type="submit"
+              className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+            >
+              Save as draft
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
+            >
+              Back
+            </button>
+          </div>
+        </fieldset>
+      </Form>
+    </div>
   );
 }

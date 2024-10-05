@@ -35,21 +35,22 @@ model Event {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  categories   Category[]
-  dateEnd      String
-  dateStart    String
-  description  String
-  linkFbEvent  String
-  linkLocation String
-  linkTickets  String
-  linkWebsite  String
-  location     String
-  region       String
-  slug         String
-  status       EventStatus @default(PUBLISHED)
-  timeEnd      String
-  timeStart    String
-  title        String
+  categories    Category[]
+  coverImageKey String
+  dateEnd       String
+  dateStart     String
+  description   String
+  linkFbEvent   String
+  linkLocation  String
+  linkTickets   String
+  linkWebsite   String
+  location      String
+  region        String
+  slug          String
+  status        EventStatus @default(PUBLISHED)
+  timeEnd       String
+  timeStart     String
+  title         String
 }
 
 model Category {
