@@ -51,7 +51,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (result.data.coverImageKey && result.data.coverImageKey !== "") {
     await moveFileInB2(
       `temp/${result.data.coverImageKey}`,
-      `live/${result.data.coverImageKey}`,
+      `events/${result.data.coverImageKey}`,
     );
   }
   return redirectWithSuccess(

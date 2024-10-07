@@ -5,6 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { customAlphabet } from "nanoid";
 import { prisma } from "~/services";
 
 const s3 = new S3Client({
@@ -28,12 +29,15 @@ async function updateEventCoverImage(eventId: string, key: string) {
 
 export async function uploadFileToB2(
   fileBuffer: Buffer,
-  fileName: string,
   fileType: string,
   folder: string,
   eventIdToUpdate?: string,
 ) {
-  const key = `${Date.now()}-${fileName}`;
+  const nanoid = customAlphabet(
+    "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ",
+    16,
+  );
+  const key = `${nanoid()}.jpeg`;
   const command = new PutObjectCommand({
     Body: fileBuffer,
     Bucket: process.env.B2_BUCKET_NAME!,

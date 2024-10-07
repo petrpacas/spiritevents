@@ -2,6 +2,7 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import { jsonWithError, jsonWithSuccess } from "remix-toast";
+import sharp from "sharp";
 import { deleteFileFromB2, uploadFileToB2 } from "~/utils/b2s3Functions.server";
 
 type Props = {
@@ -38,16 +39,19 @@ async function handleUpload(formData: FormData, eventId?: string) {
     return jsonWithError(null, "File isn't an image", { status: 400 });
   }
   const imageBuffer = Buffer.from(await coverImage.arrayBuffer());
+  const processedImageBuffer = await sharp(imageBuffer)
+    .resize(1280)
+    .toFormat("jpeg", { mozjpeg: true })
+    .toBuffer();
   const response = await uploadFileToB2(
-    imageBuffer,
-    coverImage.name,
+    processedImageBuffer,
     coverImage.type,
-    eventId ? "live" : "temp",
+    eventId ? "events" : "temp",
     eventId,
   );
   if (response?.key) {
     return jsonWithSuccess(
-      { folder: eventId ? "live" : "temp", key: response.key },
+      { folder: eventId ? "events" : "temp", key: response.key },
       "Image uploaded successfully!",
       { status: 200 },
     );

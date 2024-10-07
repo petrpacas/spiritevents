@@ -43,7 +43,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   switch (intent) {
     case "delete":
       await prisma.event.delete({ where: { id } });
-      await deleteFileFromB2(`live/${coverImageKey}`);
+      await deleteFileFromB2(`events/${coverImageKey}`);
       return redirectWithSuccess("/events", "Event deleted");
     case "draft":
       await prisma.event.update({
@@ -124,7 +124,7 @@ export default function Event() {
     fetcher.submit(formData, { method: "POST" });
   };
   const imageUrl = event.coverImageKey
-    ? `${import.meta.env.VITE_B2_CDN_ALIAS}/live/${event.coverImageKey}`
+    ? `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${event.coverImageKey}`
     : bgImage;
   return (
     <>

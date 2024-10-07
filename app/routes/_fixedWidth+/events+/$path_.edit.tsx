@@ -149,7 +149,7 @@ export default function EventEdit() {
         <span>Editing {event.title}</span>
       </h1>
       <ImageUpload
-        folder="live"
+        folder="events"
         eventId={event.id}
         imageKey={event.coverImageKey}
         onKeyChange={setKey}
