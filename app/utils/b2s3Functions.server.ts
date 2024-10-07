@@ -29,14 +29,16 @@ async function updateEventCoverImage(eventId: string, key: string) {
 export async function uploadFileToB2(
   fileBuffer: Buffer,
   fileName: string,
+  fileType: string,
   folder: string,
   eventIdToUpdate?: string,
 ) {
   const key = `${Date.now()}-${fileName}`;
   const command = new PutObjectCommand({
-    Bucket: process.env.B2_BUCKET_NAME!,
-    Key: `${folder}/${key}`,
     Body: fileBuffer,
+    Bucket: process.env.B2_BUCKET_NAME!,
+    ContentType: fileType,
+    Key: `${folder}/${key}`,
   });
   try {
     const response = await s3.send(command);
@@ -88,7 +90,7 @@ export async function moveFileInB2(sourceKey: string, destinationKey: string) {
     const copyResponse = await s3.send(copyCommand);
     if (copyResponse.$metadata.httpStatusCode === 200) {
       console.log(`File copied from ${sourceKey} to ${destinationKey}`);
-      await deleteFileFromB2(sourceKey); // Delete original after copying
+      await deleteFileFromB2(sourceKey);
       const publicUrl = `${process.env.B2_SERVER_ENDPOINT!}/${process.env.B2_BUCKET_NAME!}/${destinationKey}`;
       return { publicUrl };
     }
@@ -105,7 +107,7 @@ function shouldDeleteFile(lastModified?: Date): boolean {
   }
   const fileAgeInDays =
     (Date.now() - lastModified.getTime()) / (1000 * 60 * 60 * 24);
-  return fileAgeInDays > 7;
+  return fileAgeInDays > 1;
 }
 
 export async function pruneB2Folder(folder: string) {

@@ -34,10 +34,14 @@ async function handleUpload(formData: FormData, eventId?: string) {
   if (!coverImage || coverImage.size === 0) {
     return jsonWithError(null, "No file selected", { status: 400 });
   }
+  if (!coverImage.type.startsWith("image/")) {
+    return jsonWithError(null, "File isn't an image", { status: 400 });
+  }
   const imageBuffer = Buffer.from(await coverImage.arrayBuffer());
   const response = await uploadFileToB2(
     imageBuffer,
     coverImage.name,
+    coverImage.type,
     eventId ? "live" : "temp",
     eventId,
   );
