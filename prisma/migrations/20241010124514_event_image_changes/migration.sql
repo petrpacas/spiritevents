@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Event" RENAME COLUMN "coverImageKey" TO "imageKey";
+ALTER TABLE "Event" ADD COLUMN "imageId" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Event" ALTER COLUMN "imageId" DROP DEFAULT;

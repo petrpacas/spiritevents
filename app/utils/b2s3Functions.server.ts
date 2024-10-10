@@ -18,11 +18,12 @@ const s3 = new S3Client({
   region: process.env.B2_SERVER_REGION!,
 });
 
-async function updateEventCoverImage(eventId: string, key: string) {
+async function updateEventImage(eventId: string, id: string, key: string) {
   await prisma.event.update({
     where: { id: eventId },
     data: {
-      coverImageKey: key,
+      imageId: id,
+      imageKey: key,
     },
   });
 }
@@ -30,8 +31,7 @@ async function updateEventCoverImage(eventId: string, key: string) {
 export async function uploadFileToB2(
   fileBuffer: Buffer,
   fileType: string,
-  folder: string,
-  eventIdToUpdate?: string,
+  eventId?: string,
 ) {
   const nanoid = customAlphabet(
     "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ",
@@ -42,16 +42,19 @@ export async function uploadFileToB2(
     Body: fileBuffer,
     Bucket: process.env.B2_BUCKET_NAME!,
     ContentType: fileType,
-    Key: `${folder}/${key}`,
+    Key: `${eventId ? "events" : "temp"}/${key}`,
   });
   try {
     const response = await s3.send(command);
     if (response.$metadata.httpStatusCode === 200) {
-      console.log("File uploaded successfully:", `${folder}/${key}`);
-      if (eventIdToUpdate) {
-        await updateEventCoverImage(eventIdToUpdate, key);
+      console.log(
+        "File uploaded successfully:",
+        `${eventId ? "events" : "temp"}/${key}`,
+      );
+      if (eventId && response.VersionId) {
+        await updateEventImage(eventId, response.VersionId, key);
       }
-      return { key };
+      return { id: response.VersionId, key: key };
     }
     return null;
   } catch (error) {
@@ -61,22 +64,26 @@ export async function uploadFileToB2(
 }
 
 export async function deleteFileFromB2(
-  fileKey: string,
-  eventIdToUpdate?: string,
+  key: string,
+  id: string,
+  eventId?: string,
+  pruning?: boolean,
 ) {
+  const safeId = id && id.trim() !== "" ? id : "incorrect-id-match";
   const command = new DeleteObjectCommand({
     Bucket: process.env.B2_BUCKET_NAME!,
-    Key: fileKey,
+    Key: key,
+    VersionId: pruning ? undefined : safeId,
   });
   try {
     const response = await s3.send(command);
-    if (eventIdToUpdate) {
-      await updateEventCoverImage(eventIdToUpdate, ""); // Clear cover image key
+    if (eventId && eventId !== "") {
+      await updateEventImage(eventId, "", "");
     }
     if (response.$metadata.httpStatusCode === 204) {
-      console.log(`File ${fileKey} deleted`);
+      console.log(`File ${key} deleted`);
     } else {
-      console.log(`File ${fileKey} probably not deleted`);
+      console.log(`File ${key} probably not deleted`);
     }
     return null;
   } catch (error) {
@@ -84,19 +91,17 @@ export async function deleteFileFromB2(
   }
 }
 
-export async function moveFileInB2(sourceKey: string, destinationKey: string) {
+export async function moveFileInB2(key: string, id: string) {
   const copyCommand = new CopyObjectCommand({
     Bucket: process.env.B2_BUCKET_NAME!,
-    CopySource: `${process.env.B2_BUCKET_NAME!}/${sourceKey}`,
-    Key: destinationKey,
+    CopySource: `${process.env.B2_BUCKET_NAME!}/temp/${key}`,
+    Key: `events/${key}`,
   });
   try {
     const copyResponse = await s3.send(copyCommand);
     if (copyResponse.$metadata.httpStatusCode === 200) {
-      console.log(`File copied from ${sourceKey} to ${destinationKey}`);
-      await deleteFileFromB2(sourceKey);
-      const publicUrl = `${process.env.B2_SERVER_ENDPOINT!}/${process.env.B2_BUCKET_NAME!}/${destinationKey}`;
-      return { publicUrl };
+      console.log(`File temp/${key} copied as events/${key}`);
+      await deleteFileFromB2(`temp/${key}`, id);
     }
     return null;
   } catch (error) {
@@ -114,22 +119,23 @@ function shouldDeleteFile(lastModified?: Date): boolean {
   return fileAgeInDays > 1;
 }
 
-export async function pruneB2Folder(folder: string) {
+export async function pruneB2TempFolder() {
   const listCommand = new ListObjectsV2Command({
     Bucket: process.env.B2_BUCKET_NAME!,
-    Prefix: `${folder}/`,
+    Prefix: "temp/",
   });
   try {
     const { Contents } = await s3.send(listCommand);
     if (Contents) {
+      console.log("Attempting to prune B2 temp folder");
       for (const file of Contents) {
         if (file.Key && shouldDeleteFile(file.LastModified)) {
-          await deleteFileFromB2(file.Key);
-          console.log(`Deleted file: ${file.Key}`);
+          await deleteFileFromB2(file.Key, "", "", true);
         }
       }
+      console.log("Pruning done");
     }
   } catch (error) {
-    console.error(`Error pruning "${folder}/" folder:`, error);
+    console.error("Error pruning temp/ folder:", error);
   }
 }

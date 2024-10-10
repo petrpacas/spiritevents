@@ -210,7 +210,7 @@ export const EventFormFields = ({
             type="date"
             name="dateStart"
             placeholder="yyyy-mm-dd"
-            className={`flex-grow ${dateStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500`}
+            className={`flex-grow ${dateStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
             value={dateStartState}
             onChange={(e) => setDateStart(e.target.value)}
             onBlur={(e) => {
@@ -264,7 +264,7 @@ export const EventFormFields = ({
             type="date"
             name="dateEnd"
             placeholder="yyyy-mm-dd"
-            className={`flex-grow ${dateEndState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500`}
+            className={`flex-grow ${dateEndState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
             value={dateEndState}
             onChange={(e) => setDateEnd(e.target.value)}
             onBlur={(e) => {
@@ -318,7 +318,7 @@ export const EventFormFields = ({
             type="time"
             name="timeStart"
             placeholder="hh:mm"
-            className={`flex-grow ${timeStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500`}
+            className={`flex-grow ${timeStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
             value={timeStartState}
             onChange={(e) => setTimeStart(e.target.value)}
             onFocus={() => {
@@ -381,7 +381,7 @@ export const EventFormFields = ({
             type="time"
             name="timeEnd"
             placeholder="hh:mm"
-            className={`flex-grow ${timeEndState ? "rounded-l border-r-0" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500`}
+            className={`flex-grow ${timeEndState ? "rounded-l border-r-0" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
             value={timeEndState}
             onChange={(e) => setTimeEnd(e.target.value)}
             onFocus={() => {

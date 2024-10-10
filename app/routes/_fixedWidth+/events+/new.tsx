@@ -48,11 +48,13 @@ export async function action({ request }: ActionFunctionArgs) {
       status: EventStatus.DRAFT,
     },
   });
-  if (result.data.coverImageKey && result.data.coverImageKey !== "") {
-    await moveFileInB2(
-      `temp/${result.data.coverImageKey}`,
-      `events/${result.data.coverImageKey}`,
-    );
+  if (
+    result.data.imageKey &&
+    result.data.imageKey !== "" &&
+    result.data.imageId &&
+    result.data.imageId !== ""
+  ) {
+    await moveFileInB2(result.data.imageKey, result.data.imageId);
   }
   return redirectWithSuccess(
     `/events/${event.id}-${event.slug}`,
@@ -74,7 +76,8 @@ export default function EventNew() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
-  const [key, setKey] = useState("");
+  const [imageIdState, setImageIdState] = useState("");
+  const [imageKeyState, setImageKeyState] = useState("");
   const submit = useSubmit();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -121,32 +124,42 @@ export default function EventNew() {
         </svg>
         <span>Add a new event</span>
       </h1>
-      <ImageUpload folder="temp" onKeyChange={setKey} />
-      <Form onSubmit={handleSubmit}>
-        <fieldset className="grid gap-8" disabled={navigation.state !== "idle"}>
-          <input type="hidden" name="coverImageKey" value={key} />
-          <EventFormFields
-            categories={categories}
-            errors={errors}
-            mdxEditorRef={mdxEditorRef}
-          />
-          <div className="flex justify-end gap-4">
-            <button
-              type="submit"
-              className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-            >
-              Save as draft
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
-            >
-              Back
-            </button>
-          </div>
-        </fieldset>
-      </Form>
+      <div className="grid gap-4">
+        <ImageUpload
+          disabled={navigation.state !== "idle"}
+          onIdChange={setImageIdState}
+          onKeyChange={setImageKeyState}
+        />
+        <Form onSubmit={handleSubmit}>
+          <fieldset
+            className="grid gap-4"
+            disabled={navigation.state !== "idle"}
+          >
+            <input type="hidden" name="imageId" value={imageIdState} />
+            <input type="hidden" name="imageKey" value={imageKeyState} />
+            <EventFormFields
+              categories={categories}
+              errors={errors}
+              mdxEditorRef={mdxEditorRef}
+            />
+            <div className="flex justify-end gap-4">
+              <button
+                type="submit"
+                className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+              >
+                Save as draft
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
+              >
+                Back
+              </button>
+            </div>
+          </fieldset>
+        </Form>
+      </div>
     </div>
   );
 }

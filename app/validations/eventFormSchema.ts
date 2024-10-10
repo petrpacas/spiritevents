@@ -12,10 +12,11 @@ slugify.extend({
 export const eventFormSchema = z
   .object({
     categories: z.string().transform((value) => JSON.parse(value)),
-    coverImageKey: z.string().trim().or(z.literal("")),
     dateEnd: z.string().date().or(z.literal("")),
     dateStart: z.string().date().or(z.literal("")),
     description: z.string().trim().or(z.literal("")),
+    imageId: z.string().trim().or(z.literal("")),
+    imageKey: z.string().trim().or(z.literal("")),
     linkFbEvent: z.string().url().or(z.literal("")),
     linkLocation: z.string().url().or(z.literal("")),
     linkTickets: z.string().url().or(z.literal("")),

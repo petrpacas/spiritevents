@@ -39,11 +39,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const dateStart = formData.get("dateStart");
   const intent = formData.get("intent");
-  const coverImageKey = formData.get("coverImageKey");
+  const imageId = formData.get("imageId");
+  const imageKey = formData.get("imageKey");
   switch (intent) {
     case "delete":
       await prisma.event.delete({ where: { id } });
-      await deleteFileFromB2(`events/${coverImageKey}`);
+      await deleteFileFromB2(`events/${imageKey}`, `${imageId}`);
       return redirectWithSuccess("/events", "Event deleted");
     case "draft":
       await prisma.event.update({
@@ -108,7 +109,7 @@ export default function Event() {
   const { event, isAuthenticated } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const isWorking = navigation.state !== "idle";
+  const isWorking = fetcher.state !== "idle" || navigation.state !== "idle";
   const [statusLetter, statusBg, statusGradient, statusGlow, statusGlowMd] =
     getStatusColors(event.status);
   const handlePublishSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -123,15 +124,15 @@ export default function Event() {
     formData.set("intent", "publish");
     fetcher.submit(formData, { method: "POST" });
   };
-  const imageUrl = event.coverImageKey
-    ? `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${event.coverImageKey}`
+  const imageUrl = event.imageKey
+    ? `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${event.imageKey}`
     : bgImage;
   return (
     <>
       <div className="relative grid min-h-lvh bg-cover bg-center">
         <img
           src={imageUrl}
-          alt="Event cover background"
+          alt="Event background"
           className="absolute left-0 top-0 h-full w-full object-cover"
         />
         <div
@@ -370,11 +371,8 @@ export default function Event() {
                     }
                   }}
                 >
-                  <input
-                    type="hidden"
-                    name="coverImageKey"
-                    value={event.coverImageKey}
-                  />
+                  <input type="hidden" name="imageId" value={event.imageId} />
+                  <input type="hidden" name="imageKey" value={event.imageKey} />
                   <button
                     disabled={isWorking}
                     type="submit"
