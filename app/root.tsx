@@ -129,11 +129,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           content="#451a03"
         />
         <meta name="robots" content="index, follow" />
+        <Meta />
         <meta
           property="og:image"
           content="https://seekgathering.com/logo.png"
         />
-        <Meta />
         <link
           rel="apple-touch-icon"
           sizes="180x180"

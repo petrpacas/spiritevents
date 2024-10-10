@@ -30,7 +30,19 @@ import { EventStatus, getStatusColors } from "~/utils";
 import { deleteFileFromB2 } from "~/utils/b2s3Functions.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [{ title: `${data?.event?.title} ~ SeekGathering` }];
+  return [
+    {
+      title: `${data?.event?.title} ~ SeekGathering`,
+    },
+    ...(data?.event?.imageKey
+      ? [
+          {
+            property: "og:image",
+            content: `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${data?.event?.imageKey}`,
+          },
+        ]
+      : []),
+  ];
 };
 
 export async function action({ request, params }: ActionFunctionArgs) {
