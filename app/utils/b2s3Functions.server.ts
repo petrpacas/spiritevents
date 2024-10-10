@@ -126,15 +126,15 @@ export async function pruneB2TempFolder() {
   });
   try {
     const { Contents } = await s3.send(listCommand);
+    console.log("Attempting to prune B2 temp folder");
     if (Contents) {
-      console.log("Attempting to prune B2 temp folder");
       for (const file of Contents) {
         if (file.Key && shouldDeleteFile(file.LastModified)) {
           await deleteFileFromB2(file.Key, "", "", true);
         }
       }
-      console.log("Pruning done");
     }
+    console.log("Prune attempt done");
   } catch (error) {
     console.error("Error pruning temp/ folder:", error);
   }
