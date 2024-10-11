@@ -35,23 +35,24 @@ model Event {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  categories   Category[]
-  dateEnd      String      @default("")
-  dateStart    String      @default("")
-  description  String      @default("")
-  imageId      String      @default("")
-  imageKey     String      @default("")
-  linkFbEvent  String      @default("")
-  linkLocation String      @default("")
-  linkTickets  String      @default("")
-  linkWebsite  String      @default("")
-  location     String      @default("")
-  region       String      @default("")
-  slug         String      @default("")
-  status       EventStatus @default(PUBLISHED)
-  timeEnd      String      @default("")
-  timeStart    String      @default("")
-  title        String      @default("")
+  categories    Category[]
+  dateEnd       String      @default("")
+  dateStart     String      @default("")
+  description   String      @default("")
+  imageBlurHash String      @default("")
+  imageId       String      @default("")
+  imageKey      String      @default("")
+  linkFbEvent   String      @default("")
+  linkLocation  String      @default("")
+  linkTickets   String      @default("")
+  linkWebsite   String      @default("")
+  location      String      @default("")
+  region        String      @default("")
+  slug          String      @default("")
+  status        EventStatus @default(PUBLISHED)
+  timeEnd       String      @default("")
+  timeStart     String      @default("")
+  title         String      @default("")
 }
 
 model Category {

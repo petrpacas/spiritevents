@@ -1,16 +1,21 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
+import { blurhashToCssGradientString } from "@unpic/placeholder";
+import { Image } from "@unpic/react";
 import { useEffect, useRef, useState } from "react";
 import { jsonWithError, jsonWithSuccess } from "remix-toast";
 import sharp from "sharp";
 import { requireUserSession } from "~/services";
 import { deleteFileFromB2, uploadFileToB2 } from "~/utils/b2s3Functions.server";
+import { generateBlurHash } from "~/utils/imageFunctions.server";
 
 type Props = {
   disabled?: boolean;
   eventId?: string;
+  imageBlurHash?: string;
   imageId?: string;
   imageKey?: string;
+  onBlurHashChange?: React.Dispatch<React.SetStateAction<string>>;
   onIdChange?: React.Dispatch<React.SetStateAction<string>>;
   onKeyChange?: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -50,14 +55,17 @@ async function handleUpload(formData: FormData, eventId?: string) {
     .resize(1280)
     .toFormat("jpeg", { mozjpeg: true })
     .toBuffer();
+  const blurHash = await generateBlurHash(processedImageBuffer);
   const response = await uploadFileToB2(
     processedImageBuffer,
     image.type,
     eventId,
+    blurHash,
   );
-  if (response?.id && response?.key) {
+  if (blurHash && response?.id && response?.key) {
     return jsonWithSuccess(
       {
+        imageBlurHash: blurHash,
         imageId: response.id,
         imageKey: response.key,
       },
@@ -79,37 +87,51 @@ async function handleDelete(formData: FormData, eventId?: string) {
     `${imageId}`,
     eventId,
   );
-  return jsonWithSuccess({ imageId: "", imageKey: "" }, "Image deleted!");
+  return jsonWithSuccess(
+    { imageBlurHash: "", imageId: "", imageKey: "" },
+    "Image deleted!",
+  );
 }
 
 export const ImageUpload = ({
   disabled,
   eventId,
+  imageBlurHash,
   imageId,
   imageKey,
+  onBlurHashChange,
   onIdChange,
   onKeyChange,
 }: Props) => {
   type ActionData = {
+    imageBlurHash?: string;
     imageId?: string;
     imageKey?: string;
   };
   const fetcher = useFetcher<ActionData>();
   const formRef = useRef<HTMLFormElement>(null);
+  const [imageBlurHashState, setImageBlurHashState] = useState(
+    imageBlurHash || "",
+  );
   const [imageIdState, setImageIdState] = useState(imageId || "");
   const [imageKeyState, setImageKeyState] = useState(imageKey || "");
   useEffect(() => {
     if (fetcher.data) {
+      setImageBlurHashState(fetcher.data.imageBlurHash ?? "");
       setImageIdState(fetcher.data.imageId ?? "");
       setImageKeyState(fetcher.data.imageKey ?? "");
+      onBlurHashChange?.(fetcher.data.imageBlurHash ?? "");
       onIdChange?.(fetcher.data.imageId ?? "");
       onKeyChange?.(fetcher.data.imageKey ?? "");
       formRef.current?.reset();
     }
-  }, [fetcher.data, onIdChange, onKeyChange]);
+  }, [fetcher.data, onBlurHashChange, onIdChange, onKeyChange]);
   const imageUrl = imageKeyState
     ? `${import.meta.env.VITE_B2_CDN_ALIAS}/${eventId ? "events" : "temp"}/${imageKeyState}`
     : "";
+  const imagePlaceholder = imageBlurHashState
+    ? blurhashToCssGradientString(imageBlurHashState)
+    : undefined;
   const isWorking = disabled || fetcher.state !== "idle";
   return (
     <div className="grid gap-2">
@@ -137,15 +159,18 @@ export const ImageUpload = ({
         }
       >
         {eventId && <input type="hidden" name="eventId" value={eventId} />}
+        <input type="hidden" name="imageBlurHash" value={imageBlurHashState} />
         <input type="hidden" name="imageId" value={imageIdState} />
         <input type="hidden" name="imageKey" value={imageKeyState} />
         <div className="grid gap-4 sm:flex">
           {imageKeyState ? (
             <>
-              <img
+              <Image
                 src={imageUrl}
-                alt="Uploaded result"
+                alt=""
                 className="mx-auto max-h-96 w-full max-w-96 rounded border border-stone-300"
+                layout="fullWidth"
+                background={imagePlaceholder}
               />
               <button
                 disabled={isWorking}

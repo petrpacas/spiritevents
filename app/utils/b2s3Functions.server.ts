@@ -18,10 +18,16 @@ const s3 = new S3Client({
   region: process.env.B2_SERVER_REGION!,
 });
 
-async function updateEventImage(eventId: string, id: string, key: string) {
+async function updateEventImage(
+  eventId: string,
+  blurHash: string,
+  id: string,
+  key: string,
+) {
   await prisma.event.update({
     where: { id: eventId },
     data: {
+      imageBlurHash: blurHash,
       imageId: id,
       imageKey: key,
     },
@@ -32,6 +38,7 @@ export async function uploadFileToB2(
   fileBuffer: Buffer,
   fileType: string,
   eventId?: string,
+  blurHash?: string,
 ) {
   const nanoid = customAlphabet(
     "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ",
@@ -51,8 +58,8 @@ export async function uploadFileToB2(
         "File uploaded successfully:",
         `${eventId ? "events" : "temp"}/${key}`,
       );
-      if (eventId && response.VersionId) {
-        await updateEventImage(eventId, response.VersionId, key);
+      if (eventId && blurHash && response.VersionId) {
+        await updateEventImage(eventId, blurHash, response.VersionId, key);
       }
       return { id: response.VersionId, key: key };
     }
@@ -78,7 +85,7 @@ export async function deleteFileFromB2(
   try {
     const response = await s3.send(command);
     if (eventId && eventId !== "") {
-      await updateEventImage(eventId, "", "");
+      await updateEventImage(eventId, "", "", "");
     }
     if (response.$metadata.httpStatusCode === 204) {
       console.log(`File ${key} deleted`);

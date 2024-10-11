@@ -40,6 +40,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     dateEnd: string;
     dateStart: string;
     id: string;
+    imageBlurHash: string;
+    imageKey: string;
     location: string;
     region: string;
     slug: string;
@@ -89,6 +91,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
       e."dateEnd",
       e."dateStart",
       e."id",
+      e."imageBlurHash",
+      e."imageKey",
       e."location",
       e."region",
       e."slug",
@@ -515,6 +519,8 @@ export default function Events() {
                       key={event.id}
                       categories={event.categories}
                       id={event.id}
+                      imageBlurHash={event.imageBlurHash}
+                      imageKey={event.imageKey}
                       slug={event.slug}
                       status={isAuthenticated ? event.status : undefined}
                       title={event.title}

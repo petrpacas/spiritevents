@@ -23,6 +23,8 @@ export async function loader() {
       dateEnd: true,
       dateStart: true,
       id: true,
+      imageBlurHash: true,
+      imageKey: true,
       location: true,
       slug: true,
       timeEnd: true,
@@ -77,6 +79,8 @@ export default function Landing() {
                   dateStart={event.dateStart}
                   dateEnd={event.dateEnd}
                   id={event.id}
+                  imageBlurHash={event.imageBlurHash}
+                  imageKey={event.imageKey}
                   slug={event.slug}
                   timeStart={event.timeStart}
                   timeEnd={event.timeEnd}

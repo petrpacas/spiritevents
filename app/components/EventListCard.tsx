@@ -1,6 +1,9 @@
 import { Category } from "@prisma/client";
 import { Link } from "@remix-run/react";
+import { blurhashToCssGradientString } from "@unpic/placeholder";
+import { Image } from "@unpic/react";
 import React from "react";
+import bgImage from "~/images/bg.jpg";
 import { EventStatus, getStatusColors } from "~/utils";
 
 type Props = {
@@ -8,8 +11,10 @@ type Props = {
   dateEnd: string;
   dateStart: string;
   id: string;
+  imageBlurHash?: string;
+  imageKey?: string;
   isLanding?: boolean;
-  location?: string;
+  location: string;
   slug: string;
   status?: keyof typeof EventStatus;
   timeStart?: string;
@@ -22,6 +27,8 @@ export const EventListCard = ({
   dateEnd,
   dateStart,
   id,
+  imageBlurHash,
+  imageKey,
   isLanding,
   location,
   slug,
@@ -41,57 +48,58 @@ export const EventListCard = ({
       {title}
     </>
   );
+  const imagePlaceholder = imageBlurHash
+    ? blurhashToCssGradientString(imageBlurHash)
+    : undefined;
   return (
     <Link
       to={`/events/${id}-${slug}`}
-      className={`${statusBg} grid gap-2 rounded-lg border border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-4`}
+      className={`${statusBg} ${imageKey ? "sm:relative sm:flex" : ""} group grid rounded-lg border border-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow`}
     >
-      {isLanding ? (
-        <h3 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
-          {headingContent}
-        </h3>
-      ) : (
-        <h4 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
-          {headingContent}
-        </h4>
-      )}
-      {categories.length > 0 && (
-        <div className="flex flex-wrap gap-x-2 leading-snug text-emerald-600 sm:text-lg sm:leading-snug">
-          {categories.map((category, idx) => (
-            <React.Fragment key={category.id}>
-              {idx !== 0 && <span className="text-amber-600">~</span>}
-              <span>{category.name}</span>
-            </React.Fragment>
-          ))}
+      {imageKey && (
+        <div className="bottom-0 left-0 top-0 border-amber-600 opacity-75 transition-opacity group-hover:opacity-100 group-focus:opacity-100 max-sm:h-32 max-sm:border-b sm:absolute sm:w-[25%] sm:border-r lg:w-[20%]">
+          <Image
+            src={
+              imageKey
+                ? `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${imageKey}`
+                : bgImage
+            }
+            alt=""
+            className="h-full w-full object-cover max-sm:rounded-t-[0.4375rem] sm:rounded-l-[0.4375rem]"
+            layout="fullWidth"
+            background={imagePlaceholder}
+          />
         </div>
       )}
-      <div className="grid gap-2 leading-snug sm:text-lg sm:leading-snug lg:flex lg:items-end lg:justify-between lg:gap-4">
-        <div className="grid min-[400px]:flex min-[400px]:gap-2">
-          {dateStart ? (
-            <>
-              <div className="flex items-start gap-2">
-                <svg
-                  className="h-5 w-5 text-amber-600 sm:h-6 sm:w-6"
-                  width="16px"
-                  height="16px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
-                  />
-                </svg>
-                <span>{new Date(dateStart).toDateString()}</span>
-              </div>
-              {dateEnd && dateEnd !== dateStart ? (
+      <div
+        className={`${imageKey ? "flex-grow sm:ml-[25%] lg:ml-[20%]" : ""} grid gap-2 p-2 sm:p-4`}
+      >
+        {isLanding ? (
+          <h3 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
+            {headingContent}
+          </h3>
+        ) : (
+          <h4 className="text-xl font-medium leading-snug sm:text-2xl sm:leading-snug">
+            {headingContent}
+          </h4>
+        )}
+        {categories.length > 0 && (
+          <div className="flex flex-wrap gap-x-2 leading-snug text-emerald-600 sm:text-lg sm:leading-snug">
+            {categories.map((category, idx) => (
+              <React.Fragment key={category.id}>
+                {idx !== 0 && <span className="text-amber-600">~</span>}
+                <span>{category.name}</span>
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+        <div className="grid gap-2 leading-snug sm:text-lg sm:leading-snug lg:flex lg:items-end lg:justify-between lg:gap-4">
+          <div className="grid min-[400px]:flex min-[400px]:gap-2">
+            {dateStart ? (
+              <>
                 <div className="flex items-start gap-2">
                   <svg
-                    className="h-5 w-5 rotate-90 opacity-50 sm:h-6 sm:w-6"
+                    className="h-5 w-5 text-amber-600 sm:h-6 sm:w-6"
                     width="16px"
                     height="16px"
                     xmlns="http://www.w3.org/2000/svg"
@@ -103,16 +111,15 @@ export const EventListCard = ({
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                      d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
                     />
                   </svg>
-                  <span>{new Date(dateEnd).toDateString()}</span>
+                  <span>{new Date(dateStart).toDateString()}</span>
                 </div>
-              ) : (
-                timeStart && (
+                {dateEnd && dateEnd !== dateStart ? (
                   <div className="flex items-start gap-2">
                     <svg
-                      className="h-5 w-5 text-amber-600 sm:h-6 sm:w-6"
+                      className="h-5 w-5 rotate-90 opacity-50 sm:h-6 sm:w-6"
                       width="16px"
                       height="16px"
                       xmlns="http://www.w3.org/2000/svg"
@@ -124,40 +131,62 @@ export const EventListCard = ({
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
                       />
                     </svg>
-                    <span>{timeStart}</span>
-                    {timeEnd && (
-                      <>
-                        <svg
-                          className="h-5 w-5 rotate-90 opacity-50 sm:h-6 sm:w-6"
-                          width="16px"
-                          height="16px"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-                          />
-                        </svg>
-                        <span>{timeEnd}</span>
-                      </>
-                    )}
+                    <span>{new Date(dateEnd).toDateString()}</span>
                   </div>
-                )
-              )}
-            </>
-          ) : (
-            <span className="text-red-600">Missing date info</span>
-          )}
+                ) : (
+                  timeStart && (
+                    <div className="flex items-start gap-2">
+                      <svg
+                        className="h-5 w-5 text-amber-600 sm:h-6 sm:w-6"
+                        width="16px"
+                        height="16px"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                      <span>{timeStart}</span>
+                      {timeEnd && (
+                        <>
+                          <svg
+                            className="h-5 w-5 rotate-90 opacity-50 sm:h-6 sm:w-6"
+                            width="16px"
+                            height="16px"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                            />
+                          </svg>
+                          <span>{timeEnd}</span>
+                        </>
+                      )}
+                    </div>
+                  )
+                )}
+              </>
+            ) : (
+              <span className="text-red-600">Missing date info</span>
+            )}
+          </div>
+          {location && <div className="text-amber-600">{location}</div>}
         </div>
-        {location && <div className="text-amber-600">{location}</div>}
       </div>
     </Link>
   );

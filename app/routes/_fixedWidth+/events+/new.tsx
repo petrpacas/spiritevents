@@ -76,6 +76,7 @@ export default function EventNew() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
+  const [imageBlurHashState, setImageBlurHashState] = useState("");
   const [imageIdState, setImageIdState] = useState("");
   const [imageKeyState, setImageKeyState] = useState("");
   const submit = useSubmit();
@@ -127,6 +128,7 @@ export default function EventNew() {
       <div className="grid gap-4">
         <ImageUpload
           disabled={navigation.state !== "idle"}
+          onBlurHashChange={setImageBlurHashState}
           onIdChange={setImageIdState}
           onKeyChange={setImageKeyState}
         />
@@ -135,6 +137,11 @@ export default function EventNew() {
             className="grid gap-4"
             disabled={navigation.state !== "idle"}
           >
+            <input
+              type="hidden"
+              name="imageBlurHash"
+              value={imageBlurHashState}
+            />
             <input type="hidden" name="imageId" value={imageIdState} />
             <input type="hidden" name="imageKey" value={imageKeyState} />
             <EventFormFields

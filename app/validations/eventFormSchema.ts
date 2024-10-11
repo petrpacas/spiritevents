@@ -15,6 +15,7 @@ export const eventFormSchema = z
     dateEnd: z.string().date().or(z.literal("")),
     dateStart: z.string().date().or(z.literal("")),
     description: z.string().trim().or(z.literal("")),
+    imageBlurHash: z.string().trim().or(z.literal("")),
     imageId: z.string().trim().or(z.literal("")),
     imageKey: z.string().trim().or(z.literal("")),
     linkFbEvent: z.string().url().or(z.literal("")),
