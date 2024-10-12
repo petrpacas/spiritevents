@@ -26,7 +26,7 @@ import { moveFileInB2 } from "~/utils/b2s3Functions.server";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Add a new event ~ SeekGathering" }];
+  return [{ title: "Add a new event ~ SpiritEvents" }];
 };
 
 export const links: LinksFunction = () => [...descriptionEditorStyles()];

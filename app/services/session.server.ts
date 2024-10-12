@@ -40,7 +40,7 @@ if (!sessionSecret) {
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
     httpOnly: true,
-    name: "seek_gathering_session",
+    name: "spiritevents_session",
     path: "/",
     sameSite: "lax",
     secrets: [sessionSecret],

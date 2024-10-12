@@ -8,7 +8,7 @@ import { jsonWithSuccess } from "remix-toast";
 import { prisma, requireUserSession } from "~/services";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "All categories ~ SeekGathering" }];
+  return [{ title: "All categories ~ SpiritEvents" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -69,7 +69,7 @@ export default function Feedback() {
             <div key={category.id} className="flex">
               <Link
                 to={`/categories/${category.id}-${category.slug}/edit`}
-                className="flex flex-grow rounded-l border border-r-0 border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+                className="flex flex-grow rounded-l border border-r-0 border-amber-600 p-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
               >
                 <div className="grid gap-2 sm:flex sm:flex-grow">
                   <span className="font-semibold">{category.name}</span>

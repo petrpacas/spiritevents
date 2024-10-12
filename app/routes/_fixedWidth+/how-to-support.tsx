@@ -3,7 +3,7 @@ import { useNavigate } from "@remix-run/react";
 import qrImage from "~/images/qr.png";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Support the project ~ SeekGathering" }];
+  return [{ title: "Support the project ~ SpiritEvents" }];
 };
 
 export default function Feedback() {

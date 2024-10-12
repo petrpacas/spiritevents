@@ -35,7 +35,7 @@ slugify.extend({
 });
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Suggest a new event ~ SeekGathering" }];
+  return [{ title: "Suggest a new event ~ SpiritEvents" }];
 };
 
 export const links: LinksFunction = () => [...descriptionEditorStyles()];
@@ -147,7 +147,7 @@ export default function EventSuggest() {
       </p>
       <p className="text-lg text-amber-600 sm:text-xl">
         Suggesting it will not only support the event, but also all the other
-        seekers.
+        event seekers.
       </p>
       <p className="text-lg sm:text-xl">
         If you choose to send a suggestion, I&apos;d like to kindly ask you to

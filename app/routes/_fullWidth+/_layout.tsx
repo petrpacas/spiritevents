@@ -12,7 +12,7 @@ export default function FullWidthLayout() {
   const { isAuthenticated } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
   return (
-    <div className="grid">
+    <div className="grid min-h-lvh grid-rows-[auto_1fr_auto] bg-emerald-50 dark:bg-emerald-950">
       <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
       <main>
         <Outlet />

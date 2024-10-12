@@ -57,7 +57,7 @@ export const EventListCard = ({
       className={`${statusBg} ${imageKey ? "sm:relative sm:flex" : ""} group grid rounded-lg border border-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow`}
     >
       {imageKey && (
-        <div className="bottom-0 left-0 top-0 border-amber-600 opacity-75 transition-opacity group-hover:opacity-100 group-focus:opacity-100 max-sm:h-32 max-sm:border-b sm:absolute sm:w-[25%] sm:border-r lg:w-[20%]">
+        <div className="bottom-0 left-0 top-0 opacity-75 transition-opacity group-hover:opacity-100 group-focus:opacity-100 max-sm:h-32 sm:absolute sm:w-[25%] lg:w-[20%]">
           <Image
             src={
               imageKey
@@ -84,11 +84,11 @@ export const EventListCard = ({
           </h4>
         )}
         {categories.length > 0 && (
-          <div className="flex flex-wrap gap-x-2 leading-snug text-emerald-600 sm:text-lg sm:leading-snug">
+          <div className="flex flex-wrap gap-x-2 leading-snug sm:text-lg sm:leading-snug">
             {categories.map((category, idx) => (
               <React.Fragment key={category.id}>
-                {idx !== 0 && <span className="text-amber-600">~</span>}
-                <span>{category.name}</span>
+                {idx !== 0 && <span className="opacity-50">&amp;</span>}
+                <span className="text-emerald-600">{category.name}</span>
               </React.Fragment>
             ))}
           </div>

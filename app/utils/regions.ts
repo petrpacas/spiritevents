@@ -13,4 +13,5 @@ export const regions = [
   { name: "Středočeský kraj", code: "STC" },
   { name: "Ústecký kraj", code: "ULK" },
   { name: "Zlínský kraj", code: "ZLK" },
+  { name: "~ Mimo ČR ~", code: "***" },
 ];

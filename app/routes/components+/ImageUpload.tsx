@@ -144,7 +144,7 @@ export const ImageUpload = ({
         encType="multipart/form-data"
         method="post"
         ref={formRef}
-        className="grid gap-4 rounded-lg border border-amber-600 p-4"
+        className="grid gap-4 rounded-lg border border-amber-600 bg-white p-4 dark:bg-stone-950"
         onSubmit={
           imageKeyState
             ? (e) => {
@@ -189,7 +189,7 @@ export const ImageUpload = ({
                 type="file"
                 name="image"
                 accept="image/*"
-                className="m-0 w-full cursor-pointer rounded border border-stone-300 p-0 pr-3 shadow-sm transition-shadow file:m-0 file:mr-3 file:h-[42px] file:cursor-pointer file:rounded-l-sm file:rounded-r-none file:border-0 file:bg-stone-300 file:p-0 file:px-3 file:text-base file:text-stone-800 invalid:text-stone-400 hover:shadow-md active:shadow sm:flex-1 dark:bg-stone-800 dark:[color-scheme:dark] dark:invalid:text-stone-500"
+                className="m-0 w-full cursor-pointer rounded border border-stone-300 p-0 pr-3 shadow-sm transition-shadow file:m-0 file:mr-3 file:h-[42px] file:cursor-pointer file:rounded-l-sm file:rounded-r-none file:border-0 file:bg-stone-300 file:p-0 file:px-3 file:text-base file:text-stone-950 invalid:text-stone-400 hover:shadow-md active:shadow sm:flex-1 dark:bg-stone-950 dark:[color-scheme:dark] dark:invalid:text-stone-500"
               />
               <button
                 disabled={isWorking}

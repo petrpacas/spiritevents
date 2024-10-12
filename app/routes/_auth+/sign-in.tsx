@@ -13,7 +13,7 @@ import {
 import { authenticator, commitSession, getSession } from "~/services";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Sign in ~ SeekGathering" }];
+  return [{ title: "Sign in ~ SpiritEvents" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -65,7 +65,7 @@ export default function SignIn() {
               type="email"
               name="email"
               required
-              className="w-full rounded border border-stone-300 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+              className="w-full rounded border border-stone-300 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
             />
           </label>
           <label className="grid gap-2">
@@ -75,7 +75,7 @@ export default function SignIn() {
               name="password"
               autoComplete="current-password"
               required
-              className="w-full rounded border border-stone-300 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+              className="w-full rounded border border-stone-300 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
             />
           </label>
           {error?.message && <p className="text-red-600">{error.message}</p>}

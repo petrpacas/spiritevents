@@ -101,7 +101,7 @@ export const EventFormFields = ({
           onChange={handleTitleChange}
           onBlur={handleTitleBlur}
           value={title}
-          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
         />
         {errors?.fieldErrors.title && (
           <p className="text-red-600">{errors.fieldErrors.title.join(", ")}</p>
@@ -128,7 +128,7 @@ export const EventFormFields = ({
             onBlur={handleSlugBlur}
             value={slug}
             placeholder="e.g. example-event"
-            className={`rounded border-stone-300 placeholder-stone-400 dark:placeholder-stone-500 ${isSlugFreelyModifiable ? (event?.status === EventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800`}
+            className={`rounded border-stone-300 placeholder-stone-400 dark:placeholder-stone-500 ${isSlugFreelyModifiable ? (event?.status === EventStatus.SUGGESTED && !slugModified ? "text-stone-400" : undefined) : "text-amber-600"} shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950`}
           />
           {errors?.fieldErrors.slug && (
             <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>
@@ -145,7 +145,7 @@ export const EventFormFields = ({
           emptyOption={event?.region ? undefined : "— select a region —"}
           defaultValue={event?.region || ""}
           name="region"
-          className="custom-caret-color w-full cursor-pointer rounded border-stone-300 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow dark:bg-stone-800 dark:invalid:text-stone-500"
+          className="custom-caret-color w-full cursor-pointer rounded border-stone-300 shadow-sm transition-shadow invalid:text-stone-400 hover:shadow-md active:shadow dark:bg-stone-950 dark:invalid:text-stone-500"
         />
         {errors?.fieldErrors.region && (
           <p className="text-red-600">{errors.fieldErrors.region.join(", ")}</p>
@@ -162,7 +162,7 @@ export const EventFormFields = ({
           name="location"
           defaultValue={event?.location}
           placeholder="venue, city, general area, etc."
-          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500"
+          className="rounded border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950 dark:placeholder-stone-500"
         />
         {errors?.fieldErrors.location && (
           <p className="text-red-600">
@@ -173,10 +173,10 @@ export const EventFormFields = ({
       {categories && categories.length > 0 && (
         <div className="grid gap-2 md:col-span-2">
           Categories
-          <div className="flex flex-wrap gap-4 rounded-lg border border-stone-300 p-4">
+          <div className="flex flex-wrap gap-4 rounded-lg border border-stone-300 bg-white p-4 dark:bg-stone-950">
             {categories.map((category) => (
               <label
-                className="flex cursor-pointer items-center gap-2 rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+                className="flex cursor-pointer items-center gap-2 rounded border border-stone-300 px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
                 key={category.id}
               >
                 <input
@@ -189,7 +189,7 @@ export const EventFormFields = ({
                       (eventCategory) => eventCategory.id === category.id,
                     ),
                   )}
-                  className="rounded border border-stone-300 checked:bg-amber-600 hover:checked:bg-amber-600 focus:checked:bg-amber-600 dark:bg-stone-800"
+                  className="rounded border border-stone-300 checked:bg-amber-600 hover:checked:bg-amber-600 focus:checked:bg-amber-600 dark:bg-stone-950"
                 />
                 {category.name}
               </label>
@@ -210,7 +210,7 @@ export const EventFormFields = ({
             type="date"
             name="dateStart"
             placeholder="yyyy-mm-dd"
-            className={`flex-grow ${dateStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
+            className={`flex-grow ${dateStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
             value={dateStartState}
             onChange={(e) => setDateStart(e.target.value)}
             onBlur={(e) => {
@@ -225,7 +225,7 @@ export const EventFormFields = ({
           {dateStartState && (
             <button
               type="button"
-              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-800"
+              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-950"
               onClick={(e) => {
                 e.preventDefault();
                 setDateStart("");
@@ -264,7 +264,7 @@ export const EventFormFields = ({
             type="date"
             name="dateEnd"
             placeholder="yyyy-mm-dd"
-            className={`flex-grow ${dateEndState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
+            className={`flex-grow ${dateEndState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
             value={dateEndState}
             onChange={(e) => setDateEnd(e.target.value)}
             onBlur={(e) => {
@@ -279,7 +279,7 @@ export const EventFormFields = ({
           {dateEndState && (
             <button
               type="button"
-              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-800"
+              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-950"
               onClick={(e) => {
                 e.preventDefault();
                 setDateEnd("");
@@ -318,7 +318,7 @@ export const EventFormFields = ({
             type="time"
             name="timeStart"
             placeholder="hh:mm"
-            className={`flex-grow ${timeStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
+            className={`flex-grow ${timeStartState ? "rounded-l" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
             value={timeStartState}
             onChange={(e) => setTimeStart(e.target.value)}
             onFocus={() => {
@@ -342,7 +342,7 @@ export const EventFormFields = ({
           {timeStartState && (
             <button
               type="button"
-              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-800"
+              className="rounded-r border border-l-0 border-stone-300 px-2 dark:bg-stone-950"
               onClick={(e) => {
                 e.preventDefault();
                 setTimeStart("");
@@ -381,7 +381,7 @@ export const EventFormFields = ({
             type="time"
             name="timeEnd"
             placeholder="hh:mm"
-            className={`flex-grow ${timeEndState ? "rounded-l border-r-0" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
+            className={`flex-grow ${timeEndState ? "rounded-l border-r-0" : "rounded"} border-stone-300 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950 dark:placeholder-stone-500 dark:[color-scheme:dark]`}
             value={timeEndState}
             onChange={(e) => setTimeEnd(e.target.value)}
             onFocus={() => {
@@ -405,7 +405,7 @@ export const EventFormFields = ({
           {timeEndState && (
             <button
               type="button"
-              className="rounded-r border border-stone-300 px-2 dark:bg-stone-800"
+              className="rounded-r border border-stone-300 px-2 dark:bg-stone-950"
               onClick={(e) => {
                 e.preventDefault();
                 setTimeEnd("");
@@ -443,7 +443,7 @@ export const EventFormFields = ({
           type="text"
           name="linkWebsite"
           defaultValue={event?.linkWebsite}
-          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
         />
         {errors?.fieldErrors.linkWebsite && (
           <p className="text-red-600">
@@ -458,7 +458,7 @@ export const EventFormFields = ({
           type="text"
           name="linkTickets"
           defaultValue={event?.linkTickets}
-          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
         />
         {errors?.fieldErrors.linkTickets && (
           <p className="text-red-600">
@@ -473,7 +473,7 @@ export const EventFormFields = ({
           type="text"
           name="linkFbEvent"
           defaultValue={event?.linkFbEvent}
-          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
         />
         {errors?.fieldErrors.linkFbEvent && (
           <p className="text-red-600">
@@ -488,7 +488,7 @@ export const EventFormFields = ({
           type="text"
           name="linkLocation"
           defaultValue={event?.linkLocation}
-          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
         />
         {errors?.fieldErrors.linkLocation && (
           <p className="text-red-600">
@@ -507,7 +507,7 @@ export const EventFormFields = ({
               name="description"
               readOnly
               defaultValue={event?.description}
-              className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow read-only:bg-stone-300 hover:shadow-md active:shadow dark:bg-stone-800"
+              className="min-h-20 rounded border-stone-300 shadow-sm transition-shadow read-only:bg-stone-300 hover:shadow-md active:shadow dark:bg-stone-950"
             />
             {errors?.fieldErrors.description && (
               <p className="text-red-600">
@@ -522,7 +522,7 @@ export const EventFormFields = ({
             Description
             <DescriptionEditor
               ref={mdxEditorRef}
-              className="overflow-x-auto rounded border border-stone-300 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-800"
+              className="overflow-x-auto rounded border border-stone-300 bg-white shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
               markdown={event?.description}
             />
             {errors?.fieldErrors.description && (

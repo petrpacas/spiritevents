@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { Image } from "@unpic/react";
 import { EventListCard } from "~/components";
 import bgImage from "~/images/bg.jpg";
 import { prisma } from "~/services";
@@ -7,7 +8,7 @@ import { getTodayDate, EventStatus } from "~/utils";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "SeekGathering ~ All the magic, all in one place" },
+    { title: "SpiritEvents.cz ~ All the magic, all in one place" },
     {
       name: "description",
       content:
@@ -43,22 +44,27 @@ export async function loader() {
 
 export default function Landing() {
   const { events } = useLoaderData<typeof loader>();
+  const imagePlaceholder =
+    "radial-gradient(at 0 0,#762143,#00000000 50%),radial-gradient(at 33% 0,#7d4656,#00000000 50%),radial-gradient(at 67% 0,#9b6b64,#00000000 50%),radial-gradient(at 100% 0,#926b66,#00000000 50%),radial-gradient(at 0 50%,#9e4e36,#00000000 50%),radial-gradient(at 33% 50%,#8d534a,#00000000 50%),radial-gradient(at 67% 50%,#b97d5a,#00000000 50%),radial-gradient(at 100% 50%,#c1885f,#00000000 50%),radial-gradient(at 0 100%,#a96e33,#00000000 50%),radial-gradient(at 33% 100%,#9d6f41,#00000000 50%),radial-gradient(at 67% 100%,#c58f51,#00000000 50%),radial-gradient(at 100% 100%,#cf9c59,#00000000 50%)";
   return (
     <>
-      <div className="relative grid min-h-lvh">
-        <img
+      <div className="relative grid">
+        <Image
           src={bgImage}
-          alt="Elizabeth Anura - Medicine Festival 2023"
+          alt=""
           className="absolute left-0 top-0 h-full w-full object-cover"
+          layout="fullWidth"
+          background={imagePlaceholder}
         />
-        <div className="relative grid min-h-lvh items-center justify-center bg-[linear-gradient(rgba(255,251,235,1),rgba(255,251,235,.8),rgba(255,251,235,1))] dark:bg-[linear-gradient(rgba(69,26,3,1),rgba(69,26,3,.8),rgba(69,26,3,1))]">
-          <h2 className="max-w-7xl px-4 py-[6.625rem] text-center text-[1.875rem] font-bold leading-relaxed drop-shadow-[0_0_1.875rem_rgb(254,243,199)] min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[375px]:drop-shadow-[0_0_2rem_rgb(254,243,199)] min-[414px]:text-4xl min-[414px]:leading-relaxed min-[414px]:drop-shadow-[0_0_2.25rem_rgb(254,243,199)] sm:px-8 md:text-5xl md:leading-relaxed md:drop-shadow-[0_0_3rem_rgb(254,243,199)] dark:drop-shadow-[0_0_1.875rem_rgb(120,53,15)] dark:min-[375px]:drop-shadow-[0_0_2rem_rgb(120,53,15)] dark:min-[414px]:drop-shadow-[0_0_2.25rem_rgb(120,53,15)] dark:md:drop-shadow-[0_0_3rem_rgb(120,53,15)]">
-            Reunite with your <strong className="text-amber-600">tribe</strong>{" "}
+        <div className="relative grid items-center justify-center bg-white/80 dark:bg-stone-950/80">
+          <h2 className="max-w-7xl px-4 py-16 text-center text-[1.875rem] font-bold leading-relaxed min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[414px]:text-4xl min-[414px]:leading-relaxed sm:px-8 md:text-5xl md:leading-relaxed">
+            Reunite with your{" "}
+            <strong className="text-emerald-600">tribe</strong>{" "}
             <br className="max-lg:hidden" /> and discover{" "}
-            <strong className="text-amber-600">events in Czechia</strong>{" "}
+            <strong className="text-emerald-600">events in Czechia</strong>{" "}
             <br className="max-lg:hidden" /> focused on{" "}
-            <strong className="text-amber-600">healing</strong> and truly{" "}
-            <strong className="text-amber-600">being</strong>
+            <strong className="text-emerald-600">healing</strong> and truly{" "}
+            <strong className="text-emerald-600">being</strong>
           </h2>
         </div>
       </div>
@@ -94,7 +100,7 @@ export default function Landing() {
               </p>
               <Link
                 to="/events"
-                className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
+                className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:col-start-3 sm:max-xl:justify-self-end lg:self-center"
               >
                 Discover events in Czechia
                 <svg
@@ -112,8 +118,8 @@ export default function Landing() {
           </div>
         </div>
       )}
-      <div className="grid gap-8 pb-8 sm:gap-16 sm:pb-16">
-        <div className="bg-amber-100 dark:bg-amber-900">
+      <div className="grid">
+        <div className="bg-white dark:bg-stone-950">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:gap-16 sm:px-8 sm:py-16 xl:grid-cols-2">
             <div className="grid gap-8 text-center">
               <div className="text-4xl">🧿</div>
@@ -139,7 +145,7 @@ export default function Landing() {
                   the growth.
                 </p>
               </div>
-              <div className="-mx-4 self-end border-y border-amber-600 px-4 py-4 text-lg italic leading-snug sm:-mx-8 sm:px-8 sm:py-8 sm:text-xl sm:leading-snug xl:-mx-0 xl:px-0">
+              <div className="-mx-4 self-end border-y border-emerald-600 px-4 py-4 text-lg italic leading-snug sm:-mx-8 sm:px-8 sm:py-8 sm:text-xl sm:leading-snug xl:-mx-0 xl:px-0">
                 The ancient. <br className="min-[490px]:hidden" />
                 The indigenous. <br className="min-[490px]:hidden" />
                 The modern.
@@ -164,7 +170,7 @@ export default function Landing() {
               </p>
               <p>
                 <span className="font-bold">
-                  <span className="text-amber-600">Seek</span>Gathering
+                  <span className="text-emerald-600">Spirit</span>Events
                 </span>{" "}
                 aims to change it.
               </p>
@@ -185,13 +191,13 @@ export default function Landing() {
                 </p>
                 <p>
                   Suggesting it will not only support the event, but also all
-                  the other seekers.
+                  the other event seekers.
                 </p>
               </div>
             </div>
             <Link
               to="/events/suggest"
-              className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end xl:self-center"
+              className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-white px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:px-8 sm:py-4 sm:max-xl:justify-self-end xl:self-center dark:border-white"
             >
               Suggest a new event
               <svg

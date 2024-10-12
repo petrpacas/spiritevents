@@ -93,7 +93,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 : error instanceof Error
                   ? "Error"
                   : "Unknown error"
-            } ~ SeekGathering`}
+            } ~ SpiritEvents`}
           </title>
         )}
         <meta charSet="utf-8" />
@@ -101,39 +101,36 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta
           name="theme-color"
           media="(prefers-color-scheme: light)"
-          content="#fffbeb"
+          content="#ffffff"
         />
         <meta
           name="theme-color"
           media="(prefers-color-scheme: dark)"
-          content="#451a03"
+          content="#0c0a09"
         />
         <meta
           name="msapplication-navbutton-color"
           media="(prefers-color-scheme: light)"
-          content="#fffbeb"
+          content="#ffffff"
         />
         <meta
           name="msapplication-navbutton-color"
           media="(prefers-color-scheme: dark)"
-          content="#451a03"
+          content="#0c0a09"
         />
         <meta
           name="apple-mobile-web-app-status-bar-style"
           media="(prefers-color-scheme: light)"
-          content="#fffbeb"
+          content="#ffffff"
         />
         <meta
           name="apple-mobile-web-app-status-bar-style"
           media="(prefers-color-scheme: dark)"
-          content="#451a03"
+          content="#0c0a09"
         />
         <meta name="robots" content="index, follow" />
         <Meta />
-        <meta
-          property="og:image"
-          content="https://seekgathering.com/logo.png"
-        />
+        <meta property="og:image" content="https://spiritevents.cz/logo.png" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -169,12 +166,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <Links />
       </head>
-      <body className="relative bg-white text-amber-950 dark:bg-stone-700 dark:text-white">
+      <body className="relative bg-white text-stone-950 dark:bg-stone-950 dark:text-white">
         {children}
         <Toaster
           toastOptions={{
             className:
-              "!bg-stone-800 !text-white dark:!bg-white dark:!text-amber-950",
+              "!bg-stone-950 !text-white dark:!bg-white dark:!text-stone-950",
             duration: 3333,
             position: "bottom-center",
           }}
@@ -216,7 +213,7 @@ export function ErrorBoundary() {
     </svg>
   );
   return (
-    <div className="grid min-h-lvh grid-rows-[auto_1fr_auto]">
+    <div className="grid min-h-lvh grid-rows-[auto_1fr_auto] bg-emerald-50 dark:bg-emerald-950">
       <Header isAuthenticated={false} key={pathname} />
       <main
         className={`flex justify-center ${isRouteErrorResponse(error) && error.status === 404 ? "" : "bg-red-100 dark:bg-red-900"}`}

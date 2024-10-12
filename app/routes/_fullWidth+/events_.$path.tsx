@@ -11,6 +11,8 @@ import {
   useNavigate,
   useNavigation,
 } from "@remix-run/react";
+import { blurhashToCssGradientString } from "@unpic/placeholder";
+import { Image } from "@unpic/react";
 import { Fragment } from "react/jsx-runtime";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeStringify from "rehype-stringify";
@@ -32,7 +34,7 @@ import { deleteFileFromB2 } from "~/utils/b2s3Functions.server";
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
     {
-      title: `${data?.event?.title} ~ SeekGathering`,
+      title: `${data?.event?.title} ~ SpiritEvents`,
     },
     ...(data?.event?.imageKey
       ? [
@@ -122,8 +124,7 @@ export default function Event() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isWorking = fetcher.state !== "idle" || navigation.state !== "idle";
-  const [statusLetter, statusBg, statusGradient, statusGlow, statusGlowMd] =
-    getStatusColors(event.status);
+  const [statusLetter] = getStatusColors(event.status);
   const handlePublishSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const response = confirm("Do you really want to publish the event?");
@@ -139,33 +140,29 @@ export default function Event() {
   const imageUrl = event.imageKey
     ? `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${event.imageKey}`
     : bgImage;
+  const imagePlaceholder =
+    event.imageBlurHash && event.imageKey
+      ? blurhashToCssGradientString(event.imageBlurHash)
+      : "radial-gradient(at 0 0,#762143,#00000000 50%),radial-gradient(at 33% 0,#7d4656,#00000000 50%),radial-gradient(at 67% 0,#9b6b64,#00000000 50%),radial-gradient(at 100% 0,#926b66,#00000000 50%),radial-gradient(at 0 50%,#9e4e36,#00000000 50%),radial-gradient(at 33% 50%,#8d534a,#00000000 50%),radial-gradient(at 67% 50%,#b97d5a,#00000000 50%),radial-gradient(at 100% 50%,#c1885f,#00000000 50%),radial-gradient(at 0 100%,#a96e33,#00000000 50%),radial-gradient(at 33% 100%,#9d6f41,#00000000 50%),radial-gradient(at 67% 100%,#c58f51,#00000000 50%),radial-gradient(at 100% 100%,#cf9c59,#00000000 50%)";
   return (
     <>
-      <div className="relative grid min-h-lvh bg-cover bg-center">
-        <img
-          src={imageUrl}
-          alt="Event background"
-          className="absolute left-0 top-0 h-full w-full object-cover"
-        />
-        <div
-          className={`relative grid min-h-lvh items-center justify-center ${statusGradient}`}
-        >
+      <div className="bg-emerald-100 dark:bg-black/25">
+        <div className="mx-auto grid w-full max-w-7xl md:flex xl:pr-8">
           <div
-            className={`max-w-7xl px-4 py-[6.625rem] ${statusGlow} sm:px-8 ${statusGlowMd}`}
+            className={`flex bg-black/25 md:order-2 md:w-1/2 ${event.imageKey ? "" : "max-md:hidden"}`}
           >
-            <div className="grid gap-8 text-center lg:gap-16">
-              <div className="grid gap-4">
-                {event.categories.length > 0 && (
-                  <div className="flex flex-wrap justify-center gap-2 text-lg font-semibold leading-snug text-emerald-600 sm:text-xl sm:leading-snug lg:text-2xl lg:leading-snug">
-                    {event.categories.map((category, idx) => (
-                      <Fragment key={category.id}>
-                        {idx !== 0 && <span className="text-amber-600">~</span>}
-                        <span>{category.name}</span>
-                      </Fragment>
-                    ))}
-                  </div>
-                )}
-                <h1 className="text-3xl font-bold leading-snug sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-snug">
+            <Image
+              src={imageUrl}
+              alt="Event background"
+              className={`self-center ${event.imageKey ? "" : "h-full opacity-50"}`}
+              layout="fullWidth"
+              background={imagePlaceholder}
+            />
+          </div>
+          <div className="flex justify-between px-4 py-8 sm:px-8 md:order-1 md:w-1/2">
+            <div className="grid gap-8">
+              <div className="grid gap-2">
+                <h1 className="text-2xl font-bold leading-snug sm:text-3xl sm:leading-snug">
                   {statusLetter && (
                     <>
                       <span className="text-amber-600">{statusLetter}</span>{" "}
@@ -173,10 +170,40 @@ export default function Event() {
                   )}
                   {event.title}
                 </h1>
-                {(event.linkFbEvent ||
-                  event.linkTickets ||
-                  event.linkWebsite) && (
-                  <div className="flex justify-center gap-4 text-lg font-semibold leading-snug text-amber-600 underline max-[319px]:grid sm:text-xl sm:leading-snug">
+                {event.categories.length > 0 && (
+                  <div className="flex flex-wrap gap-2 text-lg leading-snug sm:text-xl sm:leading-snug">
+                    {event.categories.map((category, idx) => (
+                      <Fragment key={category.id}>
+                        {idx !== 0 && <span className="opacity-50">&amp;</span>}
+                        <span className="font-semibold text-emerald-600">
+                          {category.name}
+                        </span>
+                      </Fragment>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {(event.linkFbEvent ||
+                event.linkTickets ||
+                event.linkWebsite) && (
+                <div className="flex items-center gap-2 text-lg font-semibold leading-snug text-amber-600 underline max-[319px]:grid sm:text-xl sm:leading-snug">
+                  <svg
+                    className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7"
+                    width="16px"
+                    height="16px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                    />
+                  </svg>
+                  <div className="flex items-center gap-4">
                     {event.linkWebsite && (
                       <a
                         href={event.linkWebsite}
@@ -205,33 +232,16 @@ export default function Event() {
                       </a>
                     )}
                   </div>
-                )}
-              </div>
-              <div className="grid gap-4">
-                <p className="text-xl font-semibold leading-snug sm:text-2xl sm:leading-snug lg:text-3xl lg:leading-snug">
-                  {event.location && `${event.location}, `}
-                  Czech Republic
-                </p>
-                {event.linkLocation && (
-                  <div>
-                    <a
-                      href={event.linkLocation}
-                      className="text-lg font-semibold leading-snug text-amber-600 underline sm:text-xl sm:leading-snug"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Location map
-                    </a>
-                  </div>
-                )}
-              </div>
-              <div className="grid text-xl font-semibold leading-tight sm:text-2xl sm:leading-tight lg:text-3xl lg:leading-tight">
-                <div className="grid justify-center gap-2">
+                </div>
+              )}
+
+              <div className="grid text-lg font-semibold leading-tight sm:text-xl sm:leading-tight">
+                <div className="grid gap-2">
                   {event.dateStart ? (
-                    <div className="grid gap-2 sm:flex">
-                      <div className="flex items-center justify-center gap-2">
+                    <div className="grid gap-2 sm:flex md:grid xl:flex">
+                      <div className="flex items-center gap-2">
                         <svg
-                          className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                          className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7"
                           width="16px"
                           height="16px"
                           xmlns="http://www.w3.org/2000/svg"
@@ -249,9 +259,9 @@ export default function Event() {
                         <span>{new Date(event.dateStart).toDateString()}</span>
                       </div>
                       {event.dateEnd && event.dateEnd !== event.dateStart && (
-                        <div className="flex items-center justify-center gap-2">
+                        <div className="flex items-center gap-2">
                           <svg
-                            className="h-6 w-6 rotate-90 opacity-50 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                            className="h-6 w-6 rotate-90 opacity-50 sm:h-7 sm:w-7"
                             width="16px"
                             height="16px"
                             xmlns="http://www.w3.org/2000/svg"
@@ -274,9 +284,9 @@ export default function Event() {
                     <span className="text-red-600">Missing date info</span>
                   )}
                   {event.timeStart && (
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center gap-2">
                       <svg
-                        className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                        className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7"
                         width="16px"
                         height="16px"
                         xmlns="http://www.w3.org/2000/svg"
@@ -295,7 +305,7 @@ export default function Event() {
                       {event.timeEnd && (
                         <>
                           <svg
-                            className="h-6 w-6 rotate-90 opacity-50 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                            className="h-6 w-6 rotate-90 opacity-50 sm:h-7 sm:w-7"
                             width="16px"
                             height="16px"
                             xmlns="http://www.w3.org/2000/svg"
@@ -317,95 +327,149 @@ export default function Event() {
                   )}
                 </div>
               </div>
+              <div className="grid gap-2">
+                <div className="flex items-center gap-2 text-lg font-semibold leading-snug sm:text-xl sm:leading-snug">
+                  <svg
+                    className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7"
+                    width="16px"
+                    height="16px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                    />
+                  </svg>
+                  {event.location}
+                </div>
+                {event.linkLocation && (
+                  <div className="flex items-center gap-2">
+                    <svg
+                      className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7"
+                      width="16px"
+                      height="16px"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
+                      />
+                    </svg>
+                    <a
+                      href={event.linkLocation}
+                      className="text-lg font-semibold leading-snug text-amber-600 underline sm:text-xl sm:leading-snug"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Location map
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className={`flex justify-center ${statusBg}`}>
-        <div
-          className={`grid w-full max-w-7xl px-4 ${isAuthenticated ? "pt-8" : "pt-16"} pb-16 sm:px-8`}
-        >
-          <div className="grid gap-8">
-            {isAuthenticated && (
-              <div className="flex flex-wrap justify-center gap-4">
-                <Form action="edit">
-                  <button
-                    disabled={isWorking}
-                    type="submit"
-                    className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                  >
-                    Edit
-                  </button>
-                </Form>
-                {event.status === EventStatus.PUBLISHED && (
-                  <fetcher.Form
-                    method="post"
-                    onSubmit={(e) => {
-                      const response = confirm(
-                        "Do you really want to set the event as a draft?",
-                      );
-                      if (!response) {
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    <button
-                      disabled={isWorking}
-                      type="submit"
-                      name="intent"
-                      value="draft"
-                      className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                    >
-                      Set as draft
-                    </button>
-                  </fetcher.Form>
-                )}
-                {event.status !== EventStatus.PUBLISHED && event.dateStart && (
-                  <fetcher.Form onSubmit={handlePublishSubmit}>
-                    <button
-                      disabled={isWorking}
-                      type="submit"
-                      className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                    >
-                      Publish
-                    </button>
-                  </fetcher.Form>
-                )}
-                <Form
-                  method="post"
-                  replace
-                  onSubmit={(e) => {
-                    const response = confirm(
-                      "Do you really want to delete the event?",
-                    );
-                    if (!response) {
-                      e.preventDefault();
-                    }
-                  }}
+      {isAuthenticated && (
+        <div className="bg-white dark:bg-stone-950">
+          <div className="flex flex-wrap justify-center gap-4 px-4 py-4 sm:px-8">
+            <Form action="edit">
+              <button
+                disabled={isWorking}
+                type="submit"
+                className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+              >
+                Edit
+              </button>
+            </Form>
+            {event.status === EventStatus.PUBLISHED && (
+              <fetcher.Form
+                method="post"
+                onSubmit={(e) => {
+                  const response = confirm(
+                    "Do you really want to set the event as a draft?",
+                  );
+                  if (!response) {
+                    e.preventDefault();
+                  }
+                }}
+              >
+                <button
+                  disabled={isWorking}
+                  type="submit"
+                  name="intent"
+                  value="draft"
+                  className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
                 >
-                  <input type="hidden" name="imageId" value={event.imageId} />
-                  <input type="hidden" name="imageKey" value={event.imageKey} />
-                  <button
-                    disabled={isWorking}
-                    type="submit"
-                    name="intent"
-                    value="delete"
-                    className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                  >
-                    Delete
-                  </button>
-                </Form>
-              </div>
+                  Set as draft
+                </button>
+              </fetcher.Form>
             )}
+            {event.status !== EventStatus.PUBLISHED && event.dateStart && (
+              <fetcher.Form onSubmit={handlePublishSubmit}>
+                <button
+                  disabled={isWorking}
+                  type="submit"
+                  className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                >
+                  Publish
+                </button>
+              </fetcher.Form>
+            )}
+            <Form
+              method="post"
+              replace
+              onSubmit={(e) => {
+                const response = confirm(
+                  "Do you really want to delete the event?",
+                );
+                if (!response) {
+                  e.preventDefault();
+                }
+              }}
+            >
+              <input type="hidden" name="imageId" value={event.imageId} />
+              <input type="hidden" name="imageKey" value={event.imageKey} />
+              <button
+                disabled={isWorking}
+                type="submit"
+                name="intent"
+                value="delete"
+                className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+              >
+                Delete
+              </button>
+            </Form>
+          </div>
+        </div>
+      )}
+      <div className="flex justify-center">
+        <div className="grid w-full max-w-7xl px-4 py-16 sm:px-8">
+          <div className="grid gap-8">
             {event.description && (
               <div
-                className="prose prose-amber-basic mx-auto w-full max-w-4xl sm:prose-lg xl:prose-xl dark:prose-invert"
+                className="prose prose-xl prose-basic mx-auto w-full max-w-full sm:prose-2xl dark:prose-invert"
                 dangerouslySetInnerHTML={{
                   __html: event.description,
                 }}
               />
             )}
-            <div className="grid gap-4 text-center text-amber-600">
+            <div className="grid text-right text-lg text-amber-600">
               {isAuthenticated ? (
                 <>
                   <span className="break-all">ID: {event.id}</span>
@@ -423,7 +487,7 @@ export default function Event() {
                 </span>
               )}
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-end">
               <button
                 disabled={isWorking}
                 type="button"
