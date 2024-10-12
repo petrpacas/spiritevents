@@ -26,7 +26,7 @@ import { EventStatus } from "~/utils";
 import { eventFormSchema } from "~/validations";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [{ title: `Editing ${data?.event?.title} ~ SpiritEvents` }];
+  return [{ title: `Editing ${data?.event?.title} ~ SpiritEvents.cz` }];
 };
 
 export const links: LinksFunction = () => [...descriptionEditorStyles()];

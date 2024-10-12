@@ -35,7 +35,7 @@ slugify.extend({
 });
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Suggest a new event ~ SpiritEvents" }];
+  return [{ title: "Suggest a new event ~ SpiritEvents.cz" }];
 };
 
 export const links: LinksFunction = () => [...descriptionEditorStyles()];

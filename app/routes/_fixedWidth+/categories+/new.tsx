@@ -16,7 +16,7 @@ import { prisma, requireUserSession } from "~/services";
 import { categoryFormSchema } from "~/validations";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Add a new category ~ SpiritEvents" }];
+  return [{ title: "Add a new category ~ SpiritEvents.cz" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {

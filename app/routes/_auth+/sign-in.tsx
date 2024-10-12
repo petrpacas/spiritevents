@@ -13,7 +13,7 @@ import {
 import { authenticator, commitSession, getSession } from "~/services";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Sign in ~ SpiritEvents" }];
+  return [{ title: "Sign in ~ SpiritEvents.cz" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {

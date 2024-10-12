@@ -8,7 +8,7 @@ import { jsonWithSuccess } from "remix-toast";
 import { prisma, requireUserSession } from "~/services";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "All categories ~ SpiritEvents" }];
+  return [{ title: "All categories ~ SpiritEvents.cz" }];
 };
 
 export async function action({ request }: ActionFunctionArgs) {

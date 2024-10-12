@@ -19,7 +19,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     {
       title:
         (data?.past ? "Past" : "Upcoming") +
-        " events in Czechia ~ SpiritEvents",
+        " events in Czechia ~ SpiritEvents.cz",
     },
   ];
 };

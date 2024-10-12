@@ -93,7 +93,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 : error instanceof Error
                   ? "Error"
                   : "Unknown error"
-            } ~ SpiritEvents`}
+            } ~ SpiritEvents.cz`}
           </title>
         )}
         <meta charSet="utf-8" />
@@ -130,7 +130,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <meta name="robots" content="index, follow" />
         <Meta />
-        <meta property="og:image" content="https://spiritevents.cz/logo.png" />
+        <meta property="og:image" content="https://spiritevents.cz/logo.jpeg" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"

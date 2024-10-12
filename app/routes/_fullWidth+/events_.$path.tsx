@@ -34,7 +34,7 @@ import { deleteFileFromB2 } from "~/utils/b2s3Functions.server";
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
     {
-      title: `${data?.event?.title} ~ SpiritEvents`,
+      title: `${data?.event?.title} ~ SpiritEvents.cz`,
     },
     ...(data?.event?.imageKey
       ? [
