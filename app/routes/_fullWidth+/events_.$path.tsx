@@ -136,7 +136,6 @@ export default function Event() {
     formData.set("intent", "publish");
     fetcher.submit(formData, { method: "POST" });
   };
-  const imageUrl = `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${event.imageKey}`;
   const imagePlaceholder =
     event.imageBlurHash && event.imageKey
       ? blurhashToCssGradientString(event.imageBlurHash)
@@ -150,7 +149,7 @@ export default function Event() {
               className={`flex bg-black/25 md:order-2 md:w-1/2 ${event.imageKey ? "" : "max-md:hidden"}`}
             >
               <Image
-                src={imageUrl}
+                src={`${import.meta.env.VITE_B2_CDN_ALIAS}/events/${event.imageKey}`}
                 alt="Event background"
                 className={`self-center ${event.imageKey ? "" : "h-full opacity-50"}`}
                 layout="fullWidth"

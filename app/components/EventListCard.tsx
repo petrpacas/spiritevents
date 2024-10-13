@@ -3,7 +3,6 @@ import { Link } from "@remix-run/react";
 import { blurhashToCssGradientString } from "@unpic/placeholder";
 import { Image } from "@unpic/react";
 import React from "react";
-import bgImage from "~/images/bg.jpg";
 import { EventStatus, getStatusColors } from "~/utils";
 
 type Props = {
@@ -59,11 +58,7 @@ export const EventListCard = ({
       {imageKey && (
         <div className="bottom-0 left-0 top-0 opacity-75 transition-opacity group-hover:opacity-100 group-focus:opacity-100 max-sm:h-32 sm:absolute sm:w-[25%] lg:w-[20%]">
           <Image
-            src={
-              imageKey
-                ? `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${imageKey}`
-                : bgImage
-            }
+            src={`${import.meta.env.VITE_B2_CDN_ALIAS}/events/${imageKey}`}
             alt=""
             className="h-full w-full object-cover max-sm:rounded-t-[0.4375rem] sm:rounded-l-[0.4375rem]"
             layout="fullWidth"
