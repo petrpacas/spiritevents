@@ -3,9 +3,10 @@ import sharp from "sharp";
 
 export const generateBlurHash = async (fileBuffer: Buffer): Promise<string> => {
   const resizedImage = await sharp(fileBuffer)
+    .rotate()
     .raw()
     .ensureAlpha()
-    .resize(32, 32, { fit: "inside" })
+    .resize(48, 32, { fit: "inside" })
     .toBuffer({ resolveWithObject: true });
   const { data, info } = resizedImage;
   const blurHash = encode(
@@ -13,7 +14,7 @@ export const generateBlurHash = async (fileBuffer: Buffer): Promise<string> => {
     info.width,
     info.height,
     4,
-    4,
+    3,
   );
   return blurHash;
 };

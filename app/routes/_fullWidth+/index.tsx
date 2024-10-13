@@ -2,7 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Image } from "@unpic/react";
 import { EventListCard } from "~/components";
-import bgImage from "~/images/bg.jpg";
+import bgImage from "~/images/bg-people.jpeg";
 import { prisma } from "~/services";
 import { getTodayDate, EventStatus } from "~/utils";
 
@@ -45,7 +45,7 @@ export async function loader() {
 export default function Landing() {
   const { events } = useLoaderData<typeof loader>();
   const imagePlaceholder =
-    "radial-gradient(at 0 0,#762143,#00000000 50%),radial-gradient(at 33% 0,#7d4656,#00000000 50%),radial-gradient(at 67% 0,#9b6b64,#00000000 50%),radial-gradient(at 100% 0,#926b66,#00000000 50%),radial-gradient(at 0 50%,#9e4e36,#00000000 50%),radial-gradient(at 33% 50%,#8d534a,#00000000 50%),radial-gradient(at 67% 50%,#b97d5a,#00000000 50%),radial-gradient(at 100% 50%,#c1885f,#00000000 50%),radial-gradient(at 0 100%,#a96e33,#00000000 50%),radial-gradient(at 33% 100%,#9d6f41,#00000000 50%),radial-gradient(at 67% 100%,#c58f51,#00000000 50%),radial-gradient(at 100% 100%,#cf9c59,#00000000 50%)";
+    "radial-gradient(at 0 0,#52341a,#00000000 50%),radial-gradient(at 33% 0,#503e19,#00000000 50%),radial-gradient(at 67% 0,#4f3c1f,#00000000 50%),radial-gradient(at 100% 0,#4b311a,#00000000 50%),radial-gradient(at 0 50%,#55412f,#00000000 50%),radial-gradient(at 33% 50%,#5e4f3b,#00000000 50%),radial-gradient(at 67% 50%,#5b4b35,#00000000 50%),radial-gradient(at 100% 50%,#543d2b,#00000000 50%),radial-gradient(at 0 100%,#604939,#00000000 50%),radial-gradient(at 33% 100%,#635544,#00000000 50%),radial-gradient(at 67% 100%,#60513f,#00000000 50%),radial-gradient(at 100% 100%,#594534,#00000000 50%)";
   return (
     <>
       <div className="relative grid">
@@ -56,7 +56,7 @@ export default function Landing() {
           layout="fullWidth"
           background={imagePlaceholder}
         />
-        <div className="relative grid items-center justify-center bg-white/80 dark:bg-stone-950/80">
+        <div className="relative grid items-center justify-center bg-emerald-50/75 dark:bg-emerald-950/75">
           <h2 className="max-w-7xl px-4 py-16 text-center text-[1.875rem] font-bold leading-relaxed min-[375px]:text-[2rem] min-[375px]:leading-relaxed min-[414px]:text-4xl min-[414px]:leading-relaxed sm:px-8 md:text-5xl md:leading-relaxed">
             Reunite with your{" "}
             <strong className="text-emerald-600">tribe</strong>{" "}
@@ -119,7 +119,7 @@ export default function Landing() {
         </div>
       )}
       <div className="grid">
-        <div className="bg-white dark:bg-stone-950">
+        <div className="bg-emerald-100 dark:bg-emerald-900">
           <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:gap-16 sm:px-8 sm:py-16 xl:grid-cols-2">
             <div className="grid gap-8 text-center">
               <div className="text-4xl">🧿</div>
@@ -177,7 +177,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="bg-emerald-100 dark:bg-emerald-900">
+        <div className="bg-transparent">
           <div className="mx-auto grid w-full max-w-7xl px-4 py-8 max-xl:gap-8 sm:px-8 sm:py-16 xl:grid-cols-3 xl:gap-16">
             <div className="grid gap-8 xl:col-span-2">
               <h3 className="text-2xl leading-snug sm:text-3xl sm:leading-snug">

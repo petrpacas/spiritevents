@@ -52,13 +52,13 @@ async function handleUpload(formData: FormData, eventId?: string) {
   }
   const imageBuffer = Buffer.from(await image.arrayBuffer());
   const processedImageBuffer = await sharp(imageBuffer)
+    .rotate()
     .resize(1280)
     .toFormat("jpeg", { mozjpeg: true })
     .toBuffer();
   const blurHash = await generateBlurHash(processedImageBuffer);
   const response = await uploadFileToB2(
     processedImageBuffer,
-    image.type,
     eventId,
     blurHash,
   );
@@ -144,7 +144,7 @@ export const ImageUpload = ({
         encType="multipart/form-data"
         method="post"
         ref={formRef}
-        className="grid gap-4 rounded-lg border border-amber-600 bg-white p-4 dark:bg-stone-950"
+        className="grid gap-4 rounded-lg border border-emerald-600 bg-white p-4 dark:bg-stone-950"
         onSubmit={
           imageKeyState
             ? (e) => {

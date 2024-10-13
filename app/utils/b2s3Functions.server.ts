@@ -36,7 +36,6 @@ async function updateEventImage(
 
 export async function uploadFileToB2(
   fileBuffer: Buffer,
-  fileType: string,
   eventId?: string,
   blurHash?: string,
 ) {
@@ -48,7 +47,7 @@ export async function uploadFileToB2(
   const command = new PutObjectCommand({
     Body: fileBuffer,
     Bucket: process.env.B2_BUCKET_NAME!,
-    ContentType: fileType,
+    ContentType: "image/jpeg",
     Key: `${eventId ? "events" : "temp"}/${key}`,
   });
   try {

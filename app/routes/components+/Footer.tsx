@@ -111,7 +111,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 )}
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-amber-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 sm:py-4 sm:max-[839px]:col-span-2 xl:px-8"
+                  className="flex items-center justify-center gap-3 rounded-lg border border-transparent bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 sm:py-4 sm:max-[839px]:col-span-2 xl:px-8"
                 >
                   Join the mailing list
                   <svg
@@ -175,7 +175,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
                 <button
                   disabled={navigation.state !== "idle"}
                   type="submit"
-                  className="inline-flex items-center gap-3 justify-self-center rounded border border-stone-300 px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 xl:justify-self-start"
+                  className="inline-flex items-center gap-3 justify-self-center rounded border border-emerald-600 px-4 py-2 text-sm text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 xl:justify-self-start dark:border-white dark:text-white"
                 >
                   Admin sign out
                   <svg
@@ -199,7 +199,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
             ) : (
               <Link
                 to={signInUrl}
-                className="inline-flex items-center gap-3 justify-self-center rounded border border-stone-300 px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md active:shadow xl:justify-self-start"
+                className="inline-flex items-center gap-3 justify-self-center rounded border border-emerald-600 px-4 py-2 text-sm text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow xl:justify-self-start dark:border-white dark:text-white"
               >
                 Admin sign in
                 <svg
@@ -223,6 +223,15 @@ export const Footer = ({ isAuthenticated }: Props) => {
           </div>
         </div>
         <div className="grid items-center justify-center gap-8 text-center">
+          <div className="max-[399px]:grid">
+            Cover photo 📸 by{" "}
+            <a
+              href="https://www.soulfocus.media/"
+              className="text-amber-600 underline"
+            >
+              Phoebe Montague
+            </a>
+          </div>
           <div className="max-[399px]:grid">
             Made with 💛 by{" "}
             <a

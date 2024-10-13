@@ -570,7 +570,7 @@ export default function Events() {
         ) : (
           <Link
             to="/events/suggest"
-            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-white px-4 py-2 text-lg text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3 dark:border-white"
+            className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
           >
             Suggest a new event
             <svg
@@ -596,7 +596,7 @@ export default function Events() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow dark:text-white"
+          className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow dark:border-white dark:text-white"
         >
           Back
         </button>

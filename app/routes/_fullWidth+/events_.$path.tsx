@@ -26,7 +26,6 @@ import {
   redirectWithSuccess,
 } from "remix-toast";
 import { unified } from "unified";
-import bgImage from "~/images/bg.jpg";
 import { authenticator, prisma, requireUserSession } from "~/services";
 import { EventStatus, getStatusColors } from "~/utils";
 import { deleteFileFromB2 } from "~/utils/b2s3Functions.server";
@@ -137,9 +136,7 @@ export default function Event() {
     formData.set("intent", "publish");
     fetcher.submit(formData, { method: "POST" });
   };
-  const imageUrl = event.imageKey
-    ? `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${event.imageKey}`
-    : bgImage;
+  const imageUrl = `${import.meta.env.VITE_B2_CDN_ALIAS}/events/${event.imageKey}`;
   const imagePlaceholder =
     event.imageBlurHash && event.imageKey
       ? blurhashToCssGradientString(event.imageBlurHash)
@@ -148,18 +145,22 @@ export default function Event() {
     <>
       <div className="bg-emerald-100 dark:bg-black/25">
         <div className="mx-auto grid w-full max-w-7xl md:flex xl:pr-8">
+          {event.imageKey && (
+            <div
+              className={`flex bg-black/25 md:order-2 md:w-1/2 ${event.imageKey ? "" : "max-md:hidden"}`}
+            >
+              <Image
+                src={imageUrl}
+                alt="Event background"
+                className={`self-center ${event.imageKey ? "" : "h-full opacity-50"}`}
+                layout="fullWidth"
+                background={imagePlaceholder}
+              />
+            </div>
+          )}
           <div
-            className={`flex bg-black/25 md:order-2 md:w-1/2 ${event.imageKey ? "" : "max-md:hidden"}`}
+            className={`flex px-4 py-8 sm:px-8 ${event.imageKey ? "md:order-1 md:w-1/2" : ""}`}
           >
-            <Image
-              src={imageUrl}
-              alt="Event background"
-              className={`self-center ${event.imageKey ? "" : "h-full opacity-50"}`}
-              layout="fullWidth"
-              background={imagePlaceholder}
-            />
-          </div>
-          <div className="flex justify-between px-4 py-8 sm:px-8 md:order-1 md:w-1/2">
             <div className="grid gap-8">
               <div className="grid gap-2">
                 <h1 className="text-2xl font-bold leading-snug sm:text-3xl sm:leading-snug">
@@ -328,30 +329,32 @@ export default function Event() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center gap-2 text-lg font-semibold leading-snug sm:text-xl sm:leading-snug">
-                  <svg
-                    className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7"
-                    width="16px"
-                    height="16px"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                    />
-                  </svg>
-                  {event.location}
-                </div>
+                {event.location && (
+                  <div className="flex items-center gap-2 text-lg font-semibold leading-snug sm:text-xl sm:leading-snug">
+                    <svg
+                      className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7"
+                      width="16px"
+                      height="16px"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                      />
+                    </svg>
+                    {event.location}
+                  </div>
+                )}
                 {event.linkLocation && (
                   <div className="flex items-center gap-2">
                     <svg
@@ -463,7 +466,7 @@ export default function Event() {
           <div className="grid gap-8">
             {event.description && (
               <div
-                className="prose prose-xl prose-basic mx-auto w-full max-w-full sm:prose-2xl dark:prose-invert"
+                className="prose prose-lg prose-basic w-full max-w-full sm:prose-xl dark:prose-invert lg:border-r-[2rem] lg:border-dotted lg:border-emerald-100 lg:pr-[15%] xl:pr-[20%] dark:lg:border-black/25"
                 dangerouslySetInnerHTML={{
                   __html: event.description,
                 }}
@@ -483,7 +486,7 @@ export default function Event() {
               ) : (
                 <span>
                   Event last updated on{" "}
-                  {new Date(event.updatedAt).toUTCString()}
+                  {new Date(event.updatedAt).toDateString()}
                 </span>
               )}
             </div>
@@ -492,7 +495,7 @@ export default function Event() {
                 disabled={isWorking}
                 type="button"
                 onClick={() => navigate(-1)}
-                className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
+                className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
               >
                 Back
               </button>

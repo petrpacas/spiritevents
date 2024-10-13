@@ -175,7 +175,7 @@ export default function EventSuggest() {
         </button>
         .
       </p>
-      <div className="my-8 border-y border-amber-600 py-8 text-center text-lg font-semibold sm:px-4 sm:text-xl">
+      <div className="my-8 border-y border-emerald-600 py-8 text-center text-lg font-semibold sm:px-4 sm:text-xl">
         Let&apos;s make this place a true portal together 🌀
       </div>
       <div className="grid gap-4">
@@ -206,14 +206,14 @@ export default function EventSuggest() {
             <div className="flex justify-end gap-4">
               <button
                 type="submit"
-                className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
               >
                 Suggest
               </button>
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="rounded border border-amber-600 px-4 py-2 text-amber-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:text-white"
+                className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
               >
                 Back
               </button>
