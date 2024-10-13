@@ -238,7 +238,9 @@ export default function Event() {
               <div className="grid text-lg font-semibold leading-tight sm:text-xl sm:leading-tight">
                 <div className="grid gap-2">
                   {event.dateStart ? (
-                    <div className="grid gap-2 sm:flex md:grid xl:flex">
+                    <div
+                      className={`grid gap-2 sm:flex ${event.imageKey ? "md:grid xl:flex" : ""}`}
+                    >
                       <div className="flex items-center gap-2">
                         <svg
                           className="h-6 w-6 text-amber-600 sm:h-7 sm:w-7"
@@ -461,7 +463,7 @@ export default function Event() {
         </div>
       )}
       <div className="flex justify-center">
-        <div className="grid w-full max-w-7xl px-4 py-16 sm:px-8">
+        <div className="grid w-full max-w-7xl px-4 pb-16 pt-8 sm:px-8">
           <div className="grid gap-8">
             {event.description && (
               <div
@@ -484,7 +486,8 @@ export default function Event() {
                 </>
               ) : (
                 <span>
-                  Event last updated on{" "}
+                  Last update:
+                  <br />
                   {new Date(event.updatedAt).toDateString()}
                 </span>
               )}
