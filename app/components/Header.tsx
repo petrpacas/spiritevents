@@ -26,7 +26,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
   const brandName = (
     <div className="relative z-10 font-bold leading-none max-[319px]:grid max-[319px]:text-[1.3125rem] min-[320px]:text-[1.75rem] min-[374px]:text-[2.1815rem] min-[428px]:text-[2.625rem]">
       <span className="text-emerald-600">Spirit</span>
-      <span className="">Events</span>
+      <span>Events</span>
     </div>
   );
   return (

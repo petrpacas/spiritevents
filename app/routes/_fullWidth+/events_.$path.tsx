@@ -473,15 +473,18 @@ export default function Event() {
                 }}
               />
             )}
-            <div className="grid text-right text-lg text-amber-600">
+            <div className="grid gap-2 text-right text-lg text-amber-600">
               {isAuthenticated ? (
                 <>
-                  <span className="break-all">ID: {event.id}</span>
                   <span>
-                    CreatedAt: {new Date(event.createdAt).toUTCString()}
+                    Created at:
+                    <br />
+                    {new Date(event.createdAt).toUTCString()}
                   </span>
                   <span>
-                    UpdatedAt: {new Date(event.updatedAt).toUTCString()}
+                    Updated at:
+                    <br />
+                    {new Date(event.updatedAt).toUTCString()}
                   </span>
                 </>
               ) : (
