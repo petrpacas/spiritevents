@@ -176,7 +176,7 @@ export default function EventSuggest() {
           </button>
           .
         </p>
-        <div className="my-8 border-y border-emerald-600 py-8 text-center text-lg font-semibold sm:px-4 sm:text-xl">
+        <div className="border-y border-emerald-600 py-8 text-center text-lg font-semibold sm:px-4 sm:text-xl">
           Let&apos;s make this place a true portal together 🌀
         </div>
         <div className="grid gap-4">
