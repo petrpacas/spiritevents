@@ -467,13 +467,13 @@ export default function Event() {
           <div className="grid gap-8">
             {event.description && (
               <div
-                className="prose prose-lg prose-basic w-full max-w-full sm:prose-xl dark:prose-invert lg:border-r-[2rem] lg:border-dotted lg:border-emerald-100 lg:pr-[15%] xl:pr-[20%] dark:lg:border-black/25"
+                className="prose prose-base prose-basic w-full max-w-full sm:prose-lg dark:prose-invert lg:border-r-[2rem] lg:border-dotted lg:border-emerald-100 lg:pr-[15%] xl:pr-[20%] dark:lg:border-black/25"
                 dangerouslySetInnerHTML={{
                   __html: event.description,
                 }}
               />
             )}
-            <div className="grid gap-2 text-right text-lg text-amber-600">
+            <div className="grid gap-2 text-right text-amber-600 sm:text-lg">
               {isAuthenticated ? (
                 <>
                   <span>
