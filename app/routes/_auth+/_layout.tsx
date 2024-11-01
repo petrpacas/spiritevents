@@ -14,10 +14,8 @@ export default function AuthLayout() {
   return (
     <div className="grid min-h-lvh grid-rows-[auto_1fr_auto] bg-emerald-50 dark:bg-emerald-950">
       <Header isAuthenticated={isAuthenticated} key={pathname} />
-      <main className="flex justify-center">
-        <div className="grid w-full max-w-7xl px-4 py-8 sm:px-8">
-          <Outlet />
-        </div>
+      <main>
+        <Outlet />
       </main>
       <footer className="px-4 py-8 text-center text-4xl sm:px-8">👋</footer>
     </div>

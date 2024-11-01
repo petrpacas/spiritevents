@@ -8,16 +8,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { isAuthenticated: Boolean(user) };
 }
 
-export default function FixedWidthLayout() {
+export default function PagesLayout() {
   const { isAuthenticated } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
   return (
     <div className="grid min-h-lvh grid-rows-[auto_1fr_auto] bg-emerald-50 dark:bg-emerald-950">
-      <Header isAuthenticated={isAuthenticated} key={pathname} />
-      <main className="flex justify-center">
-        <div className="grid w-full max-w-7xl px-4 pb-16 pt-8 sm:px-8">
-          <Outlet />
-        </div>
+      <Header
+        isAuthenticated={isAuthenticated}
+        isLanding={pathname === "/"}
+        key={pathname}
+      />
+      <main>
+        <Outlet />
       </main>
       <Footer isAuthenticated={isAuthenticated} />
     </div>

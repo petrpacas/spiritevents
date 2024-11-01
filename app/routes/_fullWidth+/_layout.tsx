@@ -8,12 +8,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { isAuthenticated: Boolean(user) };
 }
 
-export default function FullWidthLayout() {
+export default function ObsoleteLayout() {
   const { isAuthenticated } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
   return (
     <div className="grid min-h-lvh grid-rows-[auto_1fr_auto] bg-emerald-50 dark:bg-emerald-950">
-      <Header isAuthenticated={isAuthenticated} isLanding key={pathname} />
+      <Header
+        isAuthenticated={isAuthenticated}
+        isLanding={pathname === "/"}
+        key={pathname}
+      />
       <main>
         <Outlet />
       </main>
