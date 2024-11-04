@@ -488,11 +488,33 @@ export default function Event() {
                   </span>
                 </>
               ) : (
-                <span>
-                  Last update:
-                  <br />
-                  {new Date(event.updatedAt).toDateString()}
-                </span>
+                <>
+                  <span>
+                    Last update:
+                    <br />
+                    {new Date(event.updatedAt).toDateString()}
+                  </span>
+                  <span>
+                    Is this outdated?
+                    <br />
+                    <button
+                      type="button"
+                      className="text-amber-600 underline"
+                      onClick={() => {
+                        const el = document.getElementById("contacts");
+                        if (el) {
+                          el.scrollIntoView({
+                            behavior: "auto",
+                            block: "start",
+                            inline: "center",
+                          });
+                        }
+                      }}
+                    >
+                      Let us know!
+                    </button>
+                  </span>
+                </>
               )}
             </div>
             <div className="flex justify-end">
