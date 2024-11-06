@@ -76,6 +76,7 @@ export default function EventNew() {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const mdxEditorRef = useRef<MDXEditorMethods>(null);
+  const [fileSelected, setFileSelected] = useState(false);
   const [imageBlurHashState, setImageBlurHashState] = useState("");
   const [imageIdState, setImageIdState] = useState("");
   const [imageKeyState, setImageKeyState] = useState("");
@@ -130,6 +131,7 @@ export default function EventNew() {
           <ImageUpload
             disabled={navigation.state !== "idle"}
             onBlurHashChange={setImageBlurHashState}
+            onFileChange={setFileSelected}
             onIdChange={setImageIdState}
             onKeyChange={setImageKeyState}
           />
@@ -151,12 +153,27 @@ export default function EventNew() {
                 mdxEditorRef={mdxEditorRef}
               />
               <div className="flex justify-end gap-4">
-                <button
-                  type="submit"
-                  className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
-                >
-                  Save as draft
-                </button>
+                {fileSelected ? (
+                  <button
+                    type="button"
+                    className="rounded border border-emerald-600 bg-white px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                    onClick={() => {
+                      const el = document.getElementById("imageUploadButton");
+                      if (el) {
+                        el.focus();
+                      }
+                    }}
+                  >
+                    Upload image first
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                  >
+                    Save as draft
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => navigate(-1)}

@@ -16,6 +16,7 @@ type Props = {
   imageId?: string;
   imageKey?: string;
   onBlurHashChange?: React.Dispatch<React.SetStateAction<string>>;
+  onFileChange: React.Dispatch<React.SetStateAction<boolean>>;
   onIdChange?: React.Dispatch<React.SetStateAction<string>>;
   onKeyChange?: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -100,6 +101,7 @@ export const ImageUpload = ({
   imageId,
   imageKey,
   onBlurHashChange,
+  onFileChange,
   onIdChange,
   onKeyChange,
 }: Props) => {
@@ -124,8 +126,9 @@ export const ImageUpload = ({
       onIdChange?.(fetcher.data.imageId ?? "");
       onKeyChange?.(fetcher.data.imageKey ?? "");
       formRef.current?.reset();
+      onFileChange(false);
     }
-  }, [fetcher.data, onBlurHashChange, onIdChange, onKeyChange]);
+  }, [fetcher.data, onBlurHashChange, onFileChange, onIdChange, onKeyChange]);
   const imageUrl = imageKeyState
     ? `${import.meta.env.VITE_B2_CDN_ALIAS}/${eventId ? "events" : "temp"}/${imageKeyState}`
     : "";
@@ -133,6 +136,9 @@ export const ImageUpload = ({
     ? blurhashToCssGradientString(imageBlurHashState)
     : undefined;
   const isWorking = disabled || fetcher.state !== "idle";
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onFileChange((e.target.files && e.target.files.length > 0) || false);
+  };
   return (
     <div className="grid gap-2">
       <span>
@@ -162,7 +168,7 @@ export const ImageUpload = ({
         <input type="hidden" name="imageBlurHash" value={imageBlurHashState} />
         <input type="hidden" name="imageId" value={imageIdState} />
         <input type="hidden" name="imageKey" value={imageKeyState} />
-        <div className="grid gap-4 sm:flex">
+        <div className="grid gap-4 md:flex">
           {imageKeyState ? (
             <>
               <Image
@@ -186,12 +192,15 @@ export const ImageUpload = ({
             <>
               <input
                 required
+                onChange={handleFileChange}
+                id="fileInput"
                 type="file"
                 name="image"
                 accept="image/*"
                 className="m-0 w-full cursor-pointer rounded border border-stone-300 p-0 pr-3 shadow-sm transition-shadow file:m-0 file:mr-3 file:h-[42px] file:cursor-pointer file:rounded-l-sm file:rounded-r-none file:border-0 file:bg-stone-300 file:p-0 file:px-3 file:text-base file:text-stone-950 invalid:text-stone-400 hover:shadow-md active:shadow sm:flex-1 dark:bg-stone-950 dark:[color-scheme:dark] dark:invalid:text-stone-500"
               />
               <button
+                id="imageUploadButton"
                 disabled={isWorking}
                 type="submit"
                 name="intent"
@@ -199,6 +208,20 @@ export const ImageUpload = ({
                 className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
               >
                 Upload image
+              </button>
+              <button
+                disabled={isWorking}
+                type="button"
+                className="rounded border border-emerald-600 bg-transparent px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                onClick={() => {
+                  const el = document.getElementById("fileInput");
+                  if (el && el instanceof HTMLInputElement) {
+                    el.value = "";
+                    onFileChange(false);
+                  }
+                }}
+              >
+                Clear
               </button>
             </>
           )}
