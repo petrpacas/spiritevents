@@ -167,7 +167,7 @@ export default function EventSuggest() {
               if (el) {
                 el.scrollIntoView({
                   behavior: "auto",
-                  block: "start",
+                  block: "center",
                   inline: "center",
                 });
               }
@@ -214,7 +214,12 @@ export default function EventSuggest() {
                     onClick={() => {
                       const el = document.getElementById("imageUploadButton");
                       if (el) {
-                        el.focus();
+                        el.focus({ preventScroll: true });
+                        el.scrollIntoView({
+                          behavior: "auto",
+                          block: "center",
+                          inline: "center",
+                        });
                       }
                     }}
                   >

@@ -200,7 +200,14 @@ export default function EventEdit() {
                     onClick={() => {
                       const el = document.getElementById("imageUploadButton");
                       if (el) {
-                        el.focus();
+                        if (el) {
+                          el.focus({ preventScroll: true });
+                          el.scrollIntoView({
+                            behavior: "auto",
+                            block: "center",
+                            inline: "center",
+                          });
+                        }
                       }
                     }}
                   >

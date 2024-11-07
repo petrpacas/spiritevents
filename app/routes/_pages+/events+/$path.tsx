@@ -505,7 +505,7 @@ export default function Event() {
                         if (el) {
                           el.scrollIntoView({
                             behavior: "auto",
-                            block: "start",
+                            block: "center",
                             inline: "center",
                           });
                         }
