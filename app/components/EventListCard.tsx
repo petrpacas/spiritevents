@@ -53,10 +53,10 @@ export const EventListCard = ({
   return (
     <Link
       to={`/events/${id}-${slug}`}
-      className={`${statusBg} ${imageKey ? "sm:relative sm:flex" : ""} group grid rounded-lg border border-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow`}
+      className={`${statusBg} ${imageKey ? "sm:relative sm:flex" : ""} group grid rounded-lg border border-emerald-600 shadow-sm hover:shadow-md active:shadow`}
     >
       {imageKey && (
-        <div className="bottom-0 left-0 top-0 opacity-75 transition-opacity group-hover:opacity-100 group-focus:opacity-100 max-sm:h-32 sm:absolute sm:w-[25%] lg:w-[20%]">
+        <div className="bottom-0 left-0 top-0 opacity-75 group-hover:opacity-100 group-focus:opacity-100 max-sm:h-32 sm:absolute sm:w-[25%] lg:w-[20%]">
           <Image
             src={`${import.meta.env.VITE_B2_CDN_ALIAS}/events/${imageKey}`}
             alt=""

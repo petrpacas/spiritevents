@@ -376,7 +376,7 @@ export default function Events() {
                       autoComplete="off"
                       name="status"
                       defaultValue={status || ""}
-                      className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-950"
+                      className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-950"
                     >
                       <option value="">Any status</option>
                       <option value="suggested">Suggested</option>
@@ -389,7 +389,7 @@ export default function Events() {
                     autoComplete="off"
                     name="past"
                     defaultValue={past || ""}
-                    className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-950"
+                    className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-950"
                   >
                     <option value="">
                       Upcoming{!isAuthenticated && " events"}
@@ -404,7 +404,7 @@ export default function Events() {
                     options={regions}
                     defaultValue={region || ""}
                     emptyOption="All regions"
-                    className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-950"
+                    className="custom-caret-color cursor-pointer rounded border border-stone-300 py-1 pl-2 font-semibold shadow-sm hover:shadow-md active:shadow sm:py-2 sm:pl-3 dark:bg-stone-950"
                   />
                 </div>
                 <div className="border-stone-300 max-lg:hidden lg:h-6 lg:border-l-2" />
@@ -417,7 +417,7 @@ export default function Events() {
                       type="text"
                       name="search"
                       defaultValue={search || ""}
-                      className="flex-grow rounded border border-stone-300 px-2 py-1 font-semibold shadow-sm transition-shadow hover:shadow-md active:shadow max-sm:w-full sm:px-3 sm:py-2 dark:bg-stone-950"
+                      className="flex-grow rounded border border-stone-300 px-2 py-1 font-semibold shadow-sm hover:shadow-md active:shadow max-sm:w-full sm:px-3 sm:py-2 dark:bg-stone-950"
                     />
                   </label>
                   {isFiltering ? (
@@ -442,7 +442,7 @@ export default function Events() {
                   ) : (
                     search && (
                       <button
-                        className="flex-shrink self-end rounded border border-stone-300 bg-white p-1 shadow-sm transition-shadow hover:shadow-md active:shadow sm:p-2 dark:bg-stone-950"
+                        className="flex-shrink self-end rounded border border-stone-300 bg-white p-1 shadow-sm hover:shadow-md active:shadow sm:p-2 dark:bg-stone-950"
                         type="button"
                         onClick={handleClearSearch}
                       >
@@ -474,7 +474,7 @@ export default function Events() {
                     <span className="max-sm:hidden">Categories</span>
                     {allCategories.map((category) => (
                       <label
-                        className="flex cursor-pointer items-center gap-2 rounded border border-stone-300 bg-white px-2 py-1 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
+                        className="flex cursor-pointer items-center gap-2 rounded border border-stone-300 bg-white px-2 py-1 shadow-sm hover:shadow-md active:shadow dark:bg-stone-950"
                         key={category.id}
                       >
                         <input
@@ -548,7 +548,7 @@ export default function Events() {
           {isAuthenticated ? (
             <Link
               to="/events/suggest"
-              className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
+              className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
             >
               Add a new event
               <svg
@@ -571,7 +571,7 @@ export default function Events() {
           ) : (
             <Link
               to="/events/suggest"
-              className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm transition-shadow hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
+              className="flex items-center justify-center gap-3 rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-lg text-white shadow-sm hover:shadow-md active:shadow sm:max-xl:justify-self-end xl:col-start-3"
             >
               Suggest a new event
               <svg
@@ -597,7 +597,7 @@ export default function Events() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow dark:border-white dark:text-white"
+            className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm hover:shadow-md active:shadow dark:border-white dark:text-white"
           >
             Back
           </button>

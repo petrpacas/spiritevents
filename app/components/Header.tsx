@@ -37,7 +37,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
           <button
             type="button"
             onClick={() => setIsMenuOpen((value) => !value)}
-            className={`${isMenuOpen ? "rounded-b-none border-emerald-600 bg-white text-emerald-600 dark:bg-stone-950" : "border-transparent bg-emerald-600 text-white shadow-sm transition-shadow hover:shadow-md active:shadow"} relative z-40 flex items-center rounded border px-4 py-2 md:hidden`}
+            className={`${isMenuOpen ? "rounded-b-none border-emerald-600 bg-white text-emerald-600 dark:bg-stone-950" : "border-transparent bg-emerald-600 text-white shadow-sm hover:shadow-md active:shadow"} relative z-40 flex items-center rounded border px-4 py-2 md:hidden`}
           >
             <span className="sr-only">Menu</span>
             <svg
@@ -65,7 +65,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
           >
             <Link
               to="/events"
-              className="flex items-center gap-2 rounded border border-emerald-600 bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-md:justify-center"
+              className="flex items-center gap-2 rounded border border-emerald-600 bg-emerald-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow max-md:justify-center"
             >
               <span>
                 Discover
@@ -86,7 +86,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               <>
                 <Link
                   to="/events/new"
-                  className="flex items-center gap-2 rounded border border-emerald-600 bg-white px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-md:justify-center dark:border-white"
+                  className="flex items-center gap-2 rounded border border-emerald-600 bg-white px-4 py-2 text-emerald-600 shadow-sm hover:shadow-md active:shadow max-md:justify-center dark:border-white"
                 >
                   <span>
                     New
@@ -111,7 +111,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                 </Link>
                 <Link
                   to="/categories"
-                  className="flex items-center gap-2 rounded border border-sky-600 bg-sky-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-md:justify-center"
+                  className="flex items-center gap-2 rounded border border-sky-600 bg-sky-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow max-md:justify-center"
                 >
                   <span>Categories</span>
                   <svg
@@ -141,7 +141,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
               <>
                 <Link
                   to="/events/suggest"
-                  className="flex items-center gap-2 rounded border border-emerald-600 bg-white px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow max-md:justify-center dark:border-white"
+                  className="flex items-center gap-2 rounded border border-emerald-600 bg-white px-4 py-2 text-emerald-600 shadow-sm hover:shadow-md active:shadow max-md:justify-center dark:border-white"
                 >
                   <span>
                     Suggest
@@ -166,7 +166,7 @@ export const Header = ({ isAuthenticated, isLanding }: Props) => {
                 </Link>
                 <Link
                   to="/how-to-support"
-                  className="flex items-center gap-2 rounded border border-sky-600 bg-sky-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow max-md:justify-center"
+                  className="flex items-center gap-2 rounded border border-sky-600 bg-sky-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow max-md:justify-center"
                 >
                   <span>
                     Support

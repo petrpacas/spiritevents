@@ -210,7 +210,7 @@ export default function EventSuggest() {
                 {fileSelected ? (
                   <button
                     type="button"
-                    className="rounded border border-emerald-600 bg-white px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                    className="rounded border border-emerald-600 bg-white px-4 py-2 text-emerald-600 shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
                     onClick={() => {
                       const el = document.getElementById("imageUploadButton");
                       if (el) {
@@ -228,7 +228,7 @@ export default function EventSuggest() {
                 ) : (
                   <button
                     type="submit"
-                    className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                    className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
                   >
                     Suggest
                   </button>
@@ -236,7 +236,7 @@ export default function EventSuggest() {
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
+                  className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
                 >
                   Back
                 </button>

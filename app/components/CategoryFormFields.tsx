@@ -59,7 +59,7 @@ export const CategoryFormFields = ({ errors, category }: Props) => {
           onChange={handleNameChange}
           onBlur={handleNameBlur}
           value={name}
-          className="rounded border-stone-300 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
+          className="rounded border-stone-300 shadow-sm hover:shadow-md active:shadow dark:bg-stone-950"
         />
         {errors?.fieldErrors.name && (
           <p className="text-red-600">{errors.fieldErrors.name.join(", ")}</p>
@@ -78,7 +78,7 @@ export const CategoryFormFields = ({ errors, category }: Props) => {
           onBlur={handleSlugBlur}
           value={slug}
           placeholder="e.g. example-category"
-          className="rounded border-stone-300 text-amber-600 placeholder-stone-400 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950 dark:placeholder-stone-500"
+          className="rounded border-stone-300 text-amber-600 placeholder-stone-400 shadow-sm hover:shadow-md active:shadow dark:bg-stone-950 dark:placeholder-stone-500"
         />
         {errors?.fieldErrors.slug && (
           <p className="text-red-600">{errors.fieldErrors.slug.join(", ")}</p>

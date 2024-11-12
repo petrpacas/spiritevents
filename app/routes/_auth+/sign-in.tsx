@@ -66,7 +66,7 @@ export default function SignIn() {
                 type="email"
                 name="email"
                 required
-                className="w-full rounded border border-stone-300 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
+                className="w-full rounded border border-stone-300 bg-white px-4 py-2 shadow-sm hover:shadow-md active:shadow dark:bg-stone-950"
               />
             </label>
             <label className="grid gap-2">
@@ -76,7 +76,7 @@ export default function SignIn() {
                 name="password"
                 autoComplete="current-password"
                 required
-                className="w-full rounded border border-stone-300 bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md active:shadow dark:bg-stone-950"
+                className="w-full rounded border border-stone-300 bg-white px-4 py-2 shadow-sm hover:shadow-md active:shadow dark:bg-stone-950"
               />
             </label>
             {error?.message && <p className="text-red-600">{error.message}</p>}
@@ -84,14 +84,14 @@ export default function SignIn() {
           <div className="grid gap-4">
             <button
               type="submit"
-              className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+              className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
             >
               Sign in
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
+              className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
             >
               Back
             </button>

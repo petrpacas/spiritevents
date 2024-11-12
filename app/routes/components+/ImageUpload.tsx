@@ -183,7 +183,7 @@ export const ImageUpload = ({
                 type="submit"
                 name="intent"
                 value="delete"
-                className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
               >
                 Remove image
               </button>
@@ -197,7 +197,7 @@ export const ImageUpload = ({
                 type="file"
                 name="image"
                 accept="image/*"
-                className="m-0 w-full cursor-pointer rounded border border-stone-300 p-0 pr-3 shadow-sm transition-shadow file:m-0 file:mr-3 file:h-[42px] file:cursor-pointer file:rounded-l-sm file:rounded-r-none file:border-0 file:bg-stone-300 file:p-0 file:px-3 file:text-base file:text-stone-950 invalid:text-stone-400 hover:shadow-md active:shadow sm:flex-1 dark:bg-stone-950 dark:[color-scheme:dark] dark:invalid:text-stone-500"
+                className="m-0 w-full cursor-pointer rounded border border-stone-300 p-0 pr-3 shadow-sm file:m-0 file:mr-3 file:h-[42px] file:cursor-pointer file:rounded-l-sm file:rounded-r-none file:border-0 file:bg-stone-300 file:p-0 file:px-3 file:text-base file:text-stone-950 invalid:text-stone-400 hover:shadow-md active:shadow sm:flex-1 dark:bg-stone-950 dark:[color-scheme:dark] dark:invalid:text-stone-500"
               />
               <button
                 id="imageUploadButton"
@@ -205,14 +205,14 @@ export const ImageUpload = ({
                 type="submit"
                 name="intent"
                 value="upload"
-                className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
               >
                 Upload image
               </button>
               <button
                 disabled={isWorking}
                 type="button"
-                className="rounded border border-emerald-600 bg-transparent px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                className="rounded border border-emerald-600 bg-transparent px-4 py-2 text-emerald-600 shadow-sm hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
                 onClick={() => {
                   const el = document.getElementById("fileInput");
                   if (el && el instanceof HTMLInputElement) {

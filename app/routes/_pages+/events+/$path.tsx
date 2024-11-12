@@ -396,7 +396,7 @@ export default function Event() {
               <button
                 disabled={isWorking}
                 type="submit"
-                className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                className="rounded border border-transparent bg-amber-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
               >
                 Edit
               </button>
@@ -418,7 +418,7 @@ export default function Event() {
                   type="submit"
                   name="intent"
                   value="draft"
-                  className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                  className="rounded border border-transparent bg-stone-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
                 >
                   Set as draft
                 </button>
@@ -429,7 +429,7 @@ export default function Event() {
                 <button
                   disabled={isWorking}
                   type="submit"
-                  className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                  className="rounded border border-transparent bg-emerald-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
                 >
                   Publish
                 </button>
@@ -454,7 +454,7 @@ export default function Event() {
                 type="submit"
                 name="intent"
                 value="delete"
-                className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50"
+                className="rounded border border-transparent bg-red-600 px-4 py-2 text-white shadow-sm hover:shadow-md active:shadow disabled:opacity-50"
               >
                 Delete
               </button>
@@ -522,7 +522,7 @@ export default function Event() {
                 disabled={isWorking}
                 type="button"
                 onClick={() => navigate(-1)}
-                className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm transition-shadow hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
+                className="rounded border border-emerald-600 px-4 py-2 text-emerald-600 shadow-sm hover:shadow-md active:shadow disabled:opacity-50 dark:border-white dark:text-white"
               >
                 Back
               </button>
