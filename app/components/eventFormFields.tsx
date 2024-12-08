@@ -7,8 +7,8 @@ import slugify from "slugify";
 import { z } from "zod";
 import { EventStatus, regions } from "~/utils";
 import { eventFormSchema } from "~/validations";
-import { DescriptionEditor } from "./DescriptionEditor";
-import { Select } from "./Select";
+import { DescriptionEditor } from "./descriptionEditor";
+import { Select } from "./select";
 
 slugify.extend({
   "&": "",
