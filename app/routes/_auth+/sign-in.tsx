@@ -3,7 +3,7 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import {
   Form,
   useLoaderData,
@@ -33,7 +33,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
   const session = await getSession(request.headers.get("cookie"));
   const error = session.get(authenticator.sessionErrorKey);
-  return json(
+  return data(
     { error },
     {
       headers: {

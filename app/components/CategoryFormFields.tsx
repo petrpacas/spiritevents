@@ -1,5 +1,4 @@
 import type { Category } from "@prisma/client";
-import { SerializeFrom } from "@remix-run/node";
 import { useState } from "react";
 import slugify from "slugify";
 import { z } from "zod";
@@ -14,7 +13,7 @@ slugify.extend({
 
 type Props = {
   errors?: z.inferFlattenedErrors<typeof categoryFormSchema>;
-  category?: SerializeFrom<Category>;
+  category?: Category;
 };
 
 export const CategoryFormFields = ({ errors, category }: Props) => {

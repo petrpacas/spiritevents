@@ -1,5 +1,5 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import {
   isRouteErrorResponse,
   Link,
@@ -33,7 +33,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     throw redirect(`${pathname.slice(0, -1)}${search}`, 301);
   }
   if (toast && headers) {
-    return json({ toast }, { headers });
+    return data({ toast }, { headers });
   } else {
     return null;
   }

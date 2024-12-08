@@ -1,7 +1,6 @@
 import type { MDXEditorMethods } from "@mdxeditor/editor";
 import type { Category, Prisma } from "@prisma/client";
 import type { RefObject } from "react";
-import { SerializeFrom } from "@remix-run/node";
 import { useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import slugify from "slugify";
@@ -23,8 +22,8 @@ type EventWithCategories = Prisma.EventGetPayload<{
 }>;
 type Props = {
   errors?: z.inferFlattenedErrors<typeof eventFormSchema>;
-  event?: SerializeFrom<EventWithCategories>;
-  categories?: SerializeFrom<Category[]>;
+  event?: EventWithCategories;
+  categories?: Category[];
   isSuggesting?: boolean;
   mdxEditorRef: RefObject<MDXEditorMethods>;
 };
