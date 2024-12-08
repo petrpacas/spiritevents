@@ -8,17 +8,17 @@ import {
 
 export default [
   layout("./routes/general/_layout.tsx", [
-    index("./routes/general/_index.tsx"),
+    index("./routes/general/index.tsx"),
     route("how-to-support", "./routes/general/howToSupport.tsx"),
 
     ...prefix("categories", [
-      index("./routes/general/categories/_index.tsx"),
+      index("./routes/general/categories/index.tsx"),
       route("new", "./routes/general/categories/new.tsx"),
       route(":path/edit", "./routes/general/categories/$path.edit.tsx"),
     ]),
 
     ...prefix("events", [
-      index("./routes/general/events/_index.tsx"),
+      index("./routes/general/events/index.tsx"),
       route("new", "./routes/general/events/new.tsx"),
       route("suggest", "./routes/general/events/suggest.tsx"),
       route(":path", "./routes/general/events/$path.tsx"),
