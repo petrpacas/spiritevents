@@ -10,7 +10,7 @@ export default {
   content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
   plugins: [
     scopedPreflightStyles({
-      isolationStrategy: isolateOutsideOfContainer(".no-tw"),
+      isolationStrategy: isolateOutsideOfContainer(".mdxeditor-overrides"),
     }),
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),

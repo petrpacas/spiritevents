@@ -76,7 +76,7 @@ export const Footer = ({ isAuthenticated }: Props) => {
               </p>
             </div>
             <fetcher.Form
-              action="/components/Footer"
+              action="/resources/footer"
               method="post"
               ref={formRef}
             >

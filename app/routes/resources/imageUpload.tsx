@@ -146,7 +146,7 @@ export const ImageUpload = ({
         {!imageKeyState && <span className="text-amber-600">(max. 10 MB)</span>}
       </span>
       <fetcher.Form
-        action="/components/ImageUpload"
+        action="/resources/image-upload"
         encType="multipart/form-data"
         method="post"
         ref={formRef}

@@ -23,15 +23,15 @@
   overflow-wrap: anywhere;
 }
 .mdxeditor-toolbar {
-  @apply rounded-b-none rounded-tl-sm rounded-tr-sm bg-stone-100 dark:bg-stone-400 !important;
+  @apply rounded-b-none rounded-tl-sm rounded-tr-sm bg-stone-100 dark:bg-stone-500 !important;
 }
 .mdxeditor-popup-container {
   @apply border-0 shadow-none !important;
 }
-.mdxeditor-rich-text-editor > div > div {
+.mdxeditor-overrides {
   @apply text-amber-950 dark:text-white !important;
 }
-.mdxeditor-rich-text-editor > div > div a {
+.mdxeditor-overrides a {
   @apply text-amber-600 !important;
 }
 

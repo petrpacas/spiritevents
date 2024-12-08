@@ -1,5 +1,5 @@
-import { Footer } from "~/routes/components+/Footer";
-import { ImageUpload } from "~/routes/components+/ImageUpload";
+import { Footer } from "~/routes/resources/footer";
+import { ImageUpload } from "~/routes/resources/imageUpload";
 
 import { CategoryFormFields } from "./CategoryFormFields";
 import { EventFormFields } from "./EventFormFields";

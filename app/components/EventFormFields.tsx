@@ -506,7 +506,7 @@ export const EventFormFields = ({
               name="description"
               readOnly
               defaultValue={event?.description}
-              className="min-h-20 rounded border-stone-300 shadow-sm read-only:bg-stone-300 hover:shadow-md active:shadow dark:bg-stone-950"
+              className="min-h-20 rounded border-stone-300 shadow-sm read-only:bg-stone-300 hover:shadow-md active:shadow dark:read-only:bg-stone-700"
             />
             {errors?.fieldErrors.description && (
               <p className="text-red-600">
